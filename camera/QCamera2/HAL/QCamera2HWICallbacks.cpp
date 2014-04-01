@@ -1420,6 +1420,9 @@ void QCamera2HardwareInterface::metadata_stream_cb_routine(mm_camera_super_buf_t
         } else {
             ALOGE("%s: No memory for prep_snapshot qcamera_sm_internal_evt_payload_t", __func__);
         }
+        /*Update scene capture type info*/
+        pme->mExifParams.asd_debug_params_valid = TRUE;
+        pme->mExifParams.scene= pMetaData->scene;
     }
 
     if (pMetaData->is_chromatix_mobicat_af_valid) {

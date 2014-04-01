@@ -899,6 +899,10 @@ typedef struct {
     cam_flash_mode_t flash_mode;
     cam_sensor_t sens_type;
     float aperture_value;
+    float            focal_length;
+    float            f_number;
+    int              sensing_method;
+    float            crop_factor;
 } cam_sensor_params_t;
 
 typedef struct {
@@ -909,6 +913,11 @@ typedef struct {
     uint32_t settled;
     uint32_t exp_index;
     uint32_t line_count;
+    uint32_t metering_mode;
+    uint32_t exposure_program;
+    uint32_t exposure_mode;
+    uint32_t scenetype;
+    float brightness;
 } cam_ae_params_t;
 
 typedef struct {

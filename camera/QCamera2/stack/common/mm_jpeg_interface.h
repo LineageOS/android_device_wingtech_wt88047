@@ -75,6 +75,7 @@ typedef struct {
   cam_auto_focus_data_t af_params;
   uint8_t af_mobicat_params[MAX_AF_STATS_DATA_SIZE];
   cam_awb_params_t awb_params;
+  cam_auto_scene_t scene;
   cam_ae_exif_debug_t ae_debug_params;
   cam_awb_exif_debug_t awb_debug_params;
   cam_af_exif_debug_t af_debug_params;
