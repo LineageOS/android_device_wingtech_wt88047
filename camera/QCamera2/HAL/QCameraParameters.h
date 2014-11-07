@@ -1,6 +1,6 @@
 /*
 ** Copyright 2008, The Android Open Source Project
-** Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+** Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
 ** Not a Contribution. Apache license notifications and license are
 ** retained for attribution purposes only.
 **
@@ -197,6 +197,8 @@ public:
     static const char KEY_QC_NUM_SNAPSHOT_PER_SHUTTER[];
     static const char KEY_QC_SNAPSHOT_BURST_NUM[];
     static const char KEY_QC_NO_DISPLAY_MODE[];
+    static const char KEY_QC_LOW_POWER_MODE[];
+    static const char KEY_QC_LOW_POWER_MODE_SUPPORTED[];
     static const char KEY_QC_RAW_PICUTRE_SIZE[];
     static const char KEY_QC_TINTLESS_ENABLE[];
     static const char KEY_QC_CDS_MODE[];
@@ -730,6 +732,7 @@ public:
             isHDREnabled() || isfssrEnabled() || isMultiTouchFocusEnabled();};
     int32_t setIntEvent(cam_int_evt_params_t params);
     uint8_t getLongshotStages();
+    inline bool isLowPowerEnabled() {return m_bLowPowerMode;};
 
 private:
     int32_t setPreviewSize(const QCameraParameters& );
@@ -808,6 +811,8 @@ private:
     bool UpdateHFRFrameRate(const QCameraParameters& params);
     int32_t setLongshotParam(const QCameraParameters& params);
     int32_t setCacheVideoBuffers(const QCameraParameters& params);
+    int32_t setLowPowerMode(const QCameraParameters& params);
+
     int32_t setAutoExposure(const char *autoExp);
     int32_t setPreviewFpsRange(int min_fps,int max_fps,
             int vid_min_fps,int vid_max_fps);
@@ -859,6 +864,7 @@ private:
     int32_t setFaceRecognition(const char *faceRecog, uint32_t maxFaces);
     int32_t setTintlessValue(const char *tintStr);
     int32_t setCacheVideoBuffers(const char *cacheVideoBufStr);
+    int32_t setLowPowerMode(bool value);
 
     int32_t parseGains(const char *gainStr, double &r_gain,
                        double &g_gain, double &b_gain);
@@ -989,6 +995,7 @@ private:
     bool m_bTruePortraitOn;
     bool m_bSensorHDREnabled;             // if HDR is enabled
     bool m_bIsLowMemoryDevice;
+    bool m_bLowPowerMode;
 };
 
 }; // namespace qcamera

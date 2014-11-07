@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -976,6 +976,7 @@ void QCamera2HardwareInterface::snapshot_channel_cb_routine(mm_camera_super_buf_
 {
     ATRACE_CALL();
     char value[PROPERTY_VALUE_MAX];
+    QCameraChannel *pChannel = NULL;
 
     CDBG_HIGH("[KPI Perf] %s: E", __func__);
     QCamera2HardwareInterface *pme = (QCamera2HardwareInterface *)userdata;
@@ -988,7 +989,12 @@ void QCamera2HardwareInterface::snapshot_channel_cb_routine(mm_camera_super_buf_
         return;
     }
 
-    QCameraChannel *pChannel = pme->m_channels[QCAMERA_CH_TYPE_SNAPSHOT];
+    if (pme->mParameters.isLowPowerEnabled()) {
+        pChannel = pme->m_channels[QCAMERA_CH_TYPE_VIDEO];
+    } else {
+        pChannel = pme->m_channels[QCAMERA_CH_TYPE_SNAPSHOT];
+    }
+
     if (pChannel == NULL ||
         pChannel->getMyHandle() != super_frame->ch_id) {
         ALOGE("%s: Snapshot channel doesn't exist, return here", __func__);

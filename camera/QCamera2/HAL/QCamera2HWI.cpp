@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -2162,6 +2162,35 @@ int QCamera2HardwareInterface::startRecording()
         }
     }
 
+    //link meta stream with video channel if low power mode is enabled.
+    if (mParameters.isLowPowerEnabled()) {
+        // Find and try to link a metadata stream from preview channel
+        QCameraChannel *pMetaChannel = NULL;
+        QCameraStream *pMetaStream = NULL;
+        QCameraChannel *pVideoChannel = m_channels[QCAMERA_CH_TYPE_VIDEO];
+
+        if (m_channels[QCAMERA_CH_TYPE_PREVIEW] != NULL) {
+            pMetaChannel = m_channels[QCAMERA_CH_TYPE_PREVIEW];
+            uint32_t streamNum = pMetaChannel->getNumOfStreams();
+            QCameraStream *pStream = NULL;
+            for (uint32_t i = 0 ; i < streamNum ; i++ ) {
+                pStream = pMetaChannel->getStreamByIndex(i);
+                if ((NULL != pStream) &&
+                        (CAM_STREAM_TYPE_METADATA == pStream->getMyType())) {
+                    pMetaStream = pStream;
+                    break;
+                }
+            }
+        }
+
+        if ((NULL != pMetaChannel) && (NULL != pMetaStream)) {
+            rc = pVideoChannel->linkStream(pMetaChannel, pMetaStream);
+            if (NO_ERROR != rc) {
+                CDBG_HIGH("%s : Metadata stream link failed %d", __func__, rc);
+            }
+        }
+    }
+
     if (rc == NO_ERROR) {
         rc = startChannel(QCAMERA_CH_TYPE_VIDEO);
     }
@@ -3269,17 +3298,27 @@ int QCamera2HardwareInterface::takeLiveSnapshot_internal()
     getOrientation();
     QCameraChannel *pChannel = NULL;
 
+    if (mParameters.isLowPowerEnabled()) {
+        pChannel = m_channels[QCAMERA_CH_TYPE_VIDEO];
+    } else {
+        pChannel = m_channels[QCAMERA_CH_TYPE_SNAPSHOT];
+    }
+
+    if (NULL == pChannel) {
+        ALOGE("%s: Snapshot/Video channel not initialized", __func__);
+        rc = NO_INIT;
+        goto end;
+    }
+
     // start post processor
-    rc = m_postprocessor.start(m_channels[QCAMERA_CH_TYPE_SNAPSHOT]);
+    rc = m_postprocessor.start(pChannel);
     if (NO_ERROR != rc) {
         ALOGE("%s: Post-processor start failed %d", __func__, rc);
         goto end;
     }
 
-    pChannel = m_channels[QCAMERA_CH_TYPE_SNAPSHOT];
-    if (NULL == pChannel) {
-        ALOGE("%s: Snapshot channel not initialized", __func__);
-        rc = NO_INIT;
+    if (mParameters.isLowPowerEnabled()) {
+        rc = ((QCameraVideoChannel*)pChannel)->takePicture(1);
         goto end;
     }
 
@@ -4596,8 +4635,20 @@ int32_t QCamera2HardwareInterface::addVideoChannel()
         return NO_MEMORY;
     }
 
-    // preview only channel, don't need bundle attr and cb
-    rc = pChannel->init(NULL, NULL, NULL);
+    if (mParameters.isLowPowerEnabled()) {
+        mm_camera_channel_attr_t attr;
+        memset(&attr, 0, sizeof(mm_camera_channel_attr_t));
+        attr.notify_mode = MM_CAMERA_SUPER_BUF_NOTIFY_BURST;
+        attr.look_back = 0; //wait for future frame for liveshot
+        attr.post_frame_skip = mParameters.getZSLBurstInterval();
+        attr.water_mark = 1; //hold min buffers possible in Q
+        attr.max_unmatched_frames = mParameters.getMaxUnmatchedFramesInQueue();
+        rc = pChannel->init(&attr, snapshot_channel_cb_routine, this);
+    } else {
+        // preview only channel, don't need bundle attr and cb
+        rc = pChannel->init(NULL, NULL, NULL);
+    }
+
     if (rc != 0) {
         ALOGE("%s: init video channel failed, ret = %d", __func__, rc);
         delete pChannel;
@@ -5379,7 +5430,7 @@ int32_t QCamera2HardwareInterface::preparePreview()
         if(recordingHint) {
             cam_dimension_t videoSize;
             mParameters.getVideoSize(&videoSize.width, &videoSize.height);
-            if (!is4k2kResolution(&videoSize)) {
+            if (!is4k2kResolution(&videoSize) && !mParameters.isLowPowerEnabled()) {
                rc = addChannel(QCAMERA_CH_TYPE_SNAPSHOT);
                if (rc != NO_ERROR) {
                    return rc;

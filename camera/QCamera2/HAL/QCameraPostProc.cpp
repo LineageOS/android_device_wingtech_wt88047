@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -1447,7 +1447,9 @@ int32_t QCameraPostProcessor::queryStreams(QCameraStream **main,
                 pChannel->getStreamByHandle(frame->bufs[i]->stream_id);
         if (pStream != NULL) {
             if (pStream->isTypeOf(CAM_STREAM_TYPE_SNAPSHOT) ||
-                pStream->isOrignalTypeOf(CAM_STREAM_TYPE_SNAPSHOT)) {
+                pStream->isOrignalTypeOf(CAM_STREAM_TYPE_SNAPSHOT) ||
+                pStream->isTypeOf(CAM_STREAM_TYPE_VIDEO) ||
+                pStream->isOrignalTypeOf(CAM_STREAM_TYPE_VIDEO)) {
                 *main= pStream;
                 *main_image = frame->bufs[i];
             } else if (pStream->isTypeOf(CAM_STREAM_TYPE_PREVIEW) ||

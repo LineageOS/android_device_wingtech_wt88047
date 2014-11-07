@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -117,6 +117,8 @@ const char QCameraParameters::KEY_QC_SELECTABLE_ZONE_AF[] = "selectable-zone-af"
 const char QCameraParameters::KEY_QC_CAPTURE_BURST_EXPOSURE[] = "capture-burst-exposures";
 const char QCameraParameters::KEY_QC_NUM_SNAPSHOT_PER_SHUTTER[] = "num-snaps-per-shutter";
 const char QCameraParameters::KEY_QC_NO_DISPLAY_MODE[] = "no-display-mode";
+const char QCameraParameters::KEY_QC_LOW_POWER_MODE[] = "low-power-mode";
+const char QCameraParameters::KEY_QC_LOW_POWER_MODE_SUPPORTED[] = "low-power-mode-supported";
 const char QCameraParameters::KEY_QC_RAW_PICUTRE_SIZE[] = "raw-size";
 const char QCameraParameters::KEY_QC_SUPPORTED_SKIN_TONE_ENHANCEMENT_MODES[] = "skinToneEnhancement-values";
 const char QCameraParameters::KEY_QC_SUPPORTED_LIVESNAPSHOT_SIZES[] = "supported-live-snapshot-sizes";
@@ -784,7 +786,8 @@ QCameraParameters::QCameraParameters()
       mFlashDaemonValue(CAM_FLASH_MODE_OFF),
       m_bTruePortraitOn(false),
       m_bSensorHDREnabled(false),
-      m_bIsLowMemoryDevice(false)
+      m_bIsLowMemoryDevice(false),
+      m_bLowPowerMode(false)
 {
     char value[PROPERTY_VALUE_MAX];
     // TODO: may move to parameter instead of sysprop
@@ -878,7 +881,8 @@ QCameraParameters::QCameraParameters(const String8 &params)
     mFlashDaemonValue(CAM_FLASH_MODE_OFF),
     m_bTruePortraitOn(false),
     m_bSensorHDREnabled(false),
-    m_bIsLowMemoryDevice(false)
+    m_bIsLowMemoryDevice(false),
+    m_bLowPowerMode(false)
 {
     memset(&m_LiveSnapshotSize, 0, sizeof(m_LiveSnapshotSize));
     m_pTorch = NULL;
@@ -3741,6 +3745,47 @@ int32_t QCameraParameters::setRecordingHint(const QCameraParameters& params)
 }
 
 /*===========================================================================
+ * FUNCTION   : setLowPowerMode
+ *
+ * DESCRIPTION: set camcorder power mode from user setting
+ *
+ * PARAMETERS :
+ *   @params  : user setting parameters
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setLowPowerMode(const QCameraParameters& params)
+{
+    int32_t ret = NO_ERROR;
+    const char *str_val  = params.get(KEY_QC_LOW_POWER_MODE);
+    const char *prev_str = get(KEY_QC_LOW_POWER_MODE);
+    int8_t value = -1;
+    char prop[PROPERTY_VALUE_MAX];
+
+    memset(prop, 0, sizeof(prop));
+    property_get("persist.camera.lowpower.enable", prop, "");
+
+    if (strlen(prop) > 0) {
+        value = atoi(prop);
+    } else if(str_val != NULL) {
+        if (prev_str == NULL || strcmp(str_val, prev_str) != 0) {
+            value = atoi(str_val);
+        }
+    }
+
+    if (value != -1) {
+        //map value to boolean for enabling/disabling low power
+        value = (value > 0)? true : false;
+        if ( m_bLowPowerMode != value ) {
+            ret = setLowPowerMode(value);
+        }
+    }
+    return ret;
+}
+
+/*===========================================================================
  * FUNCTION   : setNoDisplayMode
  *
  * DESCRIPTION: set no display mode from user setting
@@ -4151,6 +4196,7 @@ int32_t QCameraParameters::updateParameters(QCameraParameters& params,
     if ((rc = setZslAttributes(params)))                final_rc = rc;
     if ((rc = setCameraMode(params)))                   final_rc = rc;
     if ((rc = setRecordingHint(params)))                final_rc = rc;
+    if ((rc = setLowPowerMode(params)))                 final_rc = rc;
 
     if ((rc = setPreviewFrameRate(params)))             final_rc = rc;
     if ((rc = setPreviewFpsRange(params)))              final_rc = rc;
@@ -4979,6 +5025,13 @@ int32_t QCameraParameters::initDefaultParameters()
     set(KEY_QC_4K2K_LIVESNAP_SUPPORTED, VALUE_FALSE);
     //Set video buffers as uncached by default
     set(KEY_QC_CACHE_VIDEO_BUFFERS, "0");
+
+    if (m_pCapability->low_power_mode_supported == 1) {
+        set(KEY_QC_LOW_POWER_MODE_SUPPORTED, VALUE_TRUE);
+    } else {
+        set(KEY_QC_LOW_POWER_MODE_SUPPORTED, VALUE_FALSE);
+    }
+    setLowPowerMode(false);
 
     int32_t rc = commitParameters();
     if (rc == NO_ERROR) {
@@ -8324,6 +8377,30 @@ int QCameraParameters::getMinPPBufs()
     // each module irrespective of whether its connected or not. This has to be enhanced later
     // to get the exact requirement from backend.
     return MIN_PP_BUF_CNT;
+}
+
+/*===========================================================================
+ * FUNCTION   : setLowPowerMode
+ *
+ * DESCRIPTION: enable/disable low power mode for camcorder
+ *
+ * PARAMETERS :
+ *   @value   : true/false
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setLowPowerMode(bool value)
+{
+    CDBG_HIGH("%s: Setting %s Power mode", __func__, value ? "low":"normal");
+    m_bLowPowerMode = value;
+    set(KEY_QC_LOW_POWER_MODE, value);
+    m_bNeedRestart = true;
+    return AddSetParmEntryToBatch(m_pParamBuf,
+                                  CAM_INTF_PARM_LOW_POWER_ENABLE,
+                                  sizeof(value),
+                                  &value);
 }
 
 /*===========================================================================

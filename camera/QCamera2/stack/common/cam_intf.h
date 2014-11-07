@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -323,6 +323,8 @@ typedef struct{
     cam_af_bracketing_t  mtf_af_bracketing_parm;
     /* Sensor type information */
     cam_sensor_type_t sensor_type;
+    /* low power mode support */
+    uint8_t low_power_mode_supported;
 } cam_capability_t;
 
 typedef enum {
@@ -517,6 +519,7 @@ typedef union {
     INCLUDE(CAM_INTF_PARM_WB_MANUAL,                cam_manual_wb_parm_t,        1);
     INCLUDE(CAM_INTF_PARM_EZTUNE_CMD,               cam_eztune_cmd_data_t,       1);
     INCLUDE(CAM_INTF_PARM_LONGSHOT_ENABLE,          int8_t,                      1);
+    INCLUDE(CAM_INTF_PARM_LOW_POWER_ENABLE,         int8_t,                      1);
 
     /* HAL3 specific */
     INCLUDE(CAM_INTF_META_FRAME_NUMBER,             uint32_t,                    1);
