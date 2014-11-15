@@ -58,19 +58,19 @@ extern "C" {
 
 
 static hw_module_methods_t camera_module_methods = {
-    open: camera_device_open,
+    .open = camera_device_open,
 };
 
 static hw_module_t camera_common = {
-    tag: HARDWARE_MODULE_TAG,
-    module_api_version: CAMERA_MODULE_API_VERSION_1_0,
-    hal_api_version: HARDWARE_HAL_API_VERSION,
-    id: CAMERA_HARDWARE_MODULE_ID,
-    name: "QCamera Module",
-    author: "Quic on behalf of CAF",
-    methods: &camera_module_methods,
-    dso: NULL,
-    reserved:  {0},
+    .tag = HARDWARE_MODULE_TAG,
+    .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
+    .hal_api_version = HARDWARE_HAL_API_VERSION,
+    .id = CAMERA_HARDWARE_MODULE_ID,
+    .name = "QCamera Module",
+    .author = "Quic on behalf of CAF",
+    .methods = &camera_module_methods,
+    .dso = NULL,
+    .reserved = {0},
 };
 
 using namespace qcamera;
