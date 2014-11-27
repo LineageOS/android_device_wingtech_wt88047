@@ -7744,16 +7744,16 @@ int32_t QCameraParameters::getStreamRotation(cam_stream_type_t streamType,
     case CAM_STREAM_TYPE_VIDEO:
            switch(rotationParam) {
             case 90:
-               featureConfig.feature_mask |= CAM_QCOM_FEATURE_CPP;
+               featureConfig.feature_mask |= CAM_QCOM_FEATURE_ROTATION;
                featureConfig.rotation = ROTATE_90;
                swapDim = 1;
                break;
             case 180:
-               featureConfig.feature_mask |= CAM_QCOM_FEATURE_CPP;
+               featureConfig.feature_mask |= CAM_QCOM_FEATURE_ROTATION;
                featureConfig.rotation = ROTATE_180;
                break;
             case 270:
-               featureConfig.feature_mask |= CAM_QCOM_FEATURE_CPP;
+               featureConfig.feature_mask |= CAM_QCOM_FEATURE_ROTATION;
                featureConfig.rotation = ROTATE_270;
                swapDim = 1;
               break;

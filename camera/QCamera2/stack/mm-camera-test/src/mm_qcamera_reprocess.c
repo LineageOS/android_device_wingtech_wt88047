@@ -206,7 +206,7 @@ mm_camera_channel_t * mm_app_add_reprocess_channel(mm_camera_test_obj_t *test_ob
     memset(&pp_config, 0, sizeof(cam_pp_feature_config_t));
 
     cam_capability_t *caps = ( cam_capability_t * ) ( test_obj->cap_buf.buf.buffer );
-    if (caps->min_required_pp_mask & CAM_QCOM_FEATURE_SHARPNESS) {
+    if (caps->qcom_supported_feature_mask & CAM_QCOM_FEATURE_SHARPNESS) {
         pp_config.feature_mask |= CAM_QCOM_FEATURE_SHARPNESS;
         pp_config.sharpness = test_obj->reproc_sharpness;
     }

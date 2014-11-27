@@ -1472,7 +1472,7 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FACE_DETECTION (1U<<0)
 #define CAM_QCOM_FEATURE_DENOISE2D      (1U<<1)
 #define CAM_QCOM_FEATURE_CROP           (1U<<2)
-#define CAM_QCOM_FEATURE_CPP            (1U<<3)
+#define CAM_QCOM_FEATURE_ROTATION       (1U<<3)
 #define CAM_QCOM_FEATURE_FLIP           (1U<<4)
 #define CAM_QCOM_FEATURE_HDR            (1U<<5)
 #define CAM_QCOM_FEATURE_REGISTER_FACE  (1U<<6)

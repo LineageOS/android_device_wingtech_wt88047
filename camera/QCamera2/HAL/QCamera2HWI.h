@@ -349,6 +349,7 @@ private:
     bool is4k2kResolution(cam_dimension_t* resolution);
     bool isCaptureShutterEnabled();
     bool isAFRunning();
+    cam_pp_feature_config_t getReprocessConfig();
     bool needReprocess();
     bool needDualReprocess();
     bool needRotationReprocess();

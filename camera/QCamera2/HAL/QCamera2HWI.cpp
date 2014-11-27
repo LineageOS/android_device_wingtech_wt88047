@@ -5098,113 +5098,8 @@ QCameraReprocessChannel *QCamera2HardwareInterface::addReprocChannel(
         return NULL;
     }
 
-    CDBG_HIGH("%s: Before pproc config check, ret = %x", __func__, gCamCapability[mCameraId]->min_required_pp_mask);
-
-    // pp feature config
-    cam_pp_feature_config_t pp_config;
-    uint32_t required_mask = gCamCapability[mCameraId]->min_required_pp_mask;
-    memset(&pp_config, 0, sizeof(cam_pp_feature_config_t));
-    if (mParameters.isZSLMode() || (required_mask & CAM_QCOM_FEATURE_CPP)) {
-        if (gCamCapability[mCameraId]->min_required_pp_mask & CAM_QCOM_FEATURE_EFFECT) {
-            pp_config.feature_mask |= CAM_QCOM_FEATURE_EFFECT;
-            pp_config.effect = mParameters.getEffectValue();
-        }
-        if ((gCamCapability[mCameraId]->min_required_pp_mask & CAM_QCOM_FEATURE_SHARPNESS) &&
-                !mParameters.isOptiZoomEnabled()) {
-            pp_config.feature_mask |= CAM_QCOM_FEATURE_SHARPNESS;
-            pp_config.sharpness = mParameters.getInt(QCameraParameters::KEY_QC_SHARPNESS);
-        }
-
-        if (gCamCapability[mCameraId]->min_required_pp_mask & CAM_QCOM_FEATURE_CROP) {
-            pp_config.feature_mask |= CAM_QCOM_FEATURE_CROP;
-        }
-
-        if (mParameters.isWNREnabled()) {
-            pp_config.feature_mask |= CAM_QCOM_FEATURE_DENOISE2D;
-            pp_config.denoise2d.denoise_enable = 1;
-            pp_config.denoise2d.process_plates = mParameters.getWaveletDenoiseProcessPlate();
-        }
-
-        if (required_mask & CAM_QCOM_FEATURE_CPP) {
-            pp_config.feature_mask |= CAM_QCOM_FEATURE_CPP;
-        }
-
-    }
-
-    if (isCACEnabled()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_CAC;
-    }
-
-    if (needRotationReprocess()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_CPP;
-        uint32_t rotation = getJpegRotation();
-        if (rotation == 0) {
-            pp_config.rotation = ROTATE_0;
-        } else if (rotation == 90) {
-            pp_config.rotation = ROTATE_90;
-        } else if (rotation == 180) {
-            pp_config.rotation = ROTATE_180;
-        } else if (rotation == 270) {
-            pp_config.rotation = ROTATE_270;
-        }
-    }
-
     uint8_t minStreamBufNum = getBufNumRequired(CAM_STREAM_TYPE_OFFLINE_PROC);
-
-    if (mParameters.isHDREnabled()){
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_HDR;
-        pp_config.hdr_param.hdr_enable = 1;
-        pp_config.hdr_param.hdr_need_1x = mParameters.isHDR1xFrameEnabled();
-        pp_config.hdr_param.hdr_mode = CAM_HDR_MODE_MULTIFRAME;
-    } else {
-        pp_config.feature_mask &= ~CAM_QCOM_FEATURE_HDR;
-        pp_config.hdr_param.hdr_enable = 0;
-    }
-
-    if(needScaleReprocess()){
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_SCALE;
-        mParameters.m_reprocScaleParam.getPicSizeFromAPK(
-              pp_config.scale_param.output_width, pp_config.scale_param.output_height);
-    }
-
-    CDBG_HIGH("%s: After pproc config check, ret = %x", __func__, pp_config.feature_mask);
-
-    if(mParameters.isUbiFocusEnabled()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_UBIFOCUS;
-    } else {
-        pp_config.feature_mask &= ~CAM_QCOM_FEATURE_UBIFOCUS;
-    }
-
-    if(mParameters.isMultiTouchFocusEnabled()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS;
-    } else {
-        pp_config.feature_mask &= ~CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS;
-    }
-
-    if(mParameters.isChromaFlashEnabled()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_CHROMA_FLASH;
-        //TODO: check flash value for captured image, then assign.
-        pp_config.flash_value = CAM_FLASH_ON;
-    } else {
-        pp_config.feature_mask &= ~CAM_QCOM_FEATURE_CHROMA_FLASH;
-    }
-
-    if(mParameters.isOptiZoomEnabled()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_OPTIZOOM;
-        pp_config.zoom_level =
-                (uint8_t) mParameters.getInt(CameraParameters::KEY_ZOOM);
-    } else {
-        pp_config.feature_mask &= ~CAM_QCOM_FEATURE_OPTIZOOM;
-    }
-
-    if (mParameters.isTruePortraitEnabled()) {
-        pp_config.feature_mask |= CAM_QCOM_FEATURE_TRUEPORTRAIT;
-        pp_config.tp_param.enable = mParameters.isTruePortraitEnabled();
-        pp_config.tp_param.meta_max_size = mParameters.TpMaxMetaSize();
-    } else {
-        pp_config.feature_mask &= ~CAM_QCOM_FEATURE_TRUEPORTRAIT;
-        pp_config.tp_param.enable = 0;
-    }
+    cam_pp_feature_config_t pp_config = getReprocessConfig();
 
     //WNR and HDR happen inline. No extra buffers needed.
     uint32_t temp_feature_mask = pp_config.feature_mask;
@@ -6330,6 +6225,135 @@ bool QCamera2HardwareInterface::needDualReprocess()
 }
 
 /*===========================================================================
+ * FUNCTION   : getReprocessConfig
+ *
+ * DESCRIPTION: get for configs to be enabled via reprocess channel
+ *
+ * PARAMETERS : none
+ *
+ * RETURN     : feature config (cam_pp_feature_config_t)
+ *==========================================================================*/
+cam_pp_feature_config_t QCamera2HardwareInterface::getReprocessConfig()
+{
+    cam_pp_feature_config_t pp_config;
+    uint32_t feature_mask = gCamCapability[mCameraId]->qcom_supported_feature_mask;
+    memset(&pp_config, 0, sizeof(cam_pp_feature_config_t));
+
+    //check for features that need to be enabled by default like sharpness (if supported by hw).
+    if ((feature_mask & CAM_QCOM_FEATURE_SHARPNESS) &&
+            !mParameters.isOptiZoomEnabled()) {
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_SHARPNESS;
+        pp_config.sharpness = mParameters.getInt(QCameraParameters::KEY_QC_SHARPNESS);
+    }
+
+    //check if any effects are enabled
+    int32_t effect = mParameters.getEffectValue();
+    if (CAM_EFFECT_MODE_OFF != effect &&
+        feature_mask & CAM_QCOM_FEATURE_EFFECT) {
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_EFFECT;
+        pp_config.effect = effect;
+    }
+
+    //check if wavelet denoise is enabled
+    if (feature_mask & CAM_QCOM_FEATURE_DENOISE2D &&
+        mParameters.isWNREnabled()) {
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_DENOISE2D;
+        pp_config.denoise2d.denoise_enable = 1;
+        pp_config.denoise2d.process_plates = mParameters.getWaveletDenoiseProcessPlate();
+    }
+
+    //check if CAC is enabled
+    if (feature_mask & CAM_QCOM_FEATURE_CAC && isCACEnabled()) {
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_CAC;
+    }
+
+    //check if rotation is required
+    uint32_t rotation = getJpegRotation();
+    if (feature_mask & CAM_QCOM_FEATURE_ROTATION && (rotation > 0)) {
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_ROTATION;
+        if (rotation == 0) {
+            pp_config.rotation = ROTATE_0;
+        } else if (rotation == 90) {
+            pp_config.rotation = ROTATE_90;
+        } else if (rotation == 180) {
+            pp_config.rotation = ROTATE_180;
+        } else if (rotation == 270) {
+            pp_config.rotation = ROTATE_270;
+        }
+    }
+
+    //check if scaling is enabled
+    if (feature_mask & CAM_QCOM_FEATURE_SCALE &&
+        mParameters.m_reprocScaleParam.isScaleEnabled() &&
+        mParameters.m_reprocScaleParam.isUnderScaling()){
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_SCALE;
+        mParameters.m_reprocScaleParam.getPicSizeFromAPK(
+              pp_config.scale_param.output_width, pp_config.scale_param.output_height);
+    }
+
+    //check if any advanced features are enabled
+    if (mParameters.isAdvCamFeaturesEnabled()) {
+        if(mParameters.isUbiFocusEnabled()) {
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_UBIFOCUS;
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_UBIFOCUS;
+        }
+
+        if(mParameters.isMultiTouchFocusEnabled()) {
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS;
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS;
+        }
+
+        if(mParameters.isChromaFlashEnabled()) {
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_CHROMA_FLASH;
+            //TODO: check flash value for captured image, then assign.
+            pp_config.flash_value = CAM_FLASH_ON;
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_CHROMA_FLASH;
+        }
+
+        if(mParameters.isOptiZoomEnabled()) {
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_OPTIZOOM;
+            pp_config.zoom_level =
+                    (uint8_t) mParameters.getInt(CameraParameters::KEY_ZOOM);
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_OPTIZOOM;
+        }
+
+        if (mParameters.isTruePortraitEnabled()) {
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_TRUEPORTRAIT;
+            pp_config.tp_param.enable = mParameters.isTruePortraitEnabled();
+            pp_config.tp_param.meta_max_size = mParameters.TpMaxMetaSize();
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_TRUEPORTRAIT;
+            pp_config.tp_param.enable = 0;
+        }
+
+        if (mParameters.isHDREnabled()){
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_HDR;
+            pp_config.hdr_param.hdr_enable = 1;
+            pp_config.hdr_param.hdr_need_1x = mParameters.isHDR1xFrameEnabled();
+            pp_config.hdr_param.hdr_mode = CAM_HDR_MODE_MULTIFRAME;
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_HDR;
+            pp_config.hdr_param.hdr_enable = 0;
+        }
+    }
+
+    //check if snapshot flip is enabled
+    int snapshot_flipMode =
+        mParameters.getFlipMode(CAM_STREAM_TYPE_SNAPSHOT);
+    if (snapshot_flipMode > 0 && feature_mask & CAM_QCOM_FEATURE_FLIP) {
+        pp_config.feature_mask |= CAM_QCOM_FEATURE_FLIP;
+    }
+
+    CDBG_HIGH("%s: Final pproc config = %x", __func__, pp_config.feature_mask);
+
+    return pp_config;
+}
+
+/*===========================================================================
  * FUNCTION   : needReprocess
  *
  * DESCRIPTION: if reprocess is needed
@@ -6341,84 +6365,18 @@ bool QCamera2HardwareInterface::needDualReprocess()
  *==========================================================================*/
 bool QCamera2HardwareInterface::needReprocess()
 {
+    bool needReprocess = false;
     pthread_mutex_lock(&m_parm_lock);
-    if (!mParameters.isJpegPictureFormat() &&
-        !mParameters.isNV21PictureFormat()) {
-        // RAW image, no need to reprocess
-        pthread_mutex_unlock(&m_parm_lock);
-        return false;
+
+    if ((mParameters.isJpegPictureFormat() ||
+        mParameters.isNV21PictureFormat()) &&
+        getReprocessConfig().feature_mask > 0) {
+        needReprocess = true;
     }
 
-    if (mParameters.isHDREnabled()) {
-        CDBG_HIGH("%s: need do reprocess for HDR", __func__);
-        pthread_mutex_unlock(&m_parm_lock);
-        return true;
-    }
-
-    uint32_t feature_mask = 0;
-    uint32_t required_mask = 0;
-    feature_mask = gCamCapability[mCameraId]->qcom_supported_feature_mask;
-    required_mask = gCamCapability[mCameraId]->min_required_pp_mask;
-    if (((feature_mask & CAM_QCOM_FEATURE_CPP) > 0) &&
-        (getJpegRotation() > 0)) {
-            // current rotation is not zero, and pp has the capability to process rotation
-            CDBG_HIGH("%s: need to do reprocess for rotation=%d", __func__, getJpegRotation());
-            pthread_mutex_unlock(&m_parm_lock);
-            return true;
-    }
-
-    if (isZSLMode()) {
-        if (((gCamCapability[mCameraId]->min_required_pp_mask > 0) ||
-             mParameters.isWNREnabled() || isCACEnabled())) {
-            // TODO: add for ZSL HDR later
-            CDBG_HIGH("%s: need do reprocess for ZSL WNR or min PP reprocess", __func__);
-            pthread_mutex_unlock(&m_parm_lock);
-            return true;
-        }
-
-        int snapshot_flipMode =
-            mParameters.getFlipMode(CAM_STREAM_TYPE_SNAPSHOT);
-        if (snapshot_flipMode > 0) {
-            CDBG_HIGH("%s: Need do flip for snapshot in ZSL mode", __func__);
-            pthread_mutex_unlock(&m_parm_lock);
-            return true;
-        }
-    } else {
-        if (required_mask & CAM_QCOM_FEATURE_CPP) {
-            CDBG_HIGH("%s: Need CPP in non-ZSL mode", __func__);
-            pthread_mutex_unlock(&m_parm_lock);
-            return true;
-        }
-    }
-
-    if ((gCamCapability[mCameraId]->qcom_supported_feature_mask & CAM_QCOM_FEATURE_SCALE) > 0 &&
-        mParameters.m_reprocScaleParam.isScaleEnabled() &&
-        mParameters.m_reprocScaleParam.isUnderScaling()) {
-        // Reproc Scale is enaled and also need Scaling to current Snapshot
-        CDBG_HIGH("%s: need do reprocess for scale", __func__);
-        pthread_mutex_unlock(&m_parm_lock);
-        return true;
-    }
-
-    if (mParameters.isUbiFocusEnabled() |
-        mParameters.isMultiTouchFocusEnabled() |
-        mParameters.isChromaFlashEnabled() |
-        mParameters.isHDREnabled() |
-        mParameters.isfssrEnabled() |
-        mParameters.isOptiZoomEnabled()) {
-        CDBG_HIGH("%s: need reprocess for |UbiFocus=%d|ChramaFlash=%d"
-                  "|OptiZoom=%d|fssr=%d|MultiTouchFocus=%d",__func__,
-                  mParameters.isUbiFocusEnabled(),
-                  mParameters.isChromaFlashEnabled(),
-                  mParameters.isOptiZoomEnabled(),
-                  mParameters.isfssrEnabled(),
-                  mParameters.isMultiTouchFocusEnabled());
-        pthread_mutex_unlock(&m_parm_lock);
-        return true;
-    }
-
+    CDBG_HIGH("%s: needReprocess %s", __func__, needReprocess ? "true" : "false");
     pthread_mutex_unlock(&m_parm_lock);
-    return false;
+    return needReprocess;
 }
 
 /*===========================================================================
@@ -6443,7 +6401,7 @@ bool QCamera2HardwareInterface::needRotationReprocess()
 
     uint32_t feature_mask = 0;
     feature_mask = gCamCapability[mCameraId]->qcom_supported_feature_mask;
-    if (((feature_mask & CAM_QCOM_FEATURE_CPP) > 0) &&
+    if (((feature_mask & CAM_QCOM_FEATURE_ROTATION) > 0) &&
         (getJpegRotation() > 0)) {
         // current rotation is not zero
         // and pp has the capability to process rotation
