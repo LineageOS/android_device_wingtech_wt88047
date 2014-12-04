@@ -705,7 +705,7 @@ public:
     uint32_t MTFOutputCount();
     inline bool generateThumbFromMain() {return isUbiFocusEnabled() ||
             isChromaFlashEnabled() || isOptiZoomEnabled() || isDifferentFlipZSL() ||
-            isfssrEnabled() || isMultiTouchFocusEnabled();}
+            isfssrEnabled() || isMultiTouchFocusEnabled() || isHDREnabled();}
     cam_af_bracketing_t m_MTFBracketInfo;
     int32_t updateMTFInfo(const int32_t lenPos);
     uint8_t m_currNumBufMTF;
