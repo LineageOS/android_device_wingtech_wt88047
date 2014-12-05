@@ -91,6 +91,11 @@ static void mm_app_metadata_notify_cb(mm_camera_super_buf_t *bufs,
     }
   }
 
+  if (pme->user_metadata_cb) {
+      CDBG("[DBG] %s, user defined own metadata cb. calling it...", __func__);
+      pme->user_metadata_cb(frame);
+  }
+
   if (MM_CAMERA_OK != pme->cam->ops->qbuf(bufs->camera_handle,
                                           bufs->ch_id,
                                           frame)) {

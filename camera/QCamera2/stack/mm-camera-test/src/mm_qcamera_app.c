@@ -2522,7 +2522,7 @@ EXIT:
 }
 
 int mm_camera_lib_set_preview_usercb(
-   mm_camera_lib_handle *handle, prev_callback cb)
+   mm_camera_lib_handle *handle, cam_stream_user_cb cb)
 {
     if (handle->test_obj.user_preview_cb != NULL) {
         CDBG_ERROR("%s, already set preview callbacks\n", __func__);
@@ -2547,3 +2547,71 @@ int mm_app_set_preview_fps_range(mm_camera_test_obj_t *test_obj,
 
     return rc;
 }
+
+static int mm_app_set_params_impl(mm_camera_test_obj_t *test_obj,
+                      cam_intf_parm_type_t param_type,
+                      uint32_t param_len,
+                      void* param_val)
+{
+    int rc = MM_CAMERA_OK;
+
+    rc = initBatchUpdate(test_obj);
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: Batch camera parameter update failed\n", __func__);
+        goto ERROR;
+    }
+
+    rc = AddSetParmEntryToBatch(test_obj,
+                                param_type,
+                                param_len,
+                                param_val);
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: parameter-type %d not added to batch\n", __func__, param_type);
+        goto ERROR;
+    }
+
+    rc = commitSetBatch(test_obj);
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: Batch parameters commit failed\n", __func__);
+        goto ERROR;
+    }
+
+ERROR:
+    return rc;
+}
+
+int mm_app_set_face_detection(mm_camera_test_obj_t *test_obj,
+                        cam_fd_set_parm_t *fd_set_parm)
+{
+    if (test_obj == NULL || fd_set_parm == NULL) {
+        CDBG_ERROR("%s, invalid params!", __func__);
+        return MM_CAMERA_E_INVALID_INPUT;
+    }
+
+    CDBG_HIGH("%s: mode = %d, num_fd = %d", __func__,
+          fd_set_parm->fd_mode, fd_set_parm->num_fd);
+
+    return mm_app_set_params_impl(test_obj, CAM_INTF_PARM_FD,
+                              sizeof(cam_fd_set_parm_t),
+                              fd_set_parm);
+}
+
+int mm_app_set_metadata_usercb(mm_camera_test_obj_t *test_obj,
+                        cam_stream_user_cb usercb)
+{
+    if (test_obj == NULL || usercb == NULL) {
+        CDBG_ERROR("%s, invalid params!", __func__);
+        return MM_CAMERA_E_INVALID_INPUT;
+    }
+
+    CDBG_HIGH("%s, set user metadata callback, addr: %p\n", __func__, usercb);
+
+    if (test_obj->user_metadata_cb != NULL) {
+        CDBG_HIGH("%s, already set user metadata callback", __func__);
+    }
+    test_obj->user_metadata_cb = usercb;
+
+    return 0;
+}
+
+
