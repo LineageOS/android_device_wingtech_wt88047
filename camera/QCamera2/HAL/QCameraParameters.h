@@ -690,6 +690,7 @@ public:
     inline bool isChromaFlashEnabled() {return m_bChromaFlashOn;};
     inline bool isSeeMoreEnabled() {return m_bSeeMoreOn;};
     inline bool isTruePortraitEnabled() {return m_bTruePortraitOn;};
+    inline bool isLowMemoryDevice() {return m_bIsLowMemoryDevice;};
     inline uint32_t TpMaxMetaSize() {
         return m_pCapability->true_portrait_settings_need.meta_max_size;};
     inline uint32_t TpHeaderSize() {
@@ -728,6 +729,7 @@ public:
             isChromaFlashEnabled() || isOptiZoomEnabled() || isUbiRefocus() ||
             isHDREnabled() || isfssrEnabled() || isMultiTouchFocusEnabled();};
     int32_t setIntEvent(cam_int_evt_params_t params);
+    uint8_t getLongshotStages();
 
 private:
     int32_t setPreviewSize(const QCameraParameters& );
@@ -986,6 +988,7 @@ private:
     int32_t mFlashDaemonValue;
     bool m_bTruePortraitOn;
     bool m_bSensorHDREnabled;             // if HDR is enabled
+    bool m_bIsLowMemoryDevice;
 };
 
 }; // namespace qcamera

@@ -41,6 +41,8 @@
 #include "QCameraParameters.h"
 
 #define ASPECT_TOLERANCE 0.001
+#define CAMERA_DEFAULT_LONGSHOT_STAGES 4
+#define CAMERA_MIN_LONGSHOT_STAGES 2
 
 namespace qcamera {
 // Parameter keys to communicate between camera application and driver.
@@ -781,7 +783,8 @@ QCameraParameters::QCameraParameters()
       mFlashValue(CAM_FLASH_MODE_OFF),
       mFlashDaemonValue(CAM_FLASH_MODE_OFF),
       m_bTruePortraitOn(false),
-      m_bSensorHDREnabled(false)
+      m_bSensorHDREnabled(false),
+      m_bIsLowMemoryDevice(false)
 {
     char value[PROPERTY_VALUE_MAX];
     // TODO: may move to parameter instead of sysprop
@@ -874,7 +877,8 @@ QCameraParameters::QCameraParameters(const String8 &params)
     mFlashValue(CAM_FLASH_MODE_OFF),
     mFlashDaemonValue(CAM_FLASH_MODE_OFF),
     m_bTruePortraitOn(false),
-    m_bSensorHDREnabled(false)
+    m_bSensorHDREnabled(false),
+    m_bIsLowMemoryDevice(false)
 {
     memset(&m_LiveSnapshotSize, 0, sizeof(m_LiveSnapshotSize));
     m_pTorch = NULL;
@@ -4964,13 +4968,13 @@ int32_t QCameraParameters::initDefaultParameters()
     CDBG_HIGH("%s: totalram = %ld, freeram = %ld ", __func__, info.totalram,
         info.freeram);
     if (info.totalram > TOTAL_RAM_SIZE_512MB) {
-        set(KEY_QC_LONGSHOT_SUPPORTED, VALUE_TRUE);
         set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_TRUE);
     } else {
-        set(KEY_QC_LONGSHOT_SUPPORTED, VALUE_FALSE);
+        m_bIsLowMemoryDevice = true;
         set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_FALSE);
     }
-
+    //Enable longshot by default
+    set(KEY_QC_LONGSHOT_SUPPORTED, VALUE_TRUE);
     // Livesnapshot is not supported for 4K2K video resolutions
     set(KEY_QC_4K2K_LIVESNAP_SUPPORTED, VALUE_FALSE);
     //Set video buffers as uncached by default
@@ -8244,6 +8248,9 @@ uint8_t QCameraParameters::getZSLQueueDepth()
     if (qdepth < 0) {
         qdepth = 2;
     }
+    if (isLowMemoryDevice()) {
+        qdepth = 1;
+    }
     return (uint8_t)qdepth;
 }
 
@@ -8261,6 +8268,9 @@ uint8_t QCameraParameters::getZSLBackLookCount()
     int look_back = getInt(KEY_QC_ZSL_BURST_LOOKBACK);
     if (look_back < 0) {
         look_back = 2;
+    }
+    if (isLowMemoryDevice()) {
+        look_back = 1;
     }
     return (uint8_t)look_back;
 }
@@ -10330,6 +10340,30 @@ uint8_t QCameraParameters::getNumOfExtraBuffersForPreview()
     }
 
     return numOfBufs;
+}
+
+/*===========================================================================
+ * FUNCTION   : getLongshotStages
+ *
+ * DESCRIPTION: get number of stages for longshot
+ *
+ * PARAMETERS : none
+ *
+ * RETURN     : number of stages
+ *==========================================================================*/
+uint8_t QCameraParameters::getLongshotStages()
+{
+    uint8_t numStages =
+            isLowMemoryDevice() ? CAMERA_MIN_LONGSHOT_STAGES : CAMERA_DEFAULT_LONGSHOT_STAGES;
+
+    char prop[PROPERTY_VALUE_MAX];
+    memset(prop, 0, sizeof(prop));
+    property_get("persist.camera.longshot.stages", prop, "0");
+    uint8_t propStages = atoi(prop);
+    if (propStages > 0 && propStages <= CAMERA_DEFAULT_LONGSHOT_STAGES) {
+        numStages = propStages;
+    }
+    return numStages;
 }
 
 }; // namespace qcamera
