@@ -237,6 +237,7 @@ public:
     static const char KEY_QC_MANUAL_WB_VALUE[];
     static const char KEY_QC_CURRENT_EXPOSURE_TIME[];
     static const char KEY_QC_CURRENT_ISO[];
+    static const char KEY_QC_CACHE_VIDEO_BUFFERS[];
 
     static const char KEY_INTERNAL_PERVIEW_RESTART[];
 
@@ -625,6 +626,7 @@ public:
     int32_t getExifLongitude(rat_t *longitude, char *lonRef);
     int32_t getExifAltitude(rat_t *altitude, char *altRef);
     int32_t getExifGpsDateTimeStamp(char *gpsDateStamp, uint32_t bufLen, rat_t *gpsTimeStamp);
+    bool isVideoBuffersCached();
     int32_t updateFocusDistances(cam_focus_distances_info_t *focusDistances);
 
     bool isAEBracketEnabled();
@@ -803,7 +805,7 @@ private:
     int32_t setMobicat(const QCameraParameters& params);
     bool UpdateHFRFrameRate(const QCameraParameters& params);
     int32_t setLongshotParam(const QCameraParameters& params);
-
+    int32_t setCacheVideoBuffers(const QCameraParameters& params);
     int32_t setAutoExposure(const char *autoExp);
     int32_t setPreviewFpsRange(int min_fps,int max_fps,
             int vid_min_fps,int vid_max_fps);
@@ -854,7 +856,7 @@ private:
     int32_t setWaveletDenoise(const char *wnrStr);
     int32_t setFaceRecognition(const char *faceRecog, uint32_t maxFaces);
     int32_t setTintlessValue(const char *tintStr);
-
+    int32_t setCacheVideoBuffers(const char *cacheVideoBufStr);
 
     int32_t parseGains(const char *gainStr, double &r_gain,
                        double &g_gain, double &b_gain);

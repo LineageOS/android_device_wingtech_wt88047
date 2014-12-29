@@ -173,6 +173,7 @@ const char QCameraParameters::KEY_QC_AUTO_HDR_SUPPORTED[] = "auto-hdr-supported"
 
 const char QCameraParameters::WHITE_BALANCE_MANUAL[] = "manual";
 const char QCameraParameters::FOCUS_MODE_MANUAL_POSITION[] = "manual";
+const char QCameraParameters::KEY_QC_CACHE_VIDEO_BUFFERS[] = "cache-video-buffers";
 
 // Values for effect settings.
 const char QCameraParameters::EFFECT_EMBOSS[] = "emboss";
@@ -4189,6 +4190,7 @@ int32_t QCameraParameters::updateParameters(QCameraParameters& params,
     if ((rc = setSnapshotFDReq(params)))                final_rc = rc;
     if ((rc = setTintlessValue(params)))                final_rc = rc;
     if ((rc = setCDSMode(params)))                      final_rc = rc;
+    if ((rc = setCacheVideoBuffers(params)))            final_rc = rc;
 
     // update live snapshot size after all other parameters are set
     if ((rc = setLiveSnapshotSize(params)))             final_rc = rc;
@@ -4971,6 +4973,8 @@ int32_t QCameraParameters::initDefaultParameters()
 
     // Livesnapshot is not supported for 4K2K video resolutions
     set(KEY_QC_4K2K_LIVESNAP_SUPPORTED, VALUE_FALSE);
+    //Set video buffers as uncached by default
+    set(KEY_QC_CACHE_VIDEO_BUFFERS, "0");
 
     int32_t rc = commitParameters();
     if (rc == NO_ERROR) {
@@ -7503,6 +7507,71 @@ int32_t QCameraParameters::setHDRAEBracket(cam_exp_bracketing_t hdrBracket)
 }
 
 /*===========================================================================
+ * FUNCTION   : setCacheVideoBuffers
+ *
+ * DESCRIPTION: set cache video buffers value
+ *
+ * PARAMETERS :
+ *   @cacheVideoStr : cache video buffer value string
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setCacheVideoBuffers(const char *cacheVideoBufStr)
+{
+    if (cacheVideoBufStr != NULL) {
+        int32_t cacheVideoBuf = atoi(cacheVideoBufStr);
+        CDBG("%s : Setting video buffer %s", __func__,
+                (cacheVideoBuf == 0) ? "UnCached" : "Cached");
+        updateParamEntry(KEY_QC_CACHE_VIDEO_BUFFERS, cacheVideoBufStr);
+        return NO_ERROR;
+    }
+    CDBG_HIGH("Invalid cache video value: %s",
+            (cacheVideoBufStr == NULL) ? "NULL" : cacheVideoBufStr);
+    return BAD_VALUE;
+}
+
+
+/*===========================================================================
+ * FUNCTION   : setCacheVideoBuffers
+ *
+ * DESCRIPTION: Set buffers as Cache/Uncache Memory
+ *
+ * PARAMETERS :
+ *   @params  : user setting parameters
+ *
+ * RETURN     : int32_t type of status
+ *              NO_ERROR  -- success
+ *              none-zero failure code
+ *==========================================================================*/
+int32_t QCameraParameters::setCacheVideoBuffers(const QCameraParameters& params)
+{
+    const char *str = params.get(KEY_QC_CACHE_VIDEO_BUFFERS);;
+    const char *prev_str = get(KEY_QC_CACHE_VIDEO_BUFFERS);
+    char prop[PROPERTY_VALUE_MAX];
+    int32_t rc = NO_ERROR;
+
+    memset(prop, 0, sizeof(prop));
+    property_get("persist.camera.mem.usecache", prop, "");
+    if (strlen(prop) > 0 && (prev_str == NULL ||
+            strcmp(prop, prev_str) != 0)) {
+            rc = setCacheVideoBuffers(prop);
+    } else {
+        if (str != NULL) {
+            if (prev_str == NULL ||
+                    strcmp(str, prev_str) != 0) {
+                    rc = setCacheVideoBuffers(str);
+            }
+        }
+    }
+    if (rc != NO_ERROR) {
+        ALOGE("%s:Failed to set cache video buffers", __func__);
+    }
+    return rc;
+}
+
+/*===========================================================================
  * FUNCTION   : restoreAEBracket
  *
  * DESCRIPTION: restores client AE bracketing configuration after HDR is done
@@ -8195,7 +8264,24 @@ uint8_t QCameraParameters::getZSLBackLookCount()
     }
     return (uint8_t)look_back;
 }
-
+/*===========================================================================
+ * FUNCTION   : isVideoBuffersCached
+ *
+ * DESCRIPTION: Query buffers are cached /un cached
+ *
+ * PARAMETERS : None
+ *
+ * RETURN     : buffers are cached /un cached
+ *==========================================================================*/
+bool QCameraParameters::isVideoBuffersCached()
+{
+    int32_t cached_mem  = getInt(KEY_QC_CACHE_VIDEO_BUFFERS);
+    if (cached_mem < 0) {
+        cached_mem = 0;
+    }
+    bool bcachedMem = cached_mem;
+    return bcachedMem;
+}
 /*===========================================================================
  * FUNCTION   : getZSLMaxUnmatchedFrames
  *

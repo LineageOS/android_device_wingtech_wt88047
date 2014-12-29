@@ -1779,13 +1779,9 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(
     case CAM_STREAM_TYPE_VIDEO:
         {
             //Use uncached allocation by default
-            bCachedMem = QCAMERA_ION_USE_NOCACHE;
-            char value[PROPERTY_VALUE_MAX];
-            property_get("persist.camera.mem.usecache", value, "0");
-            if (atoi(value) == 1) {
-                bCachedMem = QCAMERA_ION_USE_CACHE;
-            }
-            ALOGD("%s: vidoe buf using cached memory = %d", __func__, bCachedMem);
+            bCachedMem = mParameters.isVideoBuffersCached();
+            CDBG_HIGH("%s: %s video buf allocated ", __func__,
+                    (bCachedMem == 0) ? "Uncached" : "Cached" );
             mem = new QCameraVideoMemory(mGetMemory, bCachedMem);
         }
         break;
