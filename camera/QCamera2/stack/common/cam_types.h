@@ -1499,6 +1499,7 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FSSR           (1U<<18)
 #define CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS (1U<<19)
 #define CAM_QCOM_FEATURE_SENSOR_HDR     (1U<<20)
+#define CAM_QCOM_FEATURE_REFOCUS        (1U<<21)
 
 // Debug mask
 #define HAL_DEBUG_MASK_HAL                 (1U<<0)

@@ -433,10 +433,9 @@ private:
     bool isZSLMode() {return mParameters.isZSLMode();};
     bool isHFRMode() {return mParameters.isHfrMode();};
     uint8_t numOfSnapshotsExpected() {
-        return (uint8_t) ((mParameters.isUbiRefocus() ||
-                    mParameters.isMTFRefocus()) ?
+        return (uint8_t) ((mParameters.isMTFRefocus()) ?
                 1 : mParameters.getNumOfSnapshots());
-    }
+    };
     bool isLongshotEnabled() { return mLongshotEnabled; };
     uint8_t getBufNumRequired(cam_stream_type_t stream_type);
     bool needFDMetadata(qcamera_ch_type_enum_t channel_type);
@@ -456,9 +455,8 @@ private:
     inline void setOutputImageCount(uint32_t aCount) {mOutputCount = aCount;}
     inline uint32_t getOutputImageCount() {return mOutputCount;}
     inline void setInputImageCount(uint32_t aCount) {mInputCount = aCount;}
-    bool processUFDumps(qcamera_jpeg_evt_payload_t *evt);
-    void captureDone();
     bool processMTFDumps(qcamera_jpeg_evt_payload_t *evt);
+    void captureDone();
     static void copyList(cam_dimension_t* src_list, cam_dimension_t* dst_list,
             size_t len);
     static void camEvtHandle(uint32_t camera_handle,

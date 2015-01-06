@@ -88,6 +88,7 @@ QCameraPostProcessor::QCameraPostProcessor(QCamera2HardwareInterface *cam_ctrl)
 {
     memset(&mJpegHandle, 0, sizeof(mJpegHandle));
     memset(&m_pJpegOutputMem, 0, sizeof(m_pJpegOutputMem));
+    m_DataMem = NULL;
 }
 
 /*===========================================================================
@@ -102,6 +103,10 @@ QCameraPostProcessor::QCameraPostProcessor(QCamera2HardwareInterface *cam_ctrl)
 QCameraPostProcessor::~QCameraPostProcessor()
 {
     FREE_JPEG_OUTPUT_BUFFER(m_pJpegOutputMem,m_JpegOutputMemCount);
+    if (NULL != m_DataMem) {
+        m_DataMem->release(m_DataMem);
+        m_DataMem = NULL;
+    }
     if (m_pJpegExifObj != NULL) {
         delete m_pJpegExifObj;
         m_pJpegExifObj = NULL;
@@ -359,7 +364,6 @@ int32_t QCameraPostProcessor::stop()
         // dataProc Thread need to process "stop" as sync call because abort jpeg job should be a sync call
         m_dataProcTh.sendCmd(CAMERA_CMD_TYPE_STOP_DATA_PROC, TRUE, TRUE);
     }
-
     return NO_ERROR;
 }
 
@@ -855,14 +859,11 @@ int32_t QCameraPostProcessor::processJpegEvt(qcamera_jpeg_evt_payload_t *evt)
           m_dataProcTh.sendCmd(CAMERA_CMD_TYPE_DO_NEXT_JOB, FALSE, FALSE);
           return rc;
         }
-
+        m_parent->setOutputImageCount(m_parent->getOutputImageCount() + 1);
         /* check if the all the captures are done */
-        if ((m_parent->mParameters.isUbiRefocus() &&
-            (m_parent->getOutputImageCount() <
-            m_parent->mParameters.UfOutputCount()))
-            || (m_parent->mParameters.isMTFRefocus()
-            && (m_parent->getOutputImageCount() <
-            m_parent->mParameters.MTFOutputCount()))) {
+        if ((m_parent->mParameters.isMTFRefocus())
+                && (m_parent->getOutputImageCount() <
+                m_parent->mParameters.MTFOutputCount())) {
             jpeg_out  = (omx_jpeg_ouput_buf_t*) evt->out_data.buf_vaddr;
             jpeg_mem = (camera_memory_t *)jpeg_out->mem_hdl;
             if (NULL != jpeg_mem) {
@@ -908,6 +909,31 @@ end:
             if (NULL != jpeg_mem) {
                 jpeg_mem->release(jpeg_mem);
                 jpeg_mem = NULL;
+            }
+        }
+
+        /* check whether to send callback for depth map */
+        if ((m_parent->mParameters.isUbiRefocus() &&
+                ((m_parent->getOutputImageCount() + 1) ==
+                m_parent->mParameters.UfOutputCount()))) {
+            m_parent->setOutputImageCount(m_parent->getOutputImageCount() + 1);
+            jpeg_mem = m_DataMem;
+            release_data.data = jpeg_mem;
+            CDBG_HIGH("[KPI Perf] %s: send jpeg callback for depthmap ",__func__);
+            rc = sendDataNotify(CAMERA_MSG_COMPRESSED_IMAGE,
+                    jpeg_mem,
+                    0,
+                    NULL,
+                    &release_data);
+            if (rc != NO_ERROR) {
+                // send error msg to upper layer
+                sendEvtNotify(CAMERA_MSG_ERROR,
+                        UNKNOWN_ERROR,
+                        0);
+                if (NULL != jpeg_mem) {
+                    jpeg_mem->release(jpeg_mem);
+                    jpeg_mem = NULL;
+                }
             }
         }
     }
@@ -1690,6 +1716,7 @@ int32_t QCameraPostProcessor::encodeData(qcamera_jpeg_data_t *jpeg_job_data,
     bool hdr_output_crop = m_parent->mParameters.isHDROutputCropEnabled();
     bool img_feature_enabled =
       m_parent->mParameters.isUbiFocusEnabled() ||
+      m_parent->mParameters.isUbiRefocus() ||
       m_parent->mParameters.isMultiTouchFocusEnabled() ||
       m_parent->mParameters.isChromaFlashEnabled() ||
       m_parent->mParameters.isOptiZoomEnabled() ||
@@ -1719,26 +1746,41 @@ int32_t QCameraPostProcessor::encodeData(qcamera_jpeg_data_t *jpeg_job_data,
         crop = imgProp.crop;
         thumb_stream = NULL; /* use thumbnail from main image */
         if (imgProp.is_raw_image) {
-           camera_memory_t *mem = memObj->getMemory(
-               main_frame->buf_idx, false);
-           ALOGE("%s:%d] Process raw image %p %d", __func__, __LINE__,
-               mem, imgProp.size);
-           /* dump image */
-           if (mem && mem->data) {
-               if (m_parent->mParameters.isUbiFocusEnabled()){
-                   CAM_DUMP_TO_FILE("/data/misc/camera/ubifocus", "DepthMapImage",
-                                    -1, "y",
-                                    (uint8_t *)mem->data,
-                                    imgProp.size);
-               }
-               if (m_parent->mParameters.isMultiTouchFocusEnabled()) {
-                   CAM_DUMP_TO_FILE("/data/misc/camera/multiTouchFocus", "DepthMapImage",
-                                    -1, "y",
-                                    (uint8_t *)mem->data,
-                                    imgProp.size);
-               }
-           }
-           return NO_ERROR;
+            camera_memory_t *temp = memObj->getMemory(main_frame->buf_idx, false);
+            if (temp && temp->data) {
+                //save mem pointer for depth map cb
+                if (m_parent->mParameters.isUbiRefocus()) {
+                    //TBD: m_DataMem needs to be released in racecondition cases in encodeData
+                    if (NULL != m_DataMem) {
+                        m_DataMem->release(m_DataMem);
+                        m_DataMem = NULL;
+                    }
+                    camera_memory_t *jpg_mem = m_parent->mGetMemory(-1, imgProp.size,
+                            1, m_parent->mCallbackCookie);
+                    if (NULL == jpg_mem) {
+                        ALOGE("%s : getMemory for JPEG, ret = NO_MEMORY", __func__);
+                        return NO_MEMORY;
+                    }
+
+                    memcpy(jpg_mem->data, temp->data, imgProp.size);
+                    m_DataMem = jpg_mem;
+                }
+                /* dump image */
+                if (m_parent->mParameters.isUbiFocusEnabled()){
+                    CAM_DUMP_TO_FILE("/data/misc/camera/ubifocus", "DepthMapImage",
+                            -1, "y",
+                            (uint8_t *)temp->data,
+                            imgProp.size);
+                }
+                if (m_parent->mParameters.isMultiTouchFocusEnabled()){
+                    CAM_DUMP_TO_FILE("/data/misc/camera/multiTouchFocus", "DepthMapImage",
+                            -1, "y",
+                            (uint8_t *)temp->data,
+                            imgProp.size);
+                }
+
+            }
+            return NO_ERROR;
         }
     } else if (m_parent->mParameters.isTruePortraitEnabled()) {
         if (mem && mem->data) {

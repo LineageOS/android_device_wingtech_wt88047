@@ -2318,113 +2318,57 @@ int QCamera2HardwareInterface::cancelAutoFocus()
 }
 
 /*===========================================================================
- * FUNCTION   : processUFDumps
- *
- * DESCRIPTION: process UF jpeg dumps for refocus support
- *
- * PARAMETERS :
- *   @evt     : payload of jpeg event, including information about jpeg encoding
- *              status, jpeg size and so on.
- *
- * RETURN     : int32_t type of status
- *              NO_ERROR  -- success
- *              none-zero failure code
- *
- * NOTE       : none
- *==========================================================================*/
-bool QCamera2HardwareInterface::processUFDumps(qcamera_jpeg_evt_payload_t *evt)
-{
-   bool ret = true;
-   if (mParameters.isUbiRefocus()) {
-       int index = (int)getOutputImageCount();
-       bool allFocusImage = (index == ((int)mParameters.UfOutputCount()-1));
-       char name[CAM_FN_CNT];
-
-       camera_memory_t *jpeg_mem = NULL;
-       omx_jpeg_ouput_buf_t *jpeg_out = NULL;
-       size_t dataLen;
-       uint8_t *dataPtr;
-       if (!m_postprocessor.getJpegMemOpt()) {
-           dataLen = evt->out_data.buf_filled_len;
-           dataPtr = evt->out_data.buf_vaddr;
-       } else {
-           jpeg_out  = (omx_jpeg_ouput_buf_t*) evt->out_data.buf_vaddr;
-           jpeg_mem = (camera_memory_t *)jpeg_out->mem_hdl;
-           dataPtr = (uint8_t *)jpeg_mem->data;
-           dataLen = jpeg_mem->size;
-       }
-
-       if (allFocusImage)  {
-           snprintf(name, CAM_FN_CNT, "AllFocusImage");
-           index = -1;
-       } else {
-           snprintf(name, CAM_FN_CNT, "%d", 0);
-       }
-       CAM_DUMP_TO_FILE("/data/misc/camera/ubifocus", name, index, "jpg",
-           dataPtr, dataLen);
-       CDBG_HIGH("%s:%d] Dump the image %d %d allFocusImage %d", __func__, __LINE__,
-           getOutputImageCount(), index, allFocusImage);
-       setOutputImageCount(getOutputImageCount() + 1);
-       if (!allFocusImage) {
-           ret = false;
-       }
-   }
-   return ret;
-}
-
-/*===========================================================================
- * FUNCTION   : processMTFDumps
- *
- * DESCRIPTION: process MTF jpeg dumps for refocus support
- *
- * PARAMETERS :
- *   @evt     : payload of jpeg event, including information about jpeg encoding
- *              status, jpeg size and so on.
- *
- * RETURN     : int32_t type of status
- *              NO_ERROR  -- success
- *              none-zero failure code
- *
- * NOTE       : none
- *==========================================================================*/
+* FUNCTION   : processMTFDumps
+*
+* DESCRIPTION: process MTF jpeg dumps for refocus support
+*
+* PARAMETERS :
+*   @evt     : payload of jpeg event, including information about jpeg encoding
+*              status, jpeg size and so on.
+*
+* RETURN     : int32_t type of status
+*              NO_ERROR  -- success
+*              none-zero failure code
+*
+* NOTE       : none
+*==========================================================================*/
 bool QCamera2HardwareInterface::processMTFDumps(qcamera_jpeg_evt_payload_t *evt)
 {
-   bool ret = true;
-   if (mParameters.isMTFRefocus()) {
-       int index = (int) getOutputImageCount();
-       bool allFocusImage = (index == ((int)mParameters.MTFOutputCount()-1));
-       char name[CAM_FN_CNT];
+    bool ret = true;
+    if (mParameters.isMTFRefocus()) {
+        int index = (int) getOutputImageCount();
+        bool allFocusImage = (index == ((int)mParameters.MTFOutputCount()-1));
+        char name[CAM_FN_CNT];
 
-       camera_memory_t *jpeg_mem = NULL;
-       omx_jpeg_ouput_buf_t *jpeg_out = NULL;
-       size_t dataLen;
-       uint8_t *dataPtr;
-       if (!m_postprocessor.getJpegMemOpt()) {
-           dataLen = evt->out_data.buf_filled_len;
-           dataPtr = evt->out_data.buf_vaddr;
-       } else {
-           jpeg_out  = (omx_jpeg_ouput_buf_t*) evt->out_data.buf_vaddr;
-           jpeg_mem = (camera_memory_t *)jpeg_out->mem_hdl;
-           dataPtr = (uint8_t *)jpeg_mem->data;
-           dataLen = jpeg_mem->size;
-       }
+        camera_memory_t *jpeg_mem = NULL;
+        omx_jpeg_ouput_buf_t *jpeg_out = NULL;
+        size_t dataLen;
+        uint8_t *dataPtr;
+        if (!m_postprocessor.getJpegMemOpt()) {
+            dataLen = evt->out_data.buf_filled_len;
+            dataPtr = evt->out_data.buf_vaddr;
+        } else {
+            jpeg_out  = (omx_jpeg_ouput_buf_t*) evt->out_data.buf_vaddr;
+            jpeg_mem = (camera_memory_t *)jpeg_out->mem_hdl;
+            dataPtr = (uint8_t *)jpeg_mem->data;
+            dataLen = jpeg_mem->size;
+        }
 
-       if (allFocusImage)  {
-           strncpy(name, "AllFocusImage", CAM_FN_CNT - 1);
-           index = -1;
-       } else {
-           strncpy(name, "0", CAM_FN_CNT - 1);
-       }
-       CAM_DUMP_TO_FILE("/data/misc/camera/multiTouchFocus", name, index, "jpg",
-               dataPtr, dataLen);
-       CDBG("%s:%d] Dump the image %d %d allFocusImage %d", __func__, __LINE__,
-               getOutputImageCount(), index, allFocusImage);
-       setOutputImageCount(getOutputImageCount() + 1);
-       if (!allFocusImage) {
-           ret = false;
-       }
-   }
-   return ret;
+        if (allFocusImage)  {
+            strncpy(name, "AllFocusImage", CAM_FN_CNT - 1);
+            index = -1;
+        } else {
+            strncpy(name, "0", CAM_FN_CNT - 1);
+        }
+        CAM_DUMP_TO_FILE("/data/misc/camera/multiTouchFocus", name, index, "jpg",
+                dataPtr, dataLen);
+        CDBG("%s:%d] Dump the image %d %d allFocusImage %d", __func__, __LINE__,
+                getOutputImageCount(), index, allFocusImage);
+        if (!allFocusImage) {
+            ret = false;
+        }
+    }
+    return ret;
 }
 
 /*===========================================================================
@@ -2493,7 +2437,7 @@ int32_t QCamera2HardwareInterface::configureAdvancedCapture()
     setOutputImageCount(0);
     setInputImageCount(0);
     mParameters.setDisplayFrame(FALSE);
-    if (mParameters.isUbiFocusEnabled()) {
+    if (mParameters.isUbiFocusEnabled() || mParameters.isUbiRefocus()) {
         rc = configureAFBracketing();
     } else if (mParameters.isMultiTouchFocusEnabled()) {
         rc = configureMTFBracketing();
@@ -2538,8 +2482,13 @@ int32_t QCamera2HardwareInterface::configureAFBracketing(bool enable)
     CDBG_HIGH("%s: E",__func__);
     int32_t rc = NO_ERROR;
     cam_af_bracketing_t *af_bracketing_need;
-    af_bracketing_need =
-        &gCamCapability[mCameraId]->ubifocus_af_bracketing_need;
+    if (mParameters.isUbiRefocus()) {
+        af_bracketing_need =
+                &(gCamCapability[mCameraId]->refocus_af_bracketing_need);
+    } else {
+        af_bracketing_need =
+                &(gCamCapability[mCameraId]->ubifocus_af_bracketing_need);
+    }
 
     //Enable AF Bracketing.
     cam_af_bracketing_t afBracket;
@@ -2802,7 +2751,7 @@ int32_t QCamera2HardwareInterface::startAdvancedCapture(
     CDBG_HIGH("%s: Start bracketig",__func__);
     int32_t rc = NO_ERROR;
 
-    if(mParameters.isUbiFocusEnabled()) {
+    if(mParameters.isUbiFocusEnabled() || mParameters.isUbiRefocus()) {
         rc = pChannel->startAdvancedCapture(MM_CAMERA_AF_BRACKETING);
     } else if (mParameters.isMultiTouchFocusEnabled()) {
         rc = pChannel->startAdvancedCapture(MM_CAMERA_MTF_BRACKETING);
@@ -2838,6 +2787,7 @@ int QCamera2HardwareInterface::takePicture()
     uint8_t numSnapshots = mParameters.getNumOfSnapshots();
 
     if (mParameters.isUbiFocusEnabled() ||
+            mParameters.isUbiRefocus() ||
             mParameters.isMultiTouchFocusEnabled() ||
             mParameters.isOptiZoomEnabled() ||
             mParameters.isfssrEnabled() ||
@@ -2864,6 +2814,7 @@ int QCamera2HardwareInterface::takePicture()
                 return rc;
             }
             if (mParameters.isUbiFocusEnabled() ||
+                    mParameters.isUbiRefocus() ||
                     mParameters.isMultiTouchFocusEnabled() ||
                     mParameters.isOptiZoomEnabled() ||
                     mParameters.isHDREnabled() ||
@@ -2969,7 +2920,8 @@ int QCamera2HardwareInterface::takePicture()
                 QCameraPicChannel *pCapChannel =
                     (QCameraPicChannel *)m_channels[QCAMERA_CH_TYPE_CAPTURE];
                 if (NULL != pCapChannel) {
-                    if (mParameters.isUbiFocusEnabled()|
+                    if (mParameters.isUbiFocusEnabled() ||
+                        mParameters.isUbiRefocus() ||
                         mParameters.isChromaFlashEnabled()) {
                         rc = startAdvancedCapture(pCapChannel);
                         if (rc != NO_ERROR) {
@@ -3850,7 +3802,6 @@ void QCamera2HardwareInterface::jpegEvtHandle(jpeg_job_status_t status,
             if (p_output != NULL) {
                 payload->out_data = *p_output;
             }
-            obj->processUFDumps(payload);
             obj->processMTFDumps(payload);
             obj->processEvt(QCAMERA_SM_EVT_JPEG_EVT_NOTIFY, payload);
         }
@@ -6298,7 +6249,11 @@ cam_pp_feature_config_t QCamera2HardwareInterface::getReprocessConfig()
         } else {
             pp_config.feature_mask &= ~CAM_QCOM_FEATURE_UBIFOCUS;
         }
-
+        if(mParameters.isUbiRefocus()) {
+            pp_config.feature_mask |= CAM_QCOM_FEATURE_REFOCUS;
+        } else {
+            pp_config.feature_mask &= ~CAM_QCOM_FEATURE_REFOCUS;
+        }
         if(mParameters.isMultiTouchFocusEnabled()) {
             pp_config.feature_mask |= CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS;
         } else {

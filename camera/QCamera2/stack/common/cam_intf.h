@@ -308,6 +308,7 @@ typedef struct{
     cam_rational_type_t base_gain_factor;    /* sensor base gain factor */
     /* AF Bracketing info */
     cam_af_bracketing_t  ubifocus_af_bracketing_need;
+    cam_af_bracketing_t  refocus_af_bracketing_need;
     /* opti Zoom info */
     cam_opti_zoom_t      opti_zoom_settings_need;
     /* true Portrait info */

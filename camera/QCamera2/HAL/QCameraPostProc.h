@@ -185,6 +185,7 @@ private:
     QCameraExif *              m_pJpegExifObj;
     uint32_t                   m_bThumbnailNeeded;
     QCameraReprocessChannel *  m_pReprocChannel;
+    camera_memory_t *          m_DataMem; // save frame mem pointer
     QCameraReprocessChannel *  m_pDualReprocChannel;
 
     int8_t                     m_bInited; // if postproc is inited
