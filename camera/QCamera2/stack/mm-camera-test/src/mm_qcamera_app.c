@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -2548,7 +2548,7 @@ int mm_app_set_preview_fps_range(mm_camera_test_obj_t *test_obj,
     return rc;
 }
 
-static int mm_app_set_params_impl(mm_camera_test_obj_t *test_obj,
+int mm_app_set_params_impl(mm_camera_test_obj_t *test_obj,
                       cam_intf_parm_type_t param_type,
                       uint32_t param_len,
                       void* param_val)

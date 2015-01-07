@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, 2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012, 2014-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -467,6 +467,10 @@ extern int mm_app_set_face_detection(mm_camera_test_obj_t *test_obj,
                         cam_fd_set_parm_t *fd_set_parm);
 extern int mm_app_set_metadata_usercb(mm_camera_test_obj_t *test_obj,
                       cam_stream_user_cb usercb);
+extern int mm_app_set_params_impl(mm_camera_test_obj_t *test_obj,
+                   cam_intf_parm_type_t param_type,
+                   uint32_t param_len,
+                   void* param_val);
 
 /* JIG camera lib interface */
 
