@@ -282,6 +282,10 @@ typedef struct{
 
     uint32_t max_face_detection_count;
 
+    /* This flag tells whether device supports SW or HW WNR and this should be used
+            in conjuction with CAM_QCOM_FEATURE_DENOISE2D */
+    uint8_t is_sw_wnr;
+
     uint8_t histogram_supported;
     /* Number of histogram buckets supported */
     int32_t histogram_size;

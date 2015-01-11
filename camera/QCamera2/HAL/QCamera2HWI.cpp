@@ -5060,6 +5060,12 @@ QCameraReprocessChannel *QCamera2HardwareInterface::addReprocChannel(
         minStreamBufNum = (uint8_t)(1 + mParameters.getNumOfExtraHDRInBufsIfNeeded());
     }
 
+    // if HDR is enabled & WNR is SW then allocate reproc buf = num of snapshots per shutter
+    // irrespective of whether any other PP config features since HDR is moved to pproc topology
+    if ((gCamCapability[mCameraId]->qcom_supported_feature_mask & CAM_QCOM_FEATURE_DENOISE2D) &&
+            gCamCapability[mCameraId]->is_sw_wnr && mParameters.isHDREnabled())
+        minStreamBufNum = getBufNumRequired(CAM_STREAM_TYPE_OFFLINE_PROC);
+
     // Add non inplace image lib buffers only when ppproc is present,
     // becuase pproc is non inplace and input buffers for img lib
     // are output for pproc and this number of extra buffers is required
