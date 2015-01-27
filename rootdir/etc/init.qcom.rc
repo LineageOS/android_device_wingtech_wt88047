@@ -710,3 +710,12 @@ service setup_fs /system/bin/setup_fs /dev/block/platform/7824900.sdhci/by-name/
     user root
     group root
     oneshot
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/dumpstate -d -p -B \
+        -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116
+
