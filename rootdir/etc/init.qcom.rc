@@ -718,3 +718,12 @@ service prebundled-apps /system/bin/sh /vendor/bin/install-apps
 
 on property:dev.bootcomplete=1
     start prebundled-apps
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/dumpstate -d -p -B \
+        -o /data/data/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116
+
