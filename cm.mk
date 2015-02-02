@@ -20,3 +20,14 @@ $(call inherit-product, vendor/cm/config/common_full_phone.mk)
 PRODUCT_NAME := cm_rendang
 BOARD_VENDOR := smartfren
 PRODUCT_DEVICE := rendang
+
+PRODUCT_GMS_CLIENTID_BASE := android-smartfren
+
+TARGET_VENDOR_PRODUCT_NAME := RENDANG
+TARGET_VENDOR_DEVICE_NAME := RENDANG
+PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=RENDANG PRODUCT_NAME=RENDANG
+
+ifeq ($(SIGN_BUILD),true)
+# Signed builds gets a special boot animation because they are special.
+PRODUCT_BOOTANIMATION := device/smartfren/rendang/bootanimation.zip
+endif

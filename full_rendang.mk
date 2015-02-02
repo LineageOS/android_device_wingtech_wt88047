@@ -15,6 +15,9 @@
 #
 
 # Inherit from those products. Most specific first.
+ifeq ($(USE_64_BIT),true)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/core_64_bit.mk)
+endif
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
 # Inherit from rendang device
@@ -23,3 +26,6 @@ $(call inherit-product, device/smartfren/rendang/device.mk)
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := rendang
 PRODUCT_NAME := full_rendang
+PRODUCT_BRAND := SMARTFREN
+PRODUCT_MODEL := RENDANG
+PRODUCT_MANUFACTURER := SMARTFREN
