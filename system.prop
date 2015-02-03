@@ -41,7 +41,7 @@ persist.hwc.mdpcomp.enable=false
 persist.hwc.ptor.enable=true
 ro.opengles.version=196608
 ro.qualcomm.cabl=0
-ro.sf.lcd_density=320
+ro.sf.lcd_density=240
 debug.enable.sglscale=1
 
 # GPS
