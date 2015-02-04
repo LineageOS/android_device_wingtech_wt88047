@@ -1100,6 +1100,9 @@ typedef  struct {
 
     uint8_t is_focus_pos_info_valid;
     cam_focus_pos_info_t cur_pos_info;
+
+    /* Indication for Frame ID reset through recovery mechanism when bus overflow  */
+    uint8_t is_frame_id_reset;
 } cam_metadata_info_t;
 
 typedef enum {

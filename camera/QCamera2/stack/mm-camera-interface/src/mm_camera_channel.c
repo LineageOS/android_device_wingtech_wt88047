@@ -2074,6 +2074,13 @@ int32_t mm_channel_handle_metadata(
                      metadata->good_frame_idx_range.min_frame_idx;
                  ch_obj->need3ABracketing = FALSE;
             }
+            /* Flush all the OLD buffers if Frame ID is reset */
+            if (metadata->is_frame_id_reset) {
+                CDBG_HIGH("%s: Flush all the old frames as frame ID is reset is_frame_id_reset=%d",
+                        __func__, metadata->is_frame_id_reset);
+                mm_channel_superbuf_flush(ch_obj,queue, CAM_STREAM_TYPE_DEFAULT);
+                queue->expected_frame_id = 1;
+            }
         }
     }
 end:
