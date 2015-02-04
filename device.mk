@@ -106,6 +106,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 PRODUCT_PACKAGES += \
+    init.qti.ims.sh \
     fstab.qcom \
     init.cne.rc \
     init.target.rc \
