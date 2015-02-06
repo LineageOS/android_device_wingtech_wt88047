@@ -664,9 +664,9 @@ on property:persist.usb.hvdcp.detect=false
     stop hvdcp
 
 service vm_bms /system/bin/vm_bms
+    class core
     user root
     group root
-    disabled
 
 #start camera server as daemon
 service qcamerasvr /system/bin/mm-qcamera-daemon
