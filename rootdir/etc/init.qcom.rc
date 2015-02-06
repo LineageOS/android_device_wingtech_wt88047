@@ -778,11 +778,6 @@ service wcnss-service /system/bin/wcnss_service
     user system
     group system wifi radio
 
-service msm_irqbalance /system/bin/msm_irqbalance -p 0,0,0,0,1,1,1,1
-    class core
-    user root
-    group root
-
 service setup_fs /system/bin/setup_fs /dev/block/platform/7824900.sdhci/by-name/userdata
     class core
     user root
