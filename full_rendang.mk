@@ -23,6 +23,6 @@ $(call inherit-product, device/smartfren/rendang/device.mk)
 # Device identifier. This must come after all inclusions
 PRODUCT_DEVICE := rendang
 PRODUCT_NAME := full_rendang
-PRODUCT_BRAND := SMARTFREN
-PRODUCT_MODEL := RENDANG
-PRODUCT_MANUFACTURER := SMARTFREN
+PRODUCT_BRAND := Smartfren
+PRODUCT_MODEL := rendang
+PRODUCT_MANUFACTURER := Haier
