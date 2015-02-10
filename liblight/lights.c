@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2014 The CyanogenMod Project
+ * Copyright (C) 2014-2015 The CyanogenMod Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,8 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 const char *const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
+const char *const BUTTONS_FILE
+        = "/sys/class/leds/button-backlight/brightness";
 
 /**
  * device methods
@@ -74,8 +76,8 @@ write_string(const char *path, const char *buffer)
 static int
 write_int(const char *path, int value)
 {
-    char buffer[20];
-    sprintf(buffer, "%d\n", value);
+    char buffer[12];
+    snprintf(buffer, sizeof(buffer), "%d\n", value);
     return write_string(path, buffer);
 }
 
@@ -98,6 +100,22 @@ set_light_backlight(__attribute__ ((unused)) struct light_device_t *dev,
     pthread_mutex_lock(&g_lock);
 
     err = write_int(LCD_FILE, brightness);
+
+    pthread_mutex_unlock(&g_lock);
+
+    return err;
+}
+
+static int
+set_light_buttons(__attribute__ ((unused)) struct light_device_t *dev,
+        const struct light_state_t *state)
+{
+    int err = 0;
+    int brightness = rgb_to_brightness(state);
+
+    pthread_mutex_lock(&g_lock);
+
+    err = write_int(BUTTONS_FILE, brightness);
 
     pthread_mutex_unlock(&g_lock);
 
@@ -129,6 +147,8 @@ static int open_lights(const struct hw_module_t *module, const char *name,
 
     if (0 == strcmp(LIGHT_ID_BACKLIGHT, name))
         set_light = set_light_backlight;
+    else if (0 == strcmp(LIGHT_ID_BUTTONS, name))
+        set_light = set_light_buttons;
     else
         return -EINVAL;
 
@@ -159,7 +179,7 @@ struct hw_module_t HAL_MODULE_INFO_SYM = {
     .version_major = 1,
     .version_minor = 0,
     .id = LIGHTS_HARDWARE_MODULE_ID,
-    .name = "YU Lights Module",
+    .name = "Rendang Lights Module",
     .author = "The CyanogenMod Project",
     .methods = &lights_module_methods,
 };
