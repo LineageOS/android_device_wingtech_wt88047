@@ -35,7 +35,8 @@
 /******************************************************************************/
 
 static pthread_once_t g_init = PTHREAD_ONCE_INIT;
-static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t bl_g_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t bt_g_lock = PTHREAD_MUTEX_INITIALIZER;
 
 const char *const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
@@ -48,8 +49,9 @@ const char *const BUTTONS_FILE
 
 void init_globals(void)
 {
-    // init the mutex
-    pthread_mutex_init(&g_lock, NULL);
+    // init the mutexes
+    pthread_mutex_init(&bl_g_lock, NULL);
+    pthread_mutex_init(&bt_g_lock, NULL);
 }
 
 static int
@@ -97,11 +99,11 @@ set_light_backlight(__attribute__ ((unused)) struct light_device_t *dev,
     int err = 0;
     int brightness = rgb_to_brightness(state);
 
-    pthread_mutex_lock(&g_lock);
+    pthread_mutex_lock(&bl_g_lock);
 
     err = write_int(LCD_FILE, brightness);
 
-    pthread_mutex_unlock(&g_lock);
+    pthread_mutex_unlock(&bl_g_lock);
 
     return err;
 }
@@ -113,11 +115,11 @@ set_light_buttons(__attribute__ ((unused)) struct light_device_t *dev,
     int err = 0;
     int brightness = rgb_to_brightness(state);
 
-    pthread_mutex_lock(&g_lock);
+    pthread_mutex_lock(&bt_g_lock);
 
     err = write_int(BUTTONS_FILE, brightness);
 
-    pthread_mutex_unlock(&g_lock);
+    pthread_mutex_unlock(&bt_g_lock);
 
     return err;
 }
