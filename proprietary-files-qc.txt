@@ -14,6 +14,9 @@ vendor/lib/soundfx/libqcbassboost.so
 vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
 
+# Battery
+bin/vm_bms
+
 # Bluetooth
 bin/btnvtool
 bin/hci_qcomm_init
@@ -109,8 +112,8 @@ vendor/lib/libsc-a3xx.so
 vendor/lib/libscale.so
 
 # Graphics firmware
-etc/firmware/a420_pfp.fw
-etc/firmware/a420_pm4.fw
+etc/firmware/a300_pfp.fw
+etc/firmware/a300_pm4.fw
 
 # Media
 vendor/lib/libDivxDrm.so
