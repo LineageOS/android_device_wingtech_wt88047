@@ -26,6 +26,7 @@ TARGET_USES_CSVT := true
 TARGET_BOOTLOADER_BOARD_NAME :=
 
 # Kernel
+BOARD_KERNEL_CMDLINE += phy-msm-usb.floated_charger_enable=1
 TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8916
 TARGET_KERNEL_CONFIG := cyanogenmod_wt88047_defconfig
 
