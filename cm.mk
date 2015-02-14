@@ -26,8 +26,3 @@ PRODUCT_GMS_CLIENTID_BASE := android-smartfren
 TARGET_VENDOR_PRODUCT_NAME := rendang
 TARGET_VENDOR_DEVICE_NAME := rendang
 PRODUCT_BUILD_PROP_OVERRIDES += TARGET_DEVICE=rendang PRODUCT_NAME=rendang
-
-ifeq ($(SIGN_BUILD),true)
-# Signed builds gets a special boot animation because they are special.
-PRODUCT_BOOTANIMATION := device/smartfren/rendang/bootanimation.zip
-endif
