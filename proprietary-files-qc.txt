@@ -199,3 +199,6 @@ etc/firmware/venus.b03
 etc/firmware/venus.b04
 etc/firmware/venus.mbn
 etc/firmware/venus.mdt
+
+# WLAN
+lib/libwcnss_qmi.so
