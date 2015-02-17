@@ -99,6 +99,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     charger_res_images
 
+# CNE
+PRODUCT_PACKAGES += \
+    libcnefeatureconfig
+
 # CRDA
 PRODUCT_PACKAGES += \
     crda \
@@ -199,7 +203,6 @@ PRODUCT_BOOT_JARS += WfdCommon
 # Connectivity Engine support
 ifeq ($(BOARD_USES_QCNE),true)
 PRODUCT_PACKAGES += \
-    libcnefeatureconfig \
     services-ext \
     init.cne.rc
 
