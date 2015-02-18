@@ -210,9 +210,10 @@
              8 - Assistant (search)
             16 - App switch
             32 - Camera
+            64 - Volume keys
          For example, a device with Home, Back and Menu keys would set this
          config to 7. -->
-    <integer name="config_deviceHardwareKeys">7</integer>
+    <integer name="config_deviceHardwareKeys">71</integer>
 
     <!-- Control the behavior when the user long presses the home button.
             0 - Nothing
@@ -275,7 +276,5 @@
     <integer name="config_multiuserMaximumUsers">4</integer>
     <!--  Whether Multiuser UI should be shown -->
     <bool name="config_enableMultiUserUI">true</bool>
-
-    <integer name="config_deviceHardwareKeys">73</integer>
 
 </resources>
