@@ -347,12 +347,6 @@ on property:service.bootanim.exit=1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
 
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
-    write /sys/class/net/rmnet0/queues/rx-0/rps_cpus 10
-
-    write /sys/class/devfreq/qcom,cpubw.61/governor "bw_hwmon"
-    write /sys/class/devfreq/qcom,cpubw.61/bw_hwmon/io_percent 20
-    write /sys/class/devfreq/qcom,gpubw.38/governor "bw_hwmon"
-    write /sys/class/devfreq/qcom,gpubw.38/bw_hwmon/io_percent 40
 
 on property:init.svc.bootanim=stopped
     # Apply HMP task packing
@@ -380,8 +374,6 @@ on property:init.svc.bootanim=stopped
     write /sys/devices/system/cpu/cpu3/online 1
 
     write /proc/sys/kernel/sched_window_stats_policy 2
-    write /proc/sys/kernel/sched_upmigrate 75
-    write /proc/sys/kernel/sched_downmigrate 60
     write /proc/sys/kernel/sched_ravg_hist_size 5
 
     write /sys/module/cpu_boost/parameters/boost_ms 20
