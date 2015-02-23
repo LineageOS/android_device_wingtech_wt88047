@@ -83,3 +83,6 @@ service cnd /system/bin/cnd
 service dpmd /system/bin/dpmd
     class late_start
     socket dpmd stream 660 root system
+
+on property:sys.boot_completed=1
+    swapon_all fstab.qcom
