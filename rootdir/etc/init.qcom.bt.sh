@@ -53,13 +53,7 @@ failed ()
 
 program_bdaddr ()
 {
-  BTMAC=`/system/bin/yl_btmac`
-  if [ -n "$BTMAC" ] && [ "$BTMAC" != "00:00:00:00:00:00" ]; then
-    /system/bin/btnvtool -b $BTMAC
-  else
-    loge "Bluetooth Address from params failed"
-    /system/bin/btnvtool -O
-  fi
+  /system/bin/btnvtool -O
   logi "Bluetooth Address programmed successfully"
 }
 
