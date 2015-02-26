@@ -2,9 +2,6 @@
 vendor/lib/libactuator_dw9714.so
 vendor/lib/libactuator_dw9714_camcorder.so
 vendor/lib/libactuator_dw9714_camera.so
-vendor/lib/libactuator_dw9714_owt8a12.so
-vendor/lib/libactuator_dw9714_owt8a12_camcorder.so
-vendor/lib/libactuator_dw9714_owt8a12_camera.so
 
 # Camera Chromatix
 vendor/lib/libchromatix_gc2355_rendang_common.so
