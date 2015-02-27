@@ -6,16 +6,16 @@ vendor/lib/libactuator_dw9714_camera.so
 # Camera Chromatix
 vendor/lib/libchromatix_gc2355_rendang_common.so
 vendor/lib/libchromatix_gc2355_rendang_preview.so
-vendor/lib/libchromatix_ov5670_q5v41b_common.so
-vendor/lib/libchromatix_ov5670_q5v41b_default_video.so
-vendor/lib/libchromatix_ov5670_q5v41b_hfr_120fps.so
-vendor/lib/libchromatix_ov5670_q5v41b_hfr_60fps.so
-vendor/lib/libchromatix_ov5670_q5v41b_hfr_90fps.so
-vendor/lib/libchromatix_ov5670_q5v41b_liveshot.so
-vendor/lib/libchromatix_ov5670_q5v41b_preview.so
-vendor/lib/libchromatix_ov5670_q5v41b_snapshot.so
-vendor/lib/libchromatix_ov5670_q5v41b_video_hd.so
-vendor/lib/libchromatix_ov5670_q5v41b_zsl.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_common.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_default_video.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_hfr_120fps.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_hfr_60fps.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_hfr_90fps.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_liveshot.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_preview.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_snapshot.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_video_hd.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_zsl.so
 
 # Camera Sensor
 vendor/lib/libmmcamera_gc2355_rendang.so
