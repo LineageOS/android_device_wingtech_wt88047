@@ -34,3 +34,6 @@ ro.sys.fw.dex2oat_thread_count=3
 
 # relax sensor fusion mag field filter
 ro.fusion.magfield.max=250
+
+# Factory Reset Protection
+ro.frp.pst=/dev/block/bootdevice/by-name/config
