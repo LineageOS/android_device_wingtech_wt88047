@@ -711,14 +711,6 @@ service setup_fs /system/bin/setup_fs /dev/block/platform/7824900.sdhci/by-name/
     group root
     oneshot
 
-service prebundled-apps /system/bin/sh /vendor/bin/install-apps
-    user system
-    oneshot
-    disabled
-
-on property:dev.bootcomplete=1
-    start prebundled-apps
-
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -B \
         -o /data/data/com.android.shell/files/bugreports/bugreport
