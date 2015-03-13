@@ -5102,11 +5102,22 @@ int32_t QCameraParameters::init(cam_capability_t *capabilities,
     }
     m_pParamBuf = (parm_buffer_new_t*) DATA_PTR(m_pParamHeap,0);
 
-    initDefaultParameters();
+    rc = initDefaultParameters();
+    if (rc < 0) {
+        ALOGE("%s: failed to set default parameters", __func__);
+        rc = FAILED_TRANSACTION;
+        goto TRANS_INIT_ERROR3;
+    }
 
     m_bInited = true;
 
     goto TRANS_INIT_DONE;
+
+TRANS_INIT_ERROR3:
+    m_pCamOpsTbl->ops->unmap_buf(
+                         m_pCamOpsTbl->camera_handle,
+                         CAM_MAPPING_BUF_TYPE_PARM_BUF);
+    m_pParamBuf = NULL;
 
 TRANS_INIT_ERROR2:
     m_pParamHeap->deallocate();
@@ -5114,6 +5125,7 @@ TRANS_INIT_ERROR2:
 TRANS_INIT_ERROR1:
     delete m_pParamHeap;
     m_pParamHeap = NULL;
+    m_pCamOpsTbl = NULL;
 
 TRANS_INIT_DONE:
     return rc;

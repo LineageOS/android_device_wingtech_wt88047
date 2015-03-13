@@ -1276,7 +1276,14 @@ int QCamera2HardwareInterface::openCamera()
         gCamCapability[mCameraId]->padding_info.plane_padding = padding_info.plane_padding;
     }
 
-    mParameters.init(gCamCapability[mCameraId], mCameraHandle, this, this);
+    rc = mParameters.init(gCamCapability[mCameraId], mCameraHandle, this, this);
+    if (rc != 0) {
+        ALOGE("Init parameters failed");
+        m_postprocessor.deinit();
+        mCameraHandle->ops->close_camera(mCameraHandle->camera_handle);
+        mCameraHandle = NULL;
+        return UNKNOWN_ERROR;
+    }
 
     mCameraOpened = true;
 
