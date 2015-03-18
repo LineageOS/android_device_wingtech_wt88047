@@ -337,7 +337,7 @@ on property:service.bootanim.exit=1
     write /sys/module/lpm_levels/system/cpu1/pc/idle_enabled Y
     write /sys/module/lpm_levels/system/cpu2/pc/idle_enabled Y
     write /sys/module/lpm_levels/system/cpu3/pc/idle_enabled Y
-    write /sys/module/lpm_levels/system/cpu0/pc/suspend_enabled N
+    write /sys/module/lpm_levels/system/cpu0/pc/suspend_enabled Y
     write /sys/module/lpm_levels/system/cpu1/pc/suspend_enabled Y
     write /sys/module/lpm_levels/system/cpu2/pc/suspend_enabled Y
     write /sys/module/lpm_levels/system/cpu3/pc/suspend_enabled Y
