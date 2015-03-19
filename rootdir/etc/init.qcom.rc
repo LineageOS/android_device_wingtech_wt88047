@@ -324,6 +324,7 @@ on boot
     # camera sockets
     mkdir /data/misc/camera 0770 camera camera
 
+
 on property:service.bootanim.exit=1
     write /sys/module/lpm_levels/system/cpu0/wfi/idle_enabled Y
     write /sys/module/lpm_levels/system/cpu1/wfi/idle_enabled Y
@@ -347,6 +348,12 @@ on property:service.bootanim.exit=1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor ondemand
 
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
+
+    # KSM options
+    write /sys/kernel/mm/ksm/pages_to_scan 100
+    write /sys/kernel/mm/ksm/sleep_millisecs 100
+    write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/run 1
 
 on property:init.svc.bootanim=stopped
     # Apply HMP task packing
