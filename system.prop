@@ -71,6 +71,7 @@ persist.radio.rat_on=combine
 
 ro.com.android.mobiledata=false
 ro.telephony.default_network=8,1
+telephony.lteOnCdmaDevice=1
 ro.use_data_netmgrd=true
 
 # Time
