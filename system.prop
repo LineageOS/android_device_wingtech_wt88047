@@ -74,6 +74,7 @@ ro.com.android.mobiledata=false
 ro.telephony.default_network=8,1
 telephony.lteOnCdmaDevice=1
 ro.use_data_netmgrd=true
+ro.ril.multi_rat_capable=true
 
 # Time
 persist.timed.enable=true
