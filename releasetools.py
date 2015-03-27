@@ -75,12 +75,11 @@ def InstallRawImage(image_data, api_version, input_zip, fn, info, filesmap):
   else:
     print "warning radio-update: no support for api_version less than 3."
 
-def FULLOTA_InstallEnd_MMC(info):
+def InstallRadioFiles(info):
   files = GetRadioFiles(info.input_zip)
   if files == {}:
     print "warning radio-update: no radio image in input target_files; not flashing radio"
     return
-  info.script.UnmountAll()
   info.script.Print("Writing radio image...")
   #Load filesmap file
   filesmap = LoadFilesMap(info.input_zip)
@@ -93,9 +92,7 @@ def FULLOTA_InstallEnd_MMC(info):
   return
 
 def FullOTA_InstallEnd(info):
-  FULLOTA_InstallEnd_MMC(info)
+  InstallRadioFiles(info)
 
 def IncrementalOTA_InstallEnd(info):
-  #TODO: Implement device specific asserstions.
-  print "warning radio-update: no real implementation of IncrementalOTA_InstallEnd."
-  return
+  InstallRadioFiles(info)
