@@ -28,4 +28,7 @@
     <bool name="config_enabled_lte" translatable="false">true</bool>
 
     <bool name="allow_emergency_numbers_in_call_log">true</bool>
+
+    <!-- Show APN Settings for some CDMA carriers -->
+    <bool name="config_show_apn_setting_cdma">true</bool>
 </resources>
