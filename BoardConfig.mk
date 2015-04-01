@@ -90,15 +90,7 @@ TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
-BOARD_SEPOLICY_DIRS += \
-    $(DEVICE_PATH)/sepolicy
-
-BOARD_SEPOLICY_UNION += \
-    memcheck.te \
-    irsc_util.te \
-    mm-qcamerad.te \
-    system_server.te \
-    file_contexts
+BOARD_SEPOLICY_DIRS += $(DEVICE_PATH)/sepolicy
 
 # inherit from the proprietary version
 -include vendor/wingtech/wt88047/BoardConfigVendor.mk
