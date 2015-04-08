@@ -22,15 +22,24 @@
         <item>"1"</item>
     </string-array>
 
+    <string name="network_lte_cdma_and_evdo">LTE Hybrid</string>
+    <string name="network_lte_only">LTE Only</string>
+    <string name="network_cdma">EVDO Hybrid</string>
+    <string name="network_evdo_no_cdma">EVDO Only</string>
+    <string name="network_cdma_no_evdo">CDMA Only</string>
 
     <string-array name="enabled_networks_cdma_choices" translatable="false">
-        <item>@string/network_lte</item>
-        <item>@string/network_3G</item>
-        <item>@string/network_1x</item>
+        <item>@string/network_lte_cdma_and_evdo</item>
+        <item>@string/network_lte_only</item>
+        <item>@string/network_cdma</item>
+        <item>@string/network_evdo_no_cdma</item>
+        <item>@string/network_cdma_no_evdo</item>
     </string-array>
     <string-array name="enabled_networks_cdma_values" translatable="false">
         <item>"8"</item>
+        <item>"11"</item>
         <item>"4"</item>
+        <item>"6"</item>
         <item>"5"</item>
     </string-array>
 
