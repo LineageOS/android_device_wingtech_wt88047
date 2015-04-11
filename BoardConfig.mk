@@ -42,7 +42,7 @@ BOARD_KERNEL_SEPARATED_DT := true
 BOARD_KERNEL_TAGS_OFFSET := 0x01E00000
 BOARD_RAMDISK_OFFSET     := 0x02000000
 TARGET_KERNEL_CONFIG := cyanogenmod_rendang_defconfig
-TARGET_KERNEL_SOURCE := kernel/smartfren/msm8916
+TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8916
 
 ifneq ($(TARGET_BUILD_VARIANT),user)
 TARGET_KERNEL_ADDITIONAL_CONFIG := cyanogenmod_debug_config
