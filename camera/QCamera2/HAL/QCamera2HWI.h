@@ -526,6 +526,8 @@ private:
     uint32_t          mCameraId;
     mm_camera_vtbl_t *mCameraHandle;
     bool mCameraOpened;
+    // This flag will indicate whether camera is opened or not
+    static unsigned int mCameraSessionActive;
 
     preview_stream_ops_t *mPreviewWindow;
     QCameraParameters mParameters;
