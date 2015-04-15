@@ -20,3 +20,6 @@ vendor/lib/libchromatix_ov5670_q5v41b_rendang_zsl.so
 # Camera Sensor
 vendor/lib/libmmcamera_gc2355_rendang.so
 vendor/lib/libmmcamera_ov5670_q5v41b.so
+
+# Memsic Compass
+vendor/lib/libcalmodule_memsic.so
