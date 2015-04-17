@@ -70,6 +70,9 @@ ril.ecclist1=112,911,110,122,119,120,000,08,118
 ril.subscription.types=RUIM
 persist.radio.rat_on=combine
 
+ro.cdma.home.operator.alpha=Smartfren
+ro.cdma.home.operator.numeric=51009
+ro.cdma.home.operator.numlist=51009,51028
 ro.com.android.mobiledata=false
 ro.telephony.default_network=8,1
 telephony.lteOnCdmaDevice=1
