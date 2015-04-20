@@ -31,4 +31,16 @@
 
     <!-- Show APN Settings for some CDMA carriers -->
     <bool name="config_show_apn_setting_cdma">true</bool>
+
+    <integer-array name="config_show_cdma">
+        <item name="slot1">1</item>
+        <item name="slot2">0</item>
+    </integer-array>
+
+    <!-- Show roaming mode options for slot 1/2-->
+    <integer-array name="config_show_roaming_mode_option">
+        <item name="slot1">1</item>
+        <item name="slot2">0</item>
+    </integer-array>
+
 </resources>
