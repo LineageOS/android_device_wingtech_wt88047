@@ -295,4 +295,7 @@
     <!--  Whether Multiuser UI should be shown -->
     <bool name="config_enableMultiUserUI">true</bool>
 
+    <!--  Disable Modem Profiles for CDMA -->
+    <bool name="config_fetch_apn_from_omh_card">false</bool>
+
 </resources>
