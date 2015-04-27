@@ -192,6 +192,7 @@ PRODUCT_PACKAGES += \
 # Sensor HAL
 PRODUCT_PACKAGES += \
     calmodule.cfg \
+    libcalmodule_memsic \
     sensors.msm8916
 
 # QC PROPRIETARY
