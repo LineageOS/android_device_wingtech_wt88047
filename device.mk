@@ -233,6 +233,9 @@ PRODUCT_EXTRA_RECOVERY_KEYS += \
 PRODUCT_PACKAGES += \
     libxml2
 
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
+
 # Thermal
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/thermal-engine.conf:system/etc/thermal-engine.conf
