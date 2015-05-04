@@ -21,8 +21,8 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/smartfren/rendang/device.mk)
 
 # Device identifier. This must come after all inclusions
-PRODUCT_DEVICE := rendang
+PRODUCT_DEVICE := G36C1H
 PRODUCT_NAME := full_rendang
 PRODUCT_BRAND := Smartfren
-PRODUCT_MODEL := rendang
+PRODUCT_MODEL := Andromax G36C1H
 PRODUCT_MANUFACTURER := Haier
