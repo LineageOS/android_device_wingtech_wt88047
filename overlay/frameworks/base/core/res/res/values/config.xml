@@ -135,12 +135,12 @@
          This must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLcdBacklightValues">
         <item>12</item>   <!-- 0-10 -->
-        <item>22</item>   <!-- 10-30 -->
-        <item>42</item>   <!-- 30-100 -->
-        <item>64</item>   <!-- 100-200 -->
-        <item>92</item>   <!-- 200-400 -->
-        <item>128</item>   <!-- 400-1000 -->
-        <item>178</item>  <!-- 1000-2000 -->
+        <item>46</item>   <!-- 10-30 -->
+        <item>126</item>   <!-- 30-100 -->
+        <item>148</item>   <!-- 100-200 -->
+        <item>148</item>   <!-- 200-400 -->
+        <item>168</item>   <!-- 400-1000 -->
+        <item>200</item>  <!-- 1000-2000 -->
         <item>226</item>  <!-- 2000-3000 -->
         <item>255</item>  <!-- 3000+ -->
     </integer-array>
