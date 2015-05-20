@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -47,6 +47,8 @@
 
 #define GET_PARM_BIT32(parm, parm_arr) \
     ((parm_arr[parm/32]>>(parm%32))& 0x1)
+
+#define WAIT_EVENT_TIMEOUT 5 //5seconds
 
 /* internal function declare */
 int32_t mm_camera_evt_sub(mm_camera_obj_t * my_obj,
@@ -251,14 +253,16 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
     uint8_t sleep_msec=MM_CAMERA_DEV_OPEN_RETRY_SLEEP;
     int cam_idx = 0;
     char t_devname[MM_CAMERA_DEV_NAME_LEN];
+    const char *temp_dev_name = mm_camera_util_get_dev_name(my_obj->my_hdl);
 
     CDBG("%s:  begin\n", __func__);
 
-    strcpy(t_devname, mm_camera_util_get_dev_name(my_obj->my_hdl));
-    if (t_devname == NULL) {
-        rc = -1;
+    if (temp_dev_name == NULL) {
+        CDBG_ERROR("%s: dev name is NULL",__func__);
+        rc= -1;
         goto on_error;
     }
+    strlcpy(t_devname, temp_dev_name, sizeof(t_devname));
     snprintf(dev_name, sizeof(dev_name), "/dev/%s",t_devname );
     sscanf(dev_name, "/dev/video%d", &cam_idx);
     CDBG_ERROR("%s: dev name = %s, cam_idx = %d", __func__, dev_name, cam_idx);
@@ -1638,7 +1642,7 @@ void mm_camera_util_wait_for_event(mm_camera_obj_t *my_obj,
     pthread_mutex_lock(&my_obj->evt_lock);
     while (!(my_obj->evt_rcvd.server_event_type & evt_mask)) {
         clock_gettime(CLOCK_REALTIME, &ts);
-        ts.tv_sec++;
+        ts.tv_sec += WAIT_EVENT_TIMEOUT;
         rc = pthread_cond_timedwait(&my_obj->evt_cond, &my_obj->evt_lock, &ts);
         if (rc == ETIMEDOUT) {
             ALOGE("%s pthread_cond_timedwait success\n", __func__);

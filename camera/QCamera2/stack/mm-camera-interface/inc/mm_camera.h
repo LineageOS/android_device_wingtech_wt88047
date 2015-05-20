@@ -362,6 +362,12 @@ typedef struct {
     void *user_data;
 } mm_channel_bundle_t;
 
+typedef enum {
+    MM_CHANNEL_BRACKETING_STATE_OFF,
+    MM_CHANNEL_BRACKETING_STATE_WAIT_GOOD_FRAME_IDX,
+    MM_CHANNEL_BRACKETING_STATE_ACTIVE,
+} mm_channel_bracketing_state_t;
+
 typedef struct mm_channel {
     uint32_t my_hdl;
     mm_channel_state_type_t state;
@@ -398,7 +404,7 @@ typedef struct mm_channel {
     uint8_t needLEDFlash;
     uint8_t previewSkipCnt;
 
-    uint8_t need3ABracketing;
+    mm_channel_bracketing_state_t bracketingState;
     uint8_t isFlashBracketingEnabled;
     uint8_t isZoom1xFrameRequested;
     char threadName[THREAD_NAME_SIZE];

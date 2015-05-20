@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2013, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -37,6 +37,8 @@
 #include <utils/Trace.h>
 #include <gralloc_priv.h>
 #include <QComOMXMetadata.h>
+#include <qdMetaData.h>
+
 #include "QCamera2HWI.h"
 #include "QCameraMem.h"
 #include "QCameraParameters.h"
@@ -1340,11 +1342,12 @@ QCameraGrallocMemory::~QCameraGrallocMemory()
  *   @stride  : stride of preview frame
  *   @scanline: scanline of preview frame
  *   @foramt  : format of preview image
+ *   @maxFPS : max fps of preview stream
  *
  * RETURN     : none
  *==========================================================================*/
 void QCameraGrallocMemory::setWindowInfo(preview_stream_ops_t *window,
-        int width, int height, int stride, int scanline, int format)
+        int width, int height, int stride, int scanline, int format, int maxFPS)
 {
     mWindow = window;
     mWidth = width;
@@ -1352,6 +1355,32 @@ void QCameraGrallocMemory::setWindowInfo(preview_stream_ops_t *window,
     mStride = stride;
     mScanline = scanline;
     mFormat = format;
+    setMaxFPS(maxFPS);
+}
+
+/*===========================================================================
+ * FUNCTION   : setMaxFPS
+ *
+ * DESCRIPTION: set max fps
+ *
+ * PARAMETERS :
+ *   @maxFPS : max fps of preview stream
+ *
+ * RETURN     : none
+ *==========================================================================*/
+void QCameraGrallocMemory::setMaxFPS(int maxFPS)
+{
+    /* input will be in multiples of 1000 */
+    maxFPS = maxFPS/1000;
+
+    /* set the lower cap to 30 always, otherwise MDP may result in underruns*/
+    if (maxFPS < 30) {
+        maxFPS = 30;
+    }
+
+    /* the new fps will be updated in metadata of the next frame enqueued to display*/
+    mMaxFPS = maxFPS;
+    CDBG_HIGH("%s: Setting max fps %d to display", __func__, mMaxFPS);
 }
 
 /*===========================================================================
@@ -1516,6 +1545,8 @@ int QCameraGrallocMemory::allocate(uint8_t count, size_t /*size*/)
 
         mPrivateHandle[cnt] =
             (struct private_handle_t *)(*mBufferHandle[cnt]);
+        //update max fps info
+        setMetaData(mPrivateHandle[cnt], UPDATE_REFRESH_RATE, (void*)&mMaxFPS);
         mMemInfo[cnt].main_ion_fd = open("/dev/ion", O_RDONLY);
         if (mMemInfo[cnt].main_ion_fd < 0) {
             ALOGE("%s: failed: could not open ion device", __func__);

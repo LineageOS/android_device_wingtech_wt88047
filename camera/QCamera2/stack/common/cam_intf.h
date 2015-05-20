@@ -325,6 +325,8 @@ typedef struct{
     cam_sensor_type_t sensor_type;
     /* low power mode support */
     uint8_t low_power_mode_supported;
+    /* support for YUV over PIX intf */
+    uint8_t use_pix_for_SOC;
 } cam_capability_t;
 
 typedef enum {

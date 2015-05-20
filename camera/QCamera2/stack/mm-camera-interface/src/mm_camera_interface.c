@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -1409,6 +1409,46 @@ void get_sensor_info()
 }
 
 /*===========================================================================
+ * FUNCTION   : sort_camera_info
+ *
+ * DESCRIPTION: sort camera info to keep back cameras idx is smaller than front cameras idx
+ *
+ * PARAMETERS : number of cameras
+ *
+ * RETURN     :
+ *==========================================================================*/
+void sort_camera_info(int num_cam)
+{
+    int idx = 0, i;
+    struct camera_info temp_info[MM_CAMERA_MAX_NUM_SENSORS];
+    char temp_dev_name[MM_CAMERA_MAX_NUM_SENSORS][MM_CAMERA_DEV_NAME_LEN];
+    memset(temp_info, 0, sizeof(temp_info));
+    memset(temp_dev_name, 0, sizeof(temp_dev_name));
+
+    /* firstly save the back cameras info*/
+    for (i = 0; i < num_cam; i++) {
+        if (g_cam_ctrl.info[i].facing == CAMERA_FACING_BACK) {
+            temp_info[idx] = g_cam_ctrl.info[i];
+            memcpy(temp_dev_name[idx++],g_cam_ctrl.video_dev_name[i],
+                    MM_CAMERA_DEV_NAME_LEN);
+        }
+    }
+
+    /* then save the front cameras info*/
+    for (i = 0; i < num_cam; i++) {
+        if (g_cam_ctrl.info[i].facing == CAMERA_FACING_FRONT) {
+            temp_info[idx] = g_cam_ctrl.info[i];
+            memcpy(temp_dev_name[idx++],g_cam_ctrl.video_dev_name[i],
+                    MM_CAMERA_DEV_NAME_LEN);
+        }
+    }
+
+    memcpy(g_cam_ctrl.info, temp_info, sizeof(temp_info));
+    memcpy(g_cam_ctrl.video_dev_name, temp_dev_name, sizeof(temp_dev_name));
+    return;
+}
+
+/*===========================================================================
  * FUNCTION   : get_num_of_cameras
  *
  * DESCRIPTION: get number of cameras
@@ -1431,8 +1471,6 @@ uint8_t get_num_of_cameras()
     uint32_t temp;
     uint32_t log_level;
     uint32_t debug_mask;
-    char temp_dev_name[MM_CAMERA_DEV_NAME_LEN];
-    struct camera_info temp_info;
 
     /*  Higher 4 bits : Value of Debug log level (Default level is 1 to print all CDBG_HIGH)
         Lower 28 bits : Control mode for sub module logging(Only 3 sub modules in HAL)
@@ -1578,17 +1616,7 @@ uint8_t get_num_of_cameras()
     g_cam_ctrl.num_cam = num_cameras;
 
     get_sensor_info();
-
-    /*if front camera probe earlier than back camera, switch front camera and back camera dev_name and info*/
-    if (g_cam_ctrl.info[0].facing == CAMERA_FACING_FRONT && g_cam_ctrl.num_cam > 1) {
-        memcpy(temp_dev_name, g_cam_ctrl.video_dev_name[0], sizeof(temp_dev_name));
-        memcpy(g_cam_ctrl.video_dev_name[0], g_cam_ctrl.video_dev_name[1], sizeof(temp_dev_name));
-        memcpy(g_cam_ctrl.video_dev_name[1], temp_dev_name, sizeof(temp_dev_name));
-        memcpy(&temp_info, &g_cam_ctrl.info[0], sizeof(temp_info));
-        memcpy(&g_cam_ctrl.info[0], &g_cam_ctrl.info[1], sizeof(temp_info));
-        memcpy(&g_cam_ctrl.info[1], &temp_info, sizeof(temp_info));
-    }
-
+    sort_camera_info(g_cam_ctrl.num_cam);
     /* unlock the mutex */
     pthread_mutex_unlock(&g_intf_lock);
     CDBG("%s: num_cameras=%d\n", __func__, (int)g_cam_ctrl.num_cam);

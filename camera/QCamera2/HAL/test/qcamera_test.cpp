@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -96,8 +96,12 @@ const char CameraContext::KEY_ZSL[] = "zsl";
  *==========================================================================*/
 void CameraContext::previewCallback(const sp<IMemory>& mem)
 {
-    printf("PREVIEW Callback %p", mem->pointer());
     uint8_t *ptr = (uint8_t*) mem->pointer();
+    if (ptr == NULL) {
+        ALOGE("Error: mem->pointer() NULL");
+        return;
+    }
+    printf("PREVIEW Callback %p", mem->pointer());
     printf("PRV_CB: 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x 0x%x",
            ptr[0],
            ptr[1],
@@ -474,7 +478,10 @@ status_t CameraContext::ReadSectionsFromBuffer (unsigned char *buffer,
     mSectionsAllocated = 10;
 
     mSections = (Sections_t *)malloc(sizeof(Sections_t)*mSectionsAllocated);
-
+    if (mSections == NULL) {
+        ALOGE("malloc failed\n");
+        return NO_MEMORY;
+    }
     if (!buffer) {
         printf("Input buffer is null\n");
         return BAD_VALUE;
@@ -950,7 +957,11 @@ void CameraContext::dataCallbackTimestamp(nsecs_t timestamp,
     ANativeWindowBuffer* anb = NULL;
 
     dstBuff = (void *) dataPtr->pointer();
-
+    if (dstBuff == NULL) {
+        ALOGE("destination buff NULL");
+        mInterpr->ViVUnlock();
+        return;
+    }
     if (mCameraIndex == mInterpr->mViVVid.sourceCameraID) {
         srcYStride = calcStride(currentVideoSize.width);
         srcUVStride = calcStride(currentVideoSize.width);
