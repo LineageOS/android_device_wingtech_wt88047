@@ -640,6 +640,19 @@ typedef union
     /*QMI_LOC_GET_AVAILABLE_WWAN_POSITION_REQ_V02*/
 
     const qmiLocSetXtraVersionCheckReqMsgT_v02 *pSetXtraVersionCheckReq;
+
+    const qmiLocGdtUploadBeginStatusReqMsgT_v02* pGdtUploadBeginStatusReq;
+    /* QMI_LOC_GDT_UPLOAD_BEGIN_STATUS_REQ_V02 */
+
+    const qmiLocGdtUploadEndReqMsgT_v02* pGdtUploadEndReq;
+    /* QMI_LOC_GDT_UPLOAD_END_REQ_V02*/
+
+    const qmiLocInjectGtpClientDownloadedDataReqMsgT_v02 *pInjectGtpClientDownloadedDataReq;
+    /* QMI_LOC_INJECT_GTP_CLIENT_DOWNLOADED_DATA_REQ_V02 */
+
+    const qmiLocSetGNSSConstRepConfigReqMsgT_v02 *pSetGNSSConstRepConfigReq;
+    /*QMI_LOC_SET_GNSS_CONSTELL_REPORT_CONFIG_V02*/
+
 }locClientReqUnionType;
 
 
@@ -825,7 +838,6 @@ typedef union
         QMI_LOC_EVENT_BATCH_FULL_IND_V02. */
 
    const qmiLocEventVehicleDataReadyIndMsgT_v02* pVehicleDataReadyEvent;
-
    /**< Sent by the engine to recommend how vehicle sensor data is
         sent to the location engine.
         The eventIndId field in the event indication callback is set to
@@ -837,6 +849,26 @@ typedef union
 
         The eventIndId field in the event indication callback is set to
         QMI_LOC_EVENT_GEOFENCE_PROXIMITY_NOTIFICATION_IND_V02. @newpagetable */
+
+   const qmiLocEventGdtUploadBeginStatusReqIndMsgT_v02* pGdtUploadBeginEvent;
+   /**< Sent by the engine to notify the client about a GDT upload
+        begine event.
+
+       The eventIndId field in the event indication callback is set to
+       QMI_LOC_EVENT_GDT_UPLOAD_BEGIN_STATUS_REQ_IND_V02. @newpagetable */
+
+   const qmiLocEventGdtUploadEndReqIndMsgT_v02* pGdtUploadEndEvent;
+   /**< Sent by the engine to notify the client about a GDT upload
+        end event.
+
+       The eventIndId field in the event indication callback is set to
+       QMI_LOC_EVENT_GDT_UPLOAD_END_REQ_IND_V02. @newpagetable */
+
+   const qmiLocEventGnssSvMeasInfoIndMsgT_v02* pGnssSvRawInfoEvent;
+   /**< Sent by the engine to report GNSS measurement.
+        The eventIndId field in the event indication callback is set to
+        QMI_LOC_EVENT_GNSS_MEASUREMENT_REPORT_IND_V02. @newpagetable */
+
 }locClientEventIndUnionType;
 
 
@@ -1234,6 +1266,10 @@ typedef union
     /*QMI_LOC_GET_AVAILABLE_WWAN_POSITION_IND_V02*/
 
     const qmiLocSetXtraVersionCheckIndMsgT_v02 *pSetXtraVersionCheckInd;
+    
+    const qmiLocSetGNSSConstRepConfigIndMsgT_v02 *pSetGNSSConstRepConfigInd;
+    /*QMI_LOC_SET_GNSS_CONSTELL_REPORT_CONFIG_IND_V02*/
+
 }locClientRespIndUnionType;
 
 /** @} */ /* end_addtogroup data_types */

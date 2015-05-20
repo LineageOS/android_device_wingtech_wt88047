@@ -53,6 +53,10 @@ void LocInternalAdapter::getZppInt() {
     sendMsg(new LocEngGetZpp(mLocEngAdapter));
 }
 
+void LocInternalAdapter::shutdown() {
+    sendMsg(new LocEngShutdown(mLocEngAdapter));
+}
+
 LocEngAdapter::LocEngAdapter(LOC_API_ADAPTER_EVENT_MASK_T mask,
                              void* owner, ContextBase* context,
                              MsgTask::tCreate tCreator) :
@@ -370,16 +374,53 @@ enum loc_api_adapter_err LocEngAdapter::setXtraVersionCheck(int check)
     switch (check) {
     case 0:
         eCheck = DISABLED;
+        break;
     case 1:
         eCheck = AUTO;
+        break;
     case 2:
         eCheck = XTRA2;
+        break;
     case 3:
         eCheck = XTRA3;
-    defaul:
+        break;
+    default:
         eCheck = DISABLED;
     }
     ret = mLocApi->setXtraVersionCheck(eCheck);
     EXIT_LOG(%d, ret);
     return ret;
+}
+
+void LocEngAdapter::reportGpsMeasurementData(GpsData &gpsMeasurementData)
+{
+    sendMsg(new LocEngReportGpsMeasurement(mOwner,
+                                           gpsMeasurementData));
+}
+
+/*
+  Update Registration Mask
+ */
+void LocEngAdapter::updateRegistrationMask(LOC_API_ADAPTER_EVENT_MASK_T event,
+                                           loc_registration_mask_status isEnabled)
+{
+    LOC_LOGD("entering %s", __func__);
+    int result = LOC_API_ADAPTER_ERR_FAILURE;
+    result = mLocApi->updateRegistrationMask(event, isEnabled);
+    if (result == LOC_API_ADAPTER_ERR_SUCCESS) {
+        LOC_LOGD("%s] update registration mask succeed.", __func__);
+    } else {
+        LOC_LOGE("%s] update registration mask failed.", __func__);
+    }
+}
+
+/*
+  Set Gnss Constellation Config
+ */
+bool LocEngAdapter::gnssConstellationConfig()
+{
+    LOC_LOGD("entering %s", __func__);
+    bool result = false;
+    result = mLocApi->gnssConstellationConfig();
+    return result;
 }

@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -81,7 +81,7 @@ static int  loc_set_position_mode(GpsPositionMode mode, GpsPositionRecurrence re
                                   uint32_t min_interval, uint32_t preferred_accuracy,
                                   uint32_t preferred_time);
 static const void* loc_get_extension(const char* name);
-
+static void loc_close_mdm_node();
 // Defines the GpsInterface in gps.h
 static const GpsInterface sLocEngInterface =
 {
@@ -150,6 +150,17 @@ typedef struct {
 static s_loc_mdm_info loc_mdm_info;
 static void loc_pm_event_notifier(void *client_data, enum pm_event event);
 #endif /*MODEM_POWER_VOTE*/
+// For shutting down MDM in fusion devices
+static int mdm_fd = -1;
+static int loc_gps_measurement_init(GpsMeasurementCallbacks* callbacks);
+static void loc_gps_measurement_close();
+
+static const GpsMeasurementInterface sLocEngGpsMeasurementInterface =
+{
+    sizeof(GpsMeasurementInterface),
+    loc_gps_measurement_init,
+    loc_gps_measurement_close
+};
 
 static void loc_agps_ril_init( AGpsRilCallbacks* callbacks );
 static void loc_agps_ril_set_ref_location(const AGpsRefLocation *agps_reflocation, size_t sz_struct);
@@ -247,6 +258,7 @@ extern "C" const GpsInterface* get_gps_interface()
     switch (gnssType)
     {
     case GNSS_GSS:
+    case GNSS_AUTO:
         //APQ8064
         gps_conf.CAPABILITIES &= ~(GPS_CAPABILITY_MSA | GPS_CAPABILITY_MSB);
         gss_fd = open("/dev/gss", O_RDONLY);
@@ -324,7 +336,8 @@ static int loc_init(GpsCallbacks* callbacks)
                                     callbacks->create_thread_cb, /* create_thread_cb */
                                     NULL, /* location_ext_parser */
                                     NULL, /* sv_ext_parser */
-                                    callbacks->request_utc_time_cb /* request_utc_time_cb */};
+                                    callbacks->request_utc_time_cb, /* request_utc_time_cb */
+                                    loc_close_mdm_node  /*loc_shutdown_cb*/};
 
     gps_loc_cb = callbacks->location_cb;
     gps_sv_cb = callbacks->sv_status_cb;
@@ -496,17 +509,9 @@ static void loc_cleanup()
     loc_afw_data.adapter->setGpsLockMsg(gps_conf.GPS_LOCK);
 
     loc_eng_cleanup(loc_afw_data);
+    loc_close_mdm_node();
     gps_loc_cb = NULL;
     gps_sv_cb = NULL;
-
-/*
-    if (gss_fd >= 0)
-    {
-        close(gss_fd);
-        gss_fd = -1;
-        LOC_LOGD("GSS shutdown.\n");
-    }
-*/
 
     EXIT_LOG(%s, VOID_RET);
 }
@@ -782,6 +787,10 @@ const void* loc_get_extension(const char* name)
    {
        ret_val = &sLocEngConfigInterface;
    }
+   else if (strcmp(name, GPS_MEASUREMENT_INTERFACE) == 0)
+   {
+       ret_val = &sLocEngGpsMeasurementInterface;
+   }
    else
    {
       LOC_LOGE ("get_extension: Invalid interface passed in\n");
@@ -987,6 +996,56 @@ static int loc_xtra_inject_data(char* data, int length)
                  __func__, data, length);
     EXIT_LOG(%d, ret_val);
     return ret_val;
+}
+
+/*===========================================================================
+FUNCTION    loc_gps_measurement_init
+
+DESCRIPTION
+   This function initializes the gps measurement interface
+
+DEPENDENCIES
+   NONE
+
+RETURN VALUE
+   None
+
+SIDE EFFECTS
+   N/A
+
+===========================================================================*/
+static int loc_gps_measurement_init(GpsMeasurementCallbacks* callbacks)
+{
+    ENTRY_LOG();
+    int ret_val = loc_eng_gps_measurement_init(loc_afw_data,
+                                               callbacks);
+
+    EXIT_LOG(%d, ret_val);
+    return ret_val;
+}
+
+/*===========================================================================
+FUNCTION    loc_gps_measurement_close
+
+DESCRIPTION
+   This function closes the gps measurement interface
+
+DEPENDENCIES
+   NONE
+
+RETURN VALUE
+   None
+
+SIDE EFFECTS
+   N/A
+
+===========================================================================*/
+static void loc_gps_measurement_close()
+{
+    ENTRY_LOG();
+    loc_eng_gps_measurement_close(loc_afw_data);
+
+    EXIT_LOG(%s, VOID_RET);
 }
 
 /*===========================================================================

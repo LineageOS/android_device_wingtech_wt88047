@@ -289,6 +289,23 @@ struct LocEngGetZpp : public LocMsg {
     void send() const;
 };
 
+struct LocEngReportGpsMeasurement : public LocMsg {
+    void* mLocEng;
+    const GpsData mGpsData;
+    LocEngReportGpsMeasurement(void* locEng,
+                               GpsData &gpsData);
+    virtual void proc() const;
+    void locallog() const;
+    virtual void log() const;
+};
+
+struct LocEngShutdown : public LocMsg {
+    LocEngAdapter* mAdapter;
+    LocEngShutdown(LocEngAdapter* adapter);
+    virtual void proc() const;
+    void locallog() const;
+    virtual void log() const;
+};
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
