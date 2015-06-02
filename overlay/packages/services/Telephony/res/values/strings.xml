@@ -27,14 +27,6 @@
     <string name="network_cdma">EVDO Hybrid</string>
     <string name="network_evdo_no_cdma">EVDO Only</string>
     <string name="network_cdma_no_evdo">CDMA Only</string>
-    <string name="network_wcdma_pref">WCDMA Hybrid</string>
-    <string name="network_gsm_only">GSM Only</string>
-    <string name="roaming_mode_title">Roaming mode</string>
-    <string name="roaming_mode_summary">International roaming mode</string>
-    <string name="roaming_lte">LTE roaming</string>
-    <string name="roaming_gsm">GSM roaming</string>
-    <string name="warning_insert_smartfren_card">Please insert Smartfren 4G Card!</string>
-    <string name="warning_smartfren_roaming">Auto roaming mode will be enabled and it may allow device to automatically roaming on Smartfren LTE and GSM roaming partner networks. Roaming charges may incur!</string>
 
     <string-array name="enabled_networks_cdma_choices" translatable="false">
         <item>@string/network_lte_cdma_and_evdo</item>
@@ -49,66 +41,6 @@
         <item>"4"</item>
         <item>"6"</item>
         <item>"5"</item>
-    </string-array>
-
-    <!-- Preferred network modes that can be used by a roaming mode. -->
-    <string-array name="roaming_mode_lte_preferred_network_choices" translatable="false">
-    </string-array>
-    <string-array name="roaming_mode_lte_preferred_network_values" translatable="false">
-    </string-array>
-    <string-array name="roaming_mode_gsm_preferred_network_choices" translatable="false">
-        <item>@string/network_wcdma_pref</item>
-        <item>@string/network_wcdma_only</item>
-        <item>@string/network_gsm_only</item>
-    </string-array>
-    <string-array name="roaming_mode_gsm_preferred_network_values" translatable="false">
-        <item>"0"</item>
-        <item>"2"</item>
-        <item>"1"</item>
-    </string-array>
-
-    <!-- Preferred network mode list for slot1's roaming modes. -->
-    <string-array name="roaming_mode_preferred_network_choices_slot1" translatable="false">
-        <item>@array/roaming_mode_lte_preferred_network_choices</item>
-        <item>@array/roaming_mode_gsm_preferred_network_choices</item>
-    </string-array>
-    <string-array name="roaming_mode_preferred_network_values_slot1" translatable="false">
-        <item>@array/roaming_mode_lte_preferred_network_values</item>
-        <item>@array/roaming_mode_gsm_preferred_network_values</item>
-    </string-array>
-    <!-- Roaming modes for slot 1, the preferred networks modes available for each roaming
-         mode is read from the above list.
-    -->
-    <string-array name="roaming_mode_choices_slot1" translatable="false">
-        <item>@string/roaming_lte</item>
-        <item>@string/roaming_gsm</item>
-        <item>@string/roaming_disabled</item>
-    </string-array>
-    <!-- Index to look up preferred network list in roaming_mode_preferred_network_choices_slot1. -->
-    <string-array name="roaming_mode_values_slot1" translatable="false">
-        <item>"0"</item>
-        <item>"1"</item>
-        <item>"-1"</item>
-    </string-array>
-    <!-- Warning message when user chooses the corresponding roaming mode. Set empty string
-         if you don't need one.
-    -->
-    <string-array name="roaming_mode_warnings_slot1" translatable="false">
-        <item>@string/warning_insert_smartfren_card</item>
-        <item>@string/warning_insert_smartfren_card</item>
-        <item>""</item>
-    </string-array>
-    <!-- Enable/disable a roaming mode. This allows us to overlay the settings.
-         For example, we can allow a roaming mode only if a specific SIM cad is inserted,
-         by setting the roaming_mode_enable_slotX to 0 (false) in this file, but overlaying
-         it to "1" (true) in a the mccXXX-mncXXX xml file.
-         When a mode is disabled, the setting UI only displays a warning dialog but does NOT
-         allow any change (e.g. Please insert XXX SIM card to enable XXX roaming mode)
-    -->
-    <string-array name="roaming_mode_enable_slot1" translatable="false">
-        <item>"0"</item>
-        <item>"0"</item>
-        <item>"1"</item>
     </string-array>
 
 </resources>
