@@ -37,3 +37,6 @@ ro.fusion.magfield.max=250
 
 # Factory Reset Protection
 ro.frp.pst=/dev/block/bootdevice/by-name/config
+
+# System property for PIP support
+persist.camera.pip.support=0
