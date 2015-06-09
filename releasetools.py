@@ -86,7 +86,18 @@ def InstallRadioFiles(info):
   if filesmap == {}:
       print "warning radio-update: no or invalid filesmap file found. not flashing radio"
       return
+  if hasattr(info, 'source_zip'):
+      source_filesmap = LoadFilesMap(info.source_zip)
+  else:
+      source_filesmap = None
   for f in files:
+    if source_filesmap:
+        filename = f[6:]
+        source_checksum = source_filesmap.get(filename, [None, 'no_source'])[1]
+        target_checksum = filesmap.get(filename, [None, 'no_target'])[1]
+        if source_checksum == target_checksum:
+            print "info radio-update: source and target match for %s... skipping" % filename
+            continue
     image_data = info.input_zip.read(f)
     InstallRawImage(image_data, info.input_version, info.input_zip, f, info, filesmap)
   return
