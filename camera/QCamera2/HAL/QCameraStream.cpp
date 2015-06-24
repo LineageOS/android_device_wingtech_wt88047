@@ -1196,11 +1196,14 @@ void *QCameraStream::BufAllocRoutine(void *data)
  * DESCRIPTION: signal if flag "wait_for_cond" is set
  *
  *==========================================================================*/
-void QCameraStream::cond_signal()
+void QCameraStream::cond_signal(bool forceExit)
 {
     pthread_mutex_lock(&m_lock);
     if(wait_for_cond == TRUE){
         wait_for_cond = FALSE;
+        if (forceExit) {
+            mNumBufsNeedAlloc = 0;
+        }
         pthread_cond_signal(&m_cond);
     }
     pthread_mutex_unlock(&m_lock);
@@ -1239,6 +1242,7 @@ int32_t QCameraStream::putBufs(mm_camera_map_unmap_ops_tbl_t *ops_tbl)
     int rc = NO_ERROR;
 
     if (mBufAllocPid != 0) {
+        cond_signal(true);
         CDBG_HIGH("%s: wait for buf allocation thread dead", __func__);
         pthread_join(mBufAllocPid, NULL);
         mBufAllocPid = 0;
