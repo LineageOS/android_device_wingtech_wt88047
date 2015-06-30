@@ -199,18 +199,6 @@ PRODUCT_PACKAGES += \
 ifneq ($(QCPATH),)
 # proprietary wifi display, if available
 PRODUCT_BOOT_JARS += WfdCommon
-
-# Connectivity Engine support
-ifeq ($(BOARD_USES_QCNE),true)
-PRODUCT_PACKAGES += \
-    services-ext \
-    init.cne.rc
-
-PRODUCT_PROPERTY_OVERRIDES +=
-    persist.cne.feature=1 \
-    persist.dpm.feature=2
-
-endif
 endif
 
 # Ramdisk
@@ -222,6 +210,7 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     fstab.qcom \
+    init.cne.rc \
     init.qcom.rc \
     init.qcom.usb.rc \
     init.recovery.qcom.rc \
