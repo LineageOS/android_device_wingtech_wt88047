@@ -1,0 +1,96 @@
+# Copyright (c) 2009-2012, 2014, The Linux Foundation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#     * Redistributions of source code must retain the above copyright
+#       notice, this list of conditions and the following disclaimer.
+#     * Redistributions in binary form must reproduce the above copyright
+#       notice, this list of conditions and the following disclaimer in the
+#       documentation and/or other materials provided with the distribution.
+#     * Neither the name of The Linux Foundation nor
+#       the names of its contributors may be used to endorse or promote
+#       products derived from this software without specific prior written
+#       permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+# NON-INFRINGEMENT ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+# CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+# OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+# WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+# OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
+# ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+
+on boot
+    # change file owner for factory test
+    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/firmware_version
+    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/firmware_update
+    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/calibrate
+
+
+    # Torch
+    chown system camera /sys/class/leds/torch-light/brightness
+    chmod 0660 /sys/class/leds/torch-light/brightness
+
+    # Touchscreen
+    chown root system /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl
+    chmod 0660 /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl
+
+    # charger
+    chown system system /sys/bus/i2c/drivers/lc709203/batt_capacity
+    chmod 0660 /sys/bus/i2c/drivers/lc709203/batt_capacity
+    chown root system /sys/class/power_supply/bms/current_now
+    chown root system /sys/class/power_supply/bms/voltage_ocv
+    chmod 0664 /sys/class/power_supply/bms/current_now
+    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
+
+    chown root system /sys/devices/soc.0/78b9000.i2c/i2c-5/5-005d/keypad_enable
+    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-005d/keypad_enable
+
+on charger
+   wait /dev/block/bootdevice/by-name/system
+   mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
+   chown root system /sys/class/power_supply/bms/current_now
+   chown root system /sys/class/power_supply/bms/voltage_ocv
+   chmod 0664 /sys/class/power_supply/bms/current_now
+   chmod 0664 /sys/class/power_supply/bms/voltage_ocv
+   start vm_bms
+
+on post-fs-data
+     mkdir /data/dpm/nsrm 0771 system system
+     chown system system /data/dpm/nsrm
+
+on property:service.bootanim.exit=1
+    # KSM options
+    write /sys/kernel/mm/ksm/pages_to_scan 100
+    write /sys/kernel/mm/ksm/sleep_millisecs 100
+    write /sys/kernel/mm/ksm/deferred_timer 1
+    write /sys/kernel/mm/ksm/run 1
+
+service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
+    class late_start
+
+service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/sdcard1 /storage/sdcard1
+    class late_start
+    disabled
+
+service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdisk /storage/usbdisk
+    class late_start
+    disabled
+
+service vm_bms /system/bin/vm_bms
+    class core
+    user root
+    group root
+
+service cnd /system/bin/cnd
+    class late_start
+    socket cnd stream 660 root inet
+
+service dpmd /system/bin/dpmd
+    class late_start
+    socket dpmd stream 660 root system
