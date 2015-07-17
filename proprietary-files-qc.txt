@@ -251,9 +251,10 @@ vendor/lib/lib-rtpdaemoninterface.so
 vendor/lib/lib-rtpsl.so
 
 # Media
+lib/libOmxVdecHevc.so
 vendor/lib/libDivxDrm.so
 vendor/lib/libExtendedExtractor.so
--vendor/lib/libHevcSwDecoder.so
+vendor/lib/libHevcSwDecoder.so
 vendor/lib/libI420colorconvert.so
 vendor/lib/libmmosal.so
 vendor/lib/libmmparser.so
