@@ -85,6 +85,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 PRODUCT_PACKAGES += \
+    fstab.qcom \
     init.cne.rc \
     init.target.rc \
     init.qcom.usb.rc
