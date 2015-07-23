@@ -53,11 +53,44 @@ vendor/lib/libmmqjpeg_codec.so
 vendor/lib/liboemcamera.so
 vendor/lib/libqomx_jpegenc.so
 
+# Camera Actuator
+vendor/lib/libactuator_dw9714_ov5648_rendang.so
+vendor/lib/libactuator_dw9714_ov5648_rendang_camcorder.so
+vendor/lib/libactuator_dw9714_ov5648_rendang_camera.so
+vendor/lib/libactuator_dw9714_ov5670_rendang.so
+vendor/lib/libactuator_dw9714_ov5670_rendang_camcorder.so
+vendor/lib/libactuator_dw9714_ov5670_rendang_camera.so
+
+# Camera Chromatix
+vendor/lib/libchromatix_gc2355_rendang_common.so
+vendor/lib/libchromatix_gc2355_rendang_preview.so
+vendor/lib/libchromatix_ov5648_q5v22e_rendang_common.so
+vendor/lib/libchromatix_ov5648_q5v22e_rendang_default_video_hd.so
+vendor/lib/libchromatix_ov5648_q5v22e_rendang_default_video.so
+vendor/lib/libchromatix_ov5648_q5v22e_rendang_preview.so
+vendor/lib/libchromatix_ov5648_q5v22e_rendang_snapshot.so
+vendor/lib/libchromatix_ov5648_q5v22e_rendang_zsl.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_common.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_default_video.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_hfr_120fps.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_hfr_60fps.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_hfr_90fps.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_liveshot.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_preview.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_snapshot.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_video_hd.so
+vendor/lib/libchromatix_ov5670_q5v41b_rendang_zsl.so
+
 # Camera firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
 etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
+
+# Camera Sensor
+vendor/lib/libmmcamera_gc2355_rendang.so
+vendor/lib/libmmcamera_ov5648_q5v22e_rendang.so
+vendor/lib/libmmcamera_ov5670_q5v41b.so
 
 # CNE
 bin/cnd
@@ -225,15 +258,6 @@ vendor/lib/libthermalioctl.so
 bin/time_daemon
 -vendor/lib/libtime_genoff.so
 vendor/lib/libTimeService.so
-
-# Venus (media) firmware
-etc/firmware/venus.b00
-etc/firmware/venus.b01
-etc/firmware/venus.b02
-etc/firmware/venus.b03
-etc/firmware/venus.b04
-etc/firmware/venus.mbn
-etc/firmware/venus.mdt
 
 # WLAN
 lib/libwcnss_qmi.so
