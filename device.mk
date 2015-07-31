@@ -129,3 +129,9 @@ PRODUCT_COPY_FILES += \
 
 # Inherit the rest from msm8916-common
 $(call inherit-product, device/cyanogen/msm8916-common/msm8916.mk)
+
+# VT
+PRODUCT_PACKAGES += \
+    libvt_jni \
+    libimscamera_jni \
+    qti_permissions.xml
