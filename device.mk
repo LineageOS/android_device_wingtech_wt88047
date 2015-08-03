@@ -107,6 +107,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     init.qti.ims.sh \
+    libqcomvisualizer \
+    libqcompostprocbundle \
     fstab.qcom \
     init.cne.rc \
     init.target.rc \
