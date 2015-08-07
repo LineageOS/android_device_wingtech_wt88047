@@ -5027,7 +5027,9 @@ int32_t QCameraParameters::initDefaultParameters()
     CDBG_HIGH("%s: totalram = %ld, freeram = %ld ", __func__, info.totalram,
         info.freeram);
     if (info.totalram > TOTAL_RAM_SIZE_512MB) {
-        set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_TRUE);
+        /* Report as unsupported on Rendang. It's buggy and provides almost no
+           benefit. */
+        set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_FALSE);
     } else {
         m_bIsLowMemoryDevice = true;
         set(KEY_QC_ZSL_HDR_SUPPORTED, VALUE_FALSE);
