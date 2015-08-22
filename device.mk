@@ -23,17 +23,18 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.accelerometer.xml:system/etc/permissions/android.hardware.sensor.accelerometer.xml \
     frameworks/native/data/etc/android.hardware.sensor.compass.xml:system/etc/permissions/android.hardware.sensor.compass.xml \
+    frameworks/native/data/etc/android.hardware.sensor.gyroscope.xml:system/etc/permissions/android.hardware.sensor.gyroscope.xml \
     frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
 # Screen density
-PRODUCT_AAPT_CONFIG := normal hdpi
-PRODUCT_AAPT_PREF_CONFIG := hdpi
+PRODUCT_AAPT_CONFIG := normal
+PRODUCT_AAPT_PREF_CONFIG := xhdpi
 
 # Boot animation
-TARGET_SCREEN_HEIGHT := 854
-TARGET_SCREEN_WIDTH := 480
+TARGET_SCREEN_HEIGHT := 1280
+TARGET_SCREEN_WIDTH := 720
 
 $(call inherit-product, frameworks/native/build/phone-hdpi-2048-dalvik-heap.mk)
 $(call inherit-product, frameworks/native/build/phone-xxhdpi-2048-hwui-memory.mk)
@@ -85,8 +86,8 @@ PRODUCT_COPY_FILES += \
 # Keylayout
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
-    $(LOCAL_PATH)/keylayout/msg2xxx.kl:system/usr/keylayout/msg2xxx.kl \
-    $(LOCAL_PATH)/keylayout/qpnp_pon.kl:system/usr/keylayout/qpnp_pon.kl
+    $(LOCAL_PATH)/keylayout/msm8x16-skui-snd-card_Button_Jack.kl:system/usr/keylayout/msm8x16-skui-snd-card_Button_Jack.kl \
+    $(LOCAL_PATH)/keylayout/synaptics_rmi4_i2c.kl:system/usr/keylayout/synaptics_rmi4_i2c.kl
 
 # Lights
 PRODUCT_PACKAGES += \
@@ -101,14 +102,12 @@ PRODUCT_PACKAGES += \
     init.cne.rc \
     init.target.rc \
     init.qcom.usb.rc
-# Recovery
-PRODUCT_EXTRA_RECOVERY_KEYS += \
-    $(LOCAL_PATH)/rendang-releasekey
 
 # Sensor HAL
 PRODUCT_PACKAGES += \
     calmodule.cfg \
-    libcalmodule_memsic \
+    libcalmodule_akm.so \
+    libcalmodule_common \
     sensors.msm8916
 
 PRODUCT_COPY_FILES += \

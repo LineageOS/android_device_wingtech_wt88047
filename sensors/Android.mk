@@ -57,25 +57,14 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE_SUFFIX := .a
-LOCAL_MODULE := CompassAlgo
-LOCAL_MODULE_CLASS := STATIC_LIBRARIES
-
-ifdef TARGET_2ND_ARCH
-LOCAL_SRC_FILES_32 := algo/memsic/CompassAlgo_32.a
-LOCAL_SRC_FILES_64 := algo/memsic/CompassAlgo.a
-LOCAL_MULTILIB := both
-else
-LOCAL_SRC_FILES := algo/memsic/CompassAlgo_32.a
-endif
-include $(BUILD_PREBUILT)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcalmodule_memsic
+LOCAL_MODULE := libcalmodule_common
 LOCAL_SRC_FILES := \
-                  algo/memsic/memsic_wrapper.c
+		   algo/common/common_wrapper.c \
+		   algo/common/compass/AKFS_AOC.c \
+		   algo/common/compass/AKFS_Device.c \
+		   algo/common/compass/AKFS_Direction.c \
+		   algo/common/compass/AKFS_VNorm.c
 
-LOCAL_STATIC_LIBRARIES := CompassAlgo
 LOCAL_SHARED_LIBRARIES := liblog libcutils
 LOCAL_MODULE_TAGS := optional
 

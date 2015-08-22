@@ -14,4 +14,4 @@
 # limitations under the License.
 
 PRODUCT_MAKEFILES := \
-    $(LOCAL_DIR)/full_rendang.mk
+    $(LOCAL_DIR)/full_wt88047.mk

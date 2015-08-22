@@ -5,25 +5,18 @@ persist.audio.fluence.voicerec=false
 persist.audio.fluence.speaker=true
 
 # Connectivity Engine support
-persist.cne.feature=1
-persist.dpm.feature=7
-persist.dpm.nsrm.bkg.evt=3955
-persist.sys.dpmd.nsrm=3
-# Debug logging for DPM can be enabled via:
-# persist.dpm.loglevel=7825
+persist.cne.feature=4
+persist.dpm.feature=3
 
 # Display
-ro.sf.lcd_density=240
+ro.sf.lcd_density=320
 
 # Radio
 persist.radio.multisim.config=dsds
 ril.ecclist=112,911,110,122,119,120,000,118
 ril.ecclist1=112,911,110,122,119,120,000,118
-ril.subscription.types=RUIM
+ril.subscription.types=NV,RUIM
 persist.radio.rat_on=combine
 
-ro.cdma.force_plmn_lookup=true
-ro.cdma.home.operator.alpha=Smartfren
-ro.telephony.default_network=8,1
-telephony.lteOnCdmaDevice=1
-ro.ril.multi_rat_capable=true
+ro.telephony.default_network=9
+telephony.lteOnCdmaDevice=0
