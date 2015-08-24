@@ -77,4 +77,4 @@ WIFI_DRIVER_MODULE_NAME := "wlan"
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # inherit from the proprietary version
--include vendor/smartfren/rendang/BoardConfigVendor.mk
+-include vendor/wingtech/wt88047/BoardConfigVendor.mk
