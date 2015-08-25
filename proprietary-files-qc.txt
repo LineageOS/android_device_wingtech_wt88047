@@ -110,6 +110,7 @@ etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
 
 # Camera Sensor
+vendor/lib/libmmcamera_ov2680_5987fhq.so
 vendor/lib/libmmcamera_ov2680_skuhf.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
 vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
