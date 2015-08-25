@@ -80,6 +80,8 @@
     <ctl name="EAR_S" value="ZERO" />
     <ctl name="HPHL" value="ZERO" />
     <ctl name="HPHR" value="ZERO" />
+    <ctl name="HPH SPK" value="ZERO"/>
+    <ctl name="Lineout_1 amp" value="DISABLE"/>
     <ctl name="SPK DAC Switch" value="0" />
     <ctl name="Speaker Boost" value="ENABLE" />
     <ctl name="MICBIAS CAPLESS Switch" value="0" />
@@ -556,8 +558,13 @@
     </path>
 
     <path name="speaker">
-        <ctl name="RX3 MIX1 INP1" value="RX1" />
-        <ctl name="SPK DAC Switch" value="1" />
+        <ctl name="RX2 MIX1 INP1" value="RX2" />
+        <ctl name="RDAC2 MUX" value="RX2" />
+        <ctl name="HPHR" value="Switch" />
+        <ctl name="MI2S_RX Channels" value="One" />
+        <ctl name="RX1 MIX1 INP1" value="RX1" />
+        <ctl name="HPHL" value="Switch" />
+        <ctl name="Lineout_1 amp" value="ENABLE"/>
     </path>
 
     <path name="speaker-mic">
@@ -591,6 +598,7 @@
         <path name="adc2" />
         <ctl name="ADC2 MUX" value="INP2" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
+        <ctl name="MICBIAS CAPLESS Switch" value="1" />
     </path>
 
     <path name="sidetone-iir">
@@ -637,8 +645,15 @@
     </path>
 
     <path name="speaker-and-headphones">
-        <path name="headphones" />
-        <path name="speaker" />
+        <!-- <path name="headphones" /> -->
+        <!-- <path name="speaker" /> -->
+        <ctl name="RX2 MIX1 INP1" value="RX2"/>
+        <ctl name="RDAC2 MUX" value="RX2"/>
+        <ctl name="HPHR" value="Switch"/>
+        <ctl name="MI2S_RX Channels" value="One" />
+        <ctl name="RX1 MIX1 INP1" value="RX1" />
+        <ctl name="HPHL" value="Switch" />
+        <ctl name="Lineout_1 amp" value="DUALMODE"/>
     </path>
 
     <path name="usb-headphones">
@@ -687,6 +702,7 @@
         <ctl name="DEC2 MUX" value="ADC2" />
         <ctl name="MI2S_TX Channels" value="Two" />
         <ctl name="ADC2 MUX" value="INP3" />
+        <ctl name="IIR1 INP1 MUX" value="DEC1" />
     </path>
 
     <path name="dmic-endfire">
@@ -743,7 +759,10 @@
 
     <path name="tty-headphones">
         <ctl name="RX1 MIX1 INP1" value="RX1" />
+        <ctl name="RX2 MIX1 INP1" value="RX2" />
+        <ctl name="RDAC2 MUX" value="RX2" />
         <ctl name="HPHL" value="Switch" />
+        <ctl name="HPHR" value="Switch" />
     </path>
 
     <path name="voice-tty-full-headphones">
