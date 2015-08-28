@@ -26,39 +26,25 @@
 #
 
 on boot
-    # change file owner for factory test
-    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/firmware_version
-    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/firmware_update
-    chown system system /sys/devices/virtual/touchscreen/touchscreen_dev/calibrate
-
-
     # Torch
     chown system camera /sys/class/leds/torch-light/brightness
     chmod 0660 /sys/class/leds/torch-light/brightness
 
-    # Touchscreen
-    chown root system /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl
-    chmod 0660 /sys/devices/virtual/touchscreen/touchscreen_dev/gesture_ctrl
-
     # charger
-    chown system system /sys/bus/i2c/drivers/lc709203/batt_capacity
-    chmod 0660 /sys/bus/i2c/drivers/lc709203/batt_capacity
-    chown root system /sys/class/power_supply/bms/current_now
-    chown root system /sys/class/power_supply/bms/voltage_ocv
-    chmod 0664 /sys/class/power_supply/bms/current_now
-    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
-
-    chown root system /sys/devices/soc.0/78b9000.i2c/i2c-5/5-005d/keypad_enable
-    chmod 0660 /sys/devices/soc.0/78b9000.i2c/i2c-5/5-005d/keypad_enable
+    chown system system /sys/class/power_supply/battery/capacity
+    chmod 0660 /sys/class/power_supply/battery/capacity
+    chown root /sys/class/power_supply/battery/current_now
+    chown root /sys/class/power_supply/battery/voltage_now
+    chmod 0664 /sys/class/power_supply/battery/current_now
+    chmod 0664 /sys/class/power_supply/battery/voltage_now
 
 on charger
    wait /dev/block/bootdevice/by-name/system
    mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
-   chown root system /sys/class/power_supply/bms/current_now
-   chown root system /sys/class/power_supply/bms/voltage_ocv
-   chmod 0664 /sys/class/power_supply/bms/current_now
-   chmod 0664 /sys/class/power_supply/bms/voltage_ocv
-   start vm_bms
+   chown root system /sys/class/power_supply/battery/current_now
+   chown root system /sys/class/power_supply/battery/voltage_now
+   chmod 0664 /sys/class/power_supply/battery/current_now
+   chmod 0664 /sys/class/power_supply/battery/voltage_now
 
 on post-fs-data
      mkdir /data/dpm/nsrm 0771 system system
@@ -81,11 +67,6 @@ service fuse_sdcard1 /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw
 service fuse_usbdisk /system/bin/sdcard -u 1023 -g 1023 -w 1023 -d /mnt/media_rw/usbdisk /storage/usbdisk
     class late_start
     disabled
-
-service vm_bms /system/bin/vm_bms
-    class core
-    user root
-    group root
 
 service cnd /system/bin/cnd
     class late_start
