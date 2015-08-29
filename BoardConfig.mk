@@ -30,6 +30,9 @@ BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 # CPU
 TARGET_CPU_CORTEX_A53 := true
 
+# WT88047 init
+TARGET_INIT_VENDOR_LIB := libinit_wt88047
+
 # Bluetooth
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(DEVICE_PATH)/bluetooth
 
