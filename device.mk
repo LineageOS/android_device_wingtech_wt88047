@@ -57,6 +57,10 @@ PRODUCT_PACKAGES += \
     camera.msm8916 \
     libmm-qcamera
 
+# Enable USB OTG in storage setting
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.sys.isUsbOtgEnabled=true
+
 # Charger
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.usb.vid=2717 \
