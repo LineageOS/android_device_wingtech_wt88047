@@ -30,6 +30,14 @@ on boot
     chown system camera /sys/class/leds/torch-light/brightness
     chmod 0660 /sys/class/leds/torch-light/brightness
 
+    # LEDs
+    chmod 0664 /sys/class/leds/red/brightness
+    chmod 0664 /sys/class/leds/red/blink
+    chmod 0664 /sys/class/leds/green/brightness
+    chmod 0664 /sys/class/leds/green/blink
+    chmod 0664 /sys/class/leds/blue/brightness
+    chmod 0664 /sys/class/leds/blue/blink
+
     # charger
     chown system system /sys/class/power_supply/battery/capacity
     chmod 0660 /sys/class/power_supply/battery/capacity
