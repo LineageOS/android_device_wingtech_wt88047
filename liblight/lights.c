@@ -209,9 +209,6 @@ set_speaker_light_locked(struct light_device_t *dev,
          write_int(BLUE_LED_FILE, blue);
     }
 
-    // Power rails are in a workqueue, give the kernel time to bring them
-    // up before starting the blinks, or those'll be lost
-    usleep(500*1000);
     if (red) write_int(RED_BLINK_FILE, blink);
     if (green) write_int(GREEN_BLINK_FILE, blink);
     if (blue) write_int(BLUE_BLINK_FILE, blink);
