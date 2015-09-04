@@ -354,24 +354,17 @@ set_speaker_light_locked(struct light_device_t* dev,
         sprintf(breath_pattern,"1 2 1 2");
     }
 
-    // Order of operations matters.
-    //
-    // Setting a pattern jacks up brightness to max, and setting the level
-    // resets blink state. So first set the pattern, then the level,
-    // and then kick off blinkage
-    if (!write_str(RED_BREATH_FILE, breath_pattern)) {
-        write_int(RED_LED_FILE, red);
-    }
-    if (!write_str(GREEN_BREATH_FILE, breath_pattern)) {
-        write_int(GREEN_LED_FILE, green);
-    }
-    if (!write_str(BLUE_BREATH_FILE, breath_pattern)) {
-        write_int(BLUE_LED_FILE, blue);
-    }
-
+    // Do everything with the lights out, then turn up the brightness
+    write_str(RED_BREATH_FILE, breath_pattern);
     write_int(RED_BLINK_FILE, (blink && red ? 1 : 0));
+    write_str(GREEN_BREATH_FILE, breath_pattern);
     write_int(GREEN_BLINK_FILE, (blink && green ? 1 : 0));
+    write_str(BLUE_BREATH_FILE, breath_pattern);
     write_int(BLUE_BLINK_FILE, (blink && blue ? 1 : 0));
+
+    write_int(RED_LED_FILE, red);
+    write_int(GREEN_LED_FILE, green);
+    write_int(BLUE_LED_FILE, blue);
 
     return 0;
 }
