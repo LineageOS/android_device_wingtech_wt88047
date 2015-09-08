@@ -37,6 +37,9 @@ on enable-low-power
 
     rm /data/system/perfd/default_values
     start perfd
+    
+    # Set RPS mask
+    write /sys/class/net/rmnet0/queues/rx-0/rps_cpus 2
 
 on charger
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
