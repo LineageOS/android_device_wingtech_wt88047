@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -204,6 +204,9 @@ typedef struct{
                                            * such as CAM_QCOM_FEATURE_SUPPORTED_FACE_DETECTION*/
     cam_padding_info_t padding_info;      /* padding information from PP */
     uint32_t min_num_pp_bufs;             /* minimum number of buffers needed by postproc module */
+    uint32_t min_required_pp_mask;        /* min required pp feature masks for ZSL.
+                                           * depends on hardware limitation, i.e. for 8974,
+                                           * sharpness is required for all ZSL snapshot frames */
 
     /* capabilities specific to HAL 3 */
 
@@ -282,10 +285,6 @@ typedef struct{
 
     uint32_t max_face_detection_count;
 
-    /* This flag tells whether device supports SW or HW WNR and this should be used
-            in conjuction with CAM_QCOM_FEATURE_DENOISE2D */
-    uint8_t is_sw_wnr;
-
     uint8_t histogram_supported;
     /* Number of histogram buckets supported */
     int32_t histogram_size;
@@ -312,7 +311,6 @@ typedef struct{
     cam_rational_type_t base_gain_factor;    /* sensor base gain factor */
     /* AF Bracketing info */
     cam_af_bracketing_t  ubifocus_af_bracketing_need;
-    cam_af_bracketing_t  refocus_af_bracketing_need;
     /* opti Zoom info */
     cam_opti_zoom_t      opti_zoom_settings_need;
     /* true Portrait info */
@@ -323,10 +321,6 @@ typedef struct{
     cam_af_bracketing_t  mtf_af_bracketing_parm;
     /* Sensor type information */
     cam_sensor_type_t sensor_type;
-    /* low power mode support */
-    uint8_t low_power_mode_supported;
-    /* support for YUV over PIX intf */
-    uint8_t use_pix_for_SOC;
 } cam_capability_t;
 
 typedef enum {
@@ -521,7 +515,6 @@ typedef union {
     INCLUDE(CAM_INTF_PARM_WB_MANUAL,                cam_manual_wb_parm_t,        1);
     INCLUDE(CAM_INTF_PARM_EZTUNE_CMD,               cam_eztune_cmd_data_t,       1);
     INCLUDE(CAM_INTF_PARM_LONGSHOT_ENABLE,          int8_t,                      1);
-    INCLUDE(CAM_INTF_PARM_LOW_POWER_ENABLE,         int8_t,                      1);
 
     /* HAL3 specific */
     INCLUDE(CAM_INTF_META_FRAME_NUMBER,             uint32_t,                    1);

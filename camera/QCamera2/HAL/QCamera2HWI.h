@@ -47,10 +47,7 @@
 #include "QCameraThermalAdapter.h"
 #include "QCameraMem.h"
 #include "cam_intf.h"
-#ifdef TARGET_TS_MAKEUP
-#include "ts_makeup_engine.h"
-#include "ts_detectface_engine.h"
-#endif
+
 extern "C" {
 #include <mm_camera_interface.h>
 #include <mm_jpeg_interface.h>
@@ -347,13 +344,11 @@ private:
 
     bool needDebugFps();
     bool isRegularCapture();
-    bool needAdjustFPS();
     bool isCACEnabled();
     bool isPreviewRestartEnabled();
     bool is4k2kResolution(cam_dimension_t* resolution);
     bool isCaptureShutterEnabled();
     bool isAFRunning();
-    cam_pp_feature_config_t getReprocessConfig();
     bool needReprocess();
     bool needDualReprocess();
     bool needRotationReprocess();
@@ -387,8 +382,8 @@ private:
     int32_t processHDRData(cam_asd_hdr_scene_data_t hdr_scene);
     int32_t transAwbMetaToParams(cam_awb_params_t &awb_params);
     int32_t processAWBUpdate(cam_awb_params_t &awb_params);
-    int32_t processFocusPositionInfo(cam_focus_pos_info_t &cur_pos_info);
-    int32_t processAEInfo(cam_ae_params_t &ae_params);
+    void processFocusPositionInfo(cam_focus_pos_info_t &cur_pos_info);
+    void processAEInfo(cam_ae_params_t &ae_params);
 
     int32_t sendEvtNotify(int32_t msg_type, int32_t ext1, int32_t ext2);
     int32_t sendDataNotify(int32_t msg_type,
@@ -437,9 +432,10 @@ private:
     bool isZSLMode() {return mParameters.isZSLMode();};
     bool isHFRMode() {return mParameters.isHfrMode();};
     uint8_t numOfSnapshotsExpected() {
-        return (uint8_t) ((mParameters.isMTFRefocus()) ?
+        return (uint8_t) ((mParameters.isUbiRefocus() ||
+                    mParameters.isMTFRefocus()) ?
                 1 : mParameters.getNumOfSnapshots());
-    };
+    }
     bool isLongshotEnabled() { return mLongshotEnabled; };
     uint8_t getBufNumRequired(cam_stream_type_t stream_type);
     bool needFDMetadata(qcamera_ch_type_enum_t channel_type);
@@ -450,7 +446,6 @@ private:
     int32_t configureAFBracketing(bool enable = true);
     int32_t configureMTFBracketing(bool enable = true);
     int32_t configureFlashBracketing(bool enable = true);
-    int32_t stopAdvancedCapture(QCameraPicChannel *pChannel);
     int32_t startAdvancedCapture(QCameraPicChannel *pChannel);
     int32_t configureZSLHDRBracketing();
     int32_t startZslAdvancedCapture(QCameraPicChannel *pChannel);
@@ -460,8 +455,9 @@ private:
     inline void setOutputImageCount(uint32_t aCount) {mOutputCount = aCount;}
     inline uint32_t getOutputImageCount() {return mOutputCount;}
     inline void setInputImageCount(uint32_t aCount) {mInputCount = aCount;}
-    bool processMTFDumps(qcamera_jpeg_evt_payload_t *evt);
+    bool processUFDumps(qcamera_jpeg_evt_payload_t *evt);
     void captureDone();
+    bool processMTFDumps(qcamera_jpeg_evt_payload_t *evt);
     static void copyList(cam_dimension_t* src_list, cam_dimension_t* dst_list,
             size_t len);
     static void camEvtHandle(uint32_t camera_handle,
@@ -526,8 +522,6 @@ private:
     uint32_t          mCameraId;
     mm_camera_vtbl_t *mCameraHandle;
     bool mCameraOpened;
-    // This flag will indicate whether camera is opened or not
-    static unsigned int mCameraSessionActive;
 
     preview_stream_ops_t *mPreviewWindow;
     QCameraParameters mParameters;
@@ -584,8 +578,6 @@ private:
     pthread_t mIntPicThread;
     bool mFlashNeeded;
     uint32_t mCaptureRotation;
-    uint32_t mJpegExifRotation;
-    bool mUseJpegExifRotation;
     int32_t mFlash;
     int32_t mRedEye;
     int32_t mFlashPresence;
@@ -654,17 +646,6 @@ private:
     cam_frame_idx_range_t mPreviewFrameSkipIdxRange;
     int32_t mNumPreviewFaces;
     bool mAdvancedCaptureConfigured;
-    bool mFPSReconfigure;
-   //ts add for makeup
-#ifdef TARGET_TS_MAKEUP
-    TSRect mFaceRect;
-    unsigned char *mMakeUpBuf;
-    int yuvDataRelocate(uint8_t* pSrcBuffer,uint8_t* pDstBuffer,cam_frame_len_offset_t offset);
-    int yuvDataRecover(uint8_t* pSrcBuffer,uint8_t* pDstBuffer,cam_frame_len_offset_t offset);
-    bool TsMakeupProcess_Preview(mm_camera_buf_def_t *pFrame,QCameraStream * pStream);
-    bool TsMakeupProcess_Snapshot(mm_camera_buf_def_t *pFrame,QCameraStream * pStream);
-    bool TsMakeupProcess(mm_camera_buf_def_t *frame,QCameraStream * stream,unsigned char *makeupOutBuf,TSRect& faceRect);
-#endif
 };
 
 }; // namespace qcamera

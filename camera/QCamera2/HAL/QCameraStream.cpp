@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -467,7 +467,7 @@ int32_t QCameraStream::calcOffset(cam_stream_info_t *streamInfo)
     int32_t rc = 0;
 
     cam_dimension_t dim = streamInfo->dim;
-    if (streamInfo->pp_config.feature_mask & CAM_QCOM_FEATURE_ROTATION &&
+    if (streamInfo->pp_config.feature_mask & CAM_QCOM_FEATURE_CPP &&
             streamInfo->stream_type != CAM_STREAM_TYPE_VIDEO) {
         if (streamInfo->pp_config.rotation == ROTATE_90 ||
                 streamInfo->pp_config.rotation == ROTATE_270) {
@@ -479,9 +479,8 @@ int32_t QCameraStream::calcOffset(cam_stream_info_t *streamInfo)
 
     switch (streamInfo->stream_type) {
     case CAM_STREAM_TYPE_PREVIEW:
-        rc = mm_stream_calc_offset_preview(streamInfo,
+        rc = mm_stream_calc_offset_preview(streamInfo->fmt,
                 &dim,
-                &mPaddingInfo,
                 &streamInfo->buf_planes);
         break;
     case CAM_STREAM_TYPE_POSTVIEW:
@@ -1136,7 +1135,6 @@ int32_t QCameraStream::releaseBuffs()
     if (!mStreamBufsAcquired && mStreamBufs != NULL) {
         mStreamBufs->deallocate();
         delete mStreamBufs;
-        mStreamBufs = NULL;
     }
 
     return rc;
@@ -1257,7 +1255,6 @@ int32_t QCameraStream::putBufs(mm_camera_map_unmap_ops_tbl_t *ops_tbl)
     if ( !mStreamBufsAcquired ) {
         mStreamBufs->deallocate();
         delete mStreamBufs;
-        mStreamBufs = NULL;
     }
 
     return rc;

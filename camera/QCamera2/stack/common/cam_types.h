@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -899,10 +899,6 @@ typedef struct {
     cam_flash_mode_t flash_mode;
     cam_sensor_t sens_type;
     float aperture_value;
-    float            focal_length;
-    float            f_number;
-    int              sensing_method;
-    float            crop_factor;
 } cam_sensor_params_t;
 
 typedef struct {
@@ -913,11 +909,6 @@ typedef struct {
     uint32_t settled;
     uint32_t exp_index;
     uint32_t line_count;
-    uint32_t metering_mode;
-    uint32_t exposure_program;
-    uint32_t exposure_mode;
-    uint32_t scenetype;
-    float brightness;
 } cam_ae_params_t;
 
 typedef struct {
@@ -1174,7 +1165,6 @@ typedef enum {
     CAM_INTF_PARM_CDS_MODE,
     CAM_INTF_PARM_WB_MANUAL,
     CAM_INTF_PARM_LONGSHOT_ENABLE,
-    CAM_INTF_PARM_LOW_POWER_ENABLE,
 
     /* stream based parameters */
     CAM_INTF_PARM_DO_REPROCESS,
@@ -1485,7 +1475,7 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FACE_DETECTION (1U<<0)
 #define CAM_QCOM_FEATURE_DENOISE2D      (1U<<1)
 #define CAM_QCOM_FEATURE_CROP           (1U<<2)
-#define CAM_QCOM_FEATURE_ROTATION       (1U<<3)
+#define CAM_QCOM_FEATURE_CPP            (1U<<3)
 #define CAM_QCOM_FEATURE_FLIP           (1U<<4)
 #define CAM_QCOM_FEATURE_HDR            (1U<<5)
 #define CAM_QCOM_FEATURE_REGISTER_FACE  (1U<<6)
@@ -1503,7 +1493,6 @@ typedef struct {
 #define CAM_QCOM_FEATURE_FSSR           (1U<<18)
 #define CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS (1U<<19)
 #define CAM_QCOM_FEATURE_SENSOR_HDR     (1U<<20)
-#define CAM_QCOM_FEATURE_REFOCUS        (1U<<21)
 
 // Debug mask
 #define HAL_DEBUG_MASK_HAL                 (1U<<0)
