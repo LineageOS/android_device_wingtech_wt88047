@@ -54,44 +54,54 @@ vendor/lib/liboemcamera.so
 vendor/lib/libqomx_jpegenc.so
 
 # Camera Actuator
-vendor/lib/libactuator_dw9714.so
-vendor/lib/libactuator_dw9714_camcorder.so
-vendor/lib/libactuator_dw9714_camera.so
-vendor/lib/libactuator_dw9714_owt8a12.so
-vendor/lib/libactuator_dw9714_owt8a12_camcorder.so
-vendor/lib/libactuator_dw9714_owt8a12_camera.so
+vendor/lib/libactuator_dw9714_13p1ba.so
+vendor/lib/libactuator_dw9714_13p1ba_camcorder.so
+vendor/lib/libactuator_dw9714_13p1ba_camera.so
+vendor/lib/libactuator_dw9714_13p1ba_sunny.so
+vendor/lib/libactuator_dw9714_13p1ba_sunny_camcorder.so
+vendor/lib/libactuator_dw9714_13p1ba_sunny_camera.so
+vendor/lib/libactuator_dw9718s.so
+vendor/lib/libactuator_dw9718s_camcorder.so
+vendor/lib/libactuator_dw9718s_camera.so
+vendor/lib/libactuator_rohm_bu64243gwz.so
+vendor/lib/libactuator_rohm_bu64243gwz_camcorder.so
+vendor/lib/libactuator_rohm_bu64243gwz_camera.so
 
 # Camera Chromatix
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_common.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_default_video.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_hfr_120fps.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_hfr_60fps.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_hfr_90fps.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_liveshot.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_preview.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_snapshot.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_video_hd.so
-vendor/lib/libchromatix_ov5670_q5v41b_t86519a1_zsl.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_common.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_default_video.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_hfr_120fps.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_hfr_60fps.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_hfr_90fps.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_liveshot.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_preview.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_snapshot.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_video_hd.so
-vendor/lib/libchromatix_ov8865_q8v18a_owt8a12_zsl.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_common.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_default_video.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_hfr_120fps.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_hfr_60fps.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_hfr_90fps.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_liveshot.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_preview.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_snapshot.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_video_hd.so
-vendor/lib/libchromatix_ov8865_q8v18a_sunny_zsl.so
+vendor/lib/libchromatix_ov2680_common.so
+vendor/lib/libchromatix_ov2680_default_video.so
+vendor/lib/libchromatix_ov2680_preview.so
+vendor/lib/libchromatix_ov2680_snapshot.so
+vendor/lib/libchromatix_ov8865_q8v18a_common.so
+vendor/lib/libchromatix_ov8865_q8v18a_default_video.so
+vendor/lib/libchromatix_ov8865_q8v18a_hfr_120fps.so
+vendor/lib/libchromatix_ov8865_q8v18a_hfr_60fps.so
+vendor/lib/libchromatix_ov8865_q8v18a_hfr_90fps.so
+vendor/lib/libchromatix_ov8865_q8v18a_liveshot.so
+vendor/lib/libchromatix_ov8865_q8v18a_preview.so
+vendor/lib/libchromatix_ov8865_q8v18a_snapshot.so
+vendor/lib/libchromatix_ov8865_q8v18a_video_hd.so
+vendor/lib/libchromatix_ov8865_q8v18a_zsl.so
+vendor/lib/libchromatix_ov8865_qtech_common.so
+vendor/lib/libchromatix_ov8865_qtech_default_video.so
+vendor/lib/libchromatix_ov8865_qtech_hfr_120fps.so
+vendor/lib/libchromatix_ov8865_qtech_hfr_60fps.so
+vendor/lib/libchromatix_ov8865_qtech_hfr_90fps.so
+vendor/lib/libchromatix_ov8865_qtech_liveshot.so
+vendor/lib/libchromatix_ov8865_qtech_preview.so
+vendor/lib/libchromatix_ov8865_qtech_snapshot.so
+vendor/lib/libchromatix_ov8865_qtech_video_hd.so
+vendor/lib/libchromatix_ov8865_qtech_zsl.so
+vendor/lib/libchromatix_ov8865_sunny_common.so
+vendor/lib/libchromatix_ov8865_sunny_default_video.so
+vendor/lib/libchromatix_ov8865_sunny_hfr_120fps.so
+vendor/lib/libchromatix_ov8865_sunny_hfr_60fps.so
+vendor/lib/libchromatix_ov8865_sunny_hfr_90fps.so
+vendor/lib/libchromatix_ov8865_sunny_liveshot.so
+vendor/lib/libchromatix_ov8865_sunny_preview.so
+vendor/lib/libchromatix_ov8865_sunny_snapshot.so
+vendor/lib/libchromatix_ov8865_sunny_video_hd.so
+vendor/lib/libchromatix_ov8865_sunny_zsl.so
 
 # Camera firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
@@ -100,10 +110,10 @@ etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
 
 # Camera Sensor
-vendor/lib/libmmcamera_ov5670_eeprom.so
-vendor/lib/libmmcamera_ov5670_q5v41b.so
+vendor/lib/libmmcamera_ov2680_5987fhq.so
+vendor/lib/libmmcamera_ov2680_skuhf.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
-vendor/lib/libmmcamera_sunny_q8v18a_t86519a1_eeprom.so
+vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
 
 # CNE
 bin/cnd
