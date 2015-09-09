@@ -38,7 +38,7 @@
 #include <signal.h>
 #include <cutils/properties.h>
 #include <stdlib.h>
-#include <media/msm_cam_sensor.h>
+#include <media/msm_cam_sensor_wingtech.h>
 #include <cutils/properties.h>
 #include <stdlib.h>
 
