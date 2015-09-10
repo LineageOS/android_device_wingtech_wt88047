@@ -38,3 +38,6 @@ ro.frp.pst=/dev/block/bootdevice/by-name/config
 
 # System property for PIP support
 persist.camera.pip.support=0
+
+# Disable all camera debug
+persist.camera.hal.debug.mask=0
