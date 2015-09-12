@@ -31,12 +31,12 @@ on boot
     chmod 0660 /sys/class/leds/torch-light/brightness
 
     # LEDs
-    chown system system /sys/class/leds/red/blink
-    chown system system /sys/class/leds/red/led_time
-    chown system system /sys/class/leds/green/blink
-    chown system system /sys/class/leds/green/led_time
-    chown system system /sys/class/leds/blue/blink
-    chown system system /sys/class/leds/blue/led_time
+    chmod 0664 /sys/class/leds/red/brightness
+    chmod 0664 /sys/class/leds/red/blink
+    chmod 0664 /sys/class/leds/green/brightness
+    chmod 0664 /sys/class/leds/green/blink
+    chmod 0664 /sys/class/leds/blue/brightness
+    chmod 0664 /sys/class/leds/blue/blink
 
     # charger
     chown system system /sys/class/power_supply/battery/capacity
