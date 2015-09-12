@@ -163,4 +163,23 @@
 
     <integer name="config_buttonBrightnessSettingDefault">0</integer>
 
+    <!-- Default value for led color when battery is low on charge -->
+    <integer name="config_notificationsBatteryLowARGB">0x00FF0000</integer>
+
+    <!-- Default value for led color when battery is medium charged -->
+    <integer name="config_notificationsBatteryMediumARGB">0x000000FF</integer>
+
+    <!-- Default value for led color when battery is fully charged -->
+    <integer name="config_notificationsBatteryFullARGB">0x0000FF00</integer>
+
+    <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveBatteryLed">true</bool>
+
+    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveNotificationLed">true</bool>
+
+    <!-- Does the notification LED support multiple colors?
+                  Used to decide if the user can change the colors -->
+    <bool name="config_multiColorNotificationLed">true</bool>
+
 </resources>
