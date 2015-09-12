@@ -154,4 +154,13 @@
     <!--  Disable Modem Profiles for CDMA -->
     <bool name="config_fetch_apn_from_omh_card">false</bool>
 
+    <!-- Array of output values for keyboard backlight corresponding to the LUX values
+         in the config_autoBrightnessLevels array.  This array should have size one greater
+         than the size of the config_autoBrightnessLevels array.
+         The brightness values must be between 0 and 255 and be non-decreasing.
+         This must be overridden in platform specific overlays -->
+    <integer-array name="config_autoBrightnessKeyboardBacklightValues"></integer-array>
+
+    <integer name="config_buttonBrightnessSettingDefault">0</integer>
+
 </resources>
