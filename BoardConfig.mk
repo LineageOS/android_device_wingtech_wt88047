@@ -19,6 +19,9 @@ include device/cyanogen/msm8916-common/BoardConfigCommon.mk
 DEVICE_PATH := device/wingtech/wt88047
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
+# Bootloader
+TARGET_BOOTLOADER_BOARD_NAME :=
+
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8916
 TARGET_KERNEL_CONFIG := cyanogenmod_wt88047_defconfig
