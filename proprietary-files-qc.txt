@@ -129,7 +129,7 @@ lib/libmmjpeg_interface.so
 lib/libqomx_core.so
 
 # Camera HAL and depedency
-lib/hw/camera.vendor.msm8916.so
+lib/hw/camera.msm8916.so
 vendor/lib/libarcsoft_beauty_shot.so
 vendor/lib/libFaceProc.so
 vendor/lib/libFaceDeform.so
