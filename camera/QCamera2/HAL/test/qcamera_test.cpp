@@ -326,7 +326,7 @@ status_t CameraContext::decodeJPEG(const sp<IMemory>& mem, SkBitmap *skBM)
         break;
     }
 
-    if (SkImageDecoder::DecodeMemory(buff, size, skBM, prefConfig,
+    if (SkImageDecoder::DecodeMemory(buff, (size_t) size, skBM, kRGBA_8888_SkColorType,
             SkImageDecoder::kDecodePixels_Mode) == false) {
         printf("%s():%d:: Failed during jpeg decode\n",__FUNCTION__,__LINE__);
         return BAD_VALUE;
