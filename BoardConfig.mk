@@ -80,10 +80,6 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 5939100672
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/fstab.qcom
 
-# Wifi
-WIFI_DRIVER_MODULE_PATH := "/system/lib/modules/wlan.ko"
-WIFI_DRIVER_MODULE_NAME := "wlan"
-
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 
 # inherit from the proprietary version
