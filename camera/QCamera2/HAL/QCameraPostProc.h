@@ -168,6 +168,7 @@ private:
     int32_t setYUVFrameInfo(mm_camera_super_buf_t *recvd_frame);
     static bool matchJobId(void *data, void *user_data, void *match_data);
     static int getJpegMemory(omx_jpeg_ouput_buf_t *out_buf);
+    static int releaseJpegMemory(omx_jpeg_ouput_buf_t *out_buf);
 
     int32_t reprocess(qcamera_pp_data_t *pp_job);
     int32_t stopCapture();
@@ -182,7 +183,7 @@ private:
 
     void *                     m_pJpegOutputMem[MM_JPEG_MAX_BUF];
     QCameraExif *              m_pJpegExifObj;
-    int8_t                     m_bThumbnailNeeded;
+    uint32_t                   m_bThumbnailNeeded;
     QCameraReprocessChannel *  m_pReprocChannel;
 
     int8_t                     m_bInited; // if postproc is inited

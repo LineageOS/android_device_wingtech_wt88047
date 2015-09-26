@@ -1,4 +1,4 @@
-/*Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/*Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -273,7 +273,7 @@ typedef struct {
   void *handle;
   void *mem_hdl;
   int8_t isheap;
-  int size; /*input*/
+  size_t size; /*input*/
   void *vaddr;
   int fd;
 } omx_jpeg_ouput_buf_t;

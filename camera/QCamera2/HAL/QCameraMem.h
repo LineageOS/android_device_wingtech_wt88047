@@ -53,7 +53,7 @@ public:
     int cleanInvalidateCache(int index) {return cacheOps(index, ION_IOC_CLEAN_INV_CACHES);}
     int getFd(int index) const;
     int getSize(int index) const;
-    int getCnt() const;
+    uint8_t getCnt() const;
 
     virtual int allocate(int count, int size) = 0;
     virtual void deallocate() = 0;

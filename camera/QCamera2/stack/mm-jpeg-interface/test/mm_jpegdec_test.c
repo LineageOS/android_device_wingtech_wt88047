@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -36,7 +36,7 @@
 #define MAX(a,b)  (((a) > (b)) ? (a) : (b))
 #define CLAMP(x, min, max) MIN(MAX((x), (min)), (max))
 
-#define TIME_IN_US(r) ((uint64_t)r.tv_sec * 1000000LL + r.tv_usec)
+#define TIME_IN_US(r) ((uint64_t)r.tv_sec * 1000000LL + (uint64_t)r.tv_usec)
 struct timeval dtime[2];
 
 
@@ -48,7 +48,7 @@ struct timeval dtime[2];
  *  dump the image to the file
  **/
 #define DUMP_TO_FILE(filename, p_addr, len) ({ \
-  int rc = 0; \
+  size_t rc = 0; \
   FILE *fp = fopen(filename, "w+"); \
   if (fp) { \
     rc = fwrite(p_addr, 1, len, fp); \
@@ -67,11 +67,6 @@ typedef struct {
   char *out_filename;
   int format;
 } jpeg_test_input_t;
-
-static jpeg_test_input_t jpeg_input[] = {
-  {"/data/test.jpg", 5248, 3936, "/data/test.yuv",
-      MM_JPEG_COLOR_FORMAT_YCBCRLP_H2V2}
-};
 
 typedef struct {
   char *filename;
@@ -125,7 +120,7 @@ static void mm_jpegdec_decode_callback(jpeg_job_status_t status,
     CDBG_ERROR("%s:%d] Decode time %llu ms",
      __func__, __LINE__, ((TIME_IN_US(dtime[1]) - TIME_IN_US(dtime[0]))/1000));
 
-    CDBG_ERROR("%s:%d] Decode success file%s addr %p len %d",
+    CDBG_ERROR("%s:%d] Decode success file%s addr %p len %zu",
       __func__, __LINE__, p_obj->out_filename,
       p_output->buf_vaddr, p_output->buf_filled_len);
     DUMP_TO_FILE(p_obj->out_filename, p_output->buf_vaddr, p_output->buf_filled_len);
@@ -175,17 +170,17 @@ int mm_jpegdec_test_read(mm_jpegdec_intf_test_t *p_obj)
 {
   int rc = 0;
   FILE *fp = NULL;
-  int file_size = 0;
+  size_t file_size = 0;
   fp = fopen(p_obj->filename, "rb");
   if (!fp) {
     CDBG_ERROR("%s:%d] error", __func__, __LINE__);
     return -1;
   }
   fseek(fp, 0, SEEK_END);
-  file_size = ftell(fp);
+  file_size = (size_t)ftell(fp);
   fseek(fp, 0, SEEK_SET);
 
-  CDBG_ERROR("%s:%d] input file size is %d",
+  CDBG_ERROR("%s:%d] input file size is %zu",
     __func__, __LINE__, file_size);
 
   p_obj->input.size = file_size;
@@ -202,9 +197,9 @@ int mm_jpegdec_test_read(mm_jpegdec_intf_test_t *p_obj)
   return 0;
 }
 
-void chromaScale(mm_jpeg_color_format format, float *cScale)
+void chromaScale(mm_jpeg_color_format format, double *cScale)
 {
-  float scale;
+  double scale;
 
   switch(format) {
     case MM_JPEG_COLOR_FORMAT_YCRCBLP_H2V2:
@@ -235,8 +230,8 @@ void chromaScale(mm_jpeg_color_format format, float *cScale)
 static int decode_init(jpeg_test_input_t *p_input, mm_jpegdec_intf_test_t *p_obj)
 {
   int rc = -1;
-  int size = CEILING16(p_input->width) * CEILING16(p_input->height);
-  float cScale;
+  size_t size = (size_t)(CEILING16(p_input->width) * CEILING16(p_input->height));
+  double cScale;
   mm_jpeg_decode_params_t *p_params = &p_obj->params;
   mm_jpeg_decode_job_t *p_job_params = &p_obj->job.decode_job;
 
@@ -250,7 +245,7 @@ static int decode_init(jpeg_test_input_t *p_input, mm_jpegdec_intf_test_t *p_obj
   pthread_cond_init(&p_obj->cond, NULL);
 
   chromaScale(p_input->format, &cScale);
-  p_obj->output.size = size * cScale;
+  p_obj->output.size = (size_t)((double)size * cScale);
   rc = mm_jpegdec_test_alloc(&p_obj->output, p_obj->use_ion);
   if (rc) {
     CDBG_ERROR("%s:%d] Error",__func__, __LINE__);
@@ -273,8 +268,9 @@ static int decode_init(jpeg_test_input_t *p_input, mm_jpegdec_intf_test_t *p_obj
   p_params->dest_buf[0].buf_vaddr = p_obj->output.addr;
   p_params->dest_buf[0].fd = p_obj->output.p_pmem_fd;
   p_params->dest_buf[0].format = MM_JPEG_FMT_YUV;
-  p_params->dest_buf[0].offset.mp[0].len = size;
-  p_params->dest_buf[0].offset.mp[1].len = size * (cScale-1.0);
+  p_params->dest_buf[0].offset.mp[0].len = (uint32_t)size;
+  p_params->dest_buf[0].offset.mp[1].len =
+    (uint32_t)((double)size * (cScale - 1.0));
   p_params->dest_buf[0].offset.mp[0].stride = CEILING16(p_input->width);
   p_params->dest_buf[0].offset.mp[0].scanline = CEILING16(p_input->height);
   p_params->dest_buf[0].offset.mp[1].stride = CEILING16(p_input->width);
@@ -361,7 +357,7 @@ static int mm_jpegdec_test_get_input(int argc, char *argv[],
       int format = 0;
       format = atoi(optarg);
       int num_formats = ARR_SZ(col_formats);
-      CLAMP(format, 0, num_formats);
+      format = CLAMP(format, 0, num_formats);
       p_test->format = col_formats[format].eColorFormat;
       fprintf(stderr, "%-25s%s\n", "Default image format",
         col_formats[format].format_str);
