@@ -25,3 +25,6 @@ ro.ril.multi_rat_capable=true
 
 # Disable mobile data at first boot
 ro.com.android.mobiledata=false
+
+# Disable the thumbnail encoding in order to reduce the power
+persist.camera.tn.disable=1
