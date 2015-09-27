@@ -113,6 +113,7 @@ PRODUCT_PACKAGES += \
     fstab.qcom \
     init.cne.rc \
     init.target.rc \
+    init.target.power.rc \
     init.qcom.usb.rc
 
 # Sensor HAL
