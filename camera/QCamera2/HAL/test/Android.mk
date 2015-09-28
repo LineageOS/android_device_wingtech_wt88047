@@ -39,6 +39,8 @@ LOCAL_C_INCLUDES += \
     frameworks/av/include/media/stagefright \
     frameworks/native/include/media/openmax \
 
+LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
+
 LOCAL_MODULE:= camera_test
 LOCAL_32_BIT_ONLY := true
 LOCAL_MODULE_TAGS:= tests
