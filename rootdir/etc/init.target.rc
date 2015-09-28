@@ -67,6 +67,13 @@ on property:service.bootanim.exit=1
     write /sys/kernel/mm/ksm/deferred_timer 1
     write /sys/kernel/mm/ksm/run 1
 
+    # Set per_process_reclaim tuning parameters
+    write /sys/module/process_reclaim/parameters/enable_process_reclaim 1
+    write /sys/module/process_reclaim/parameters/pressure_min 50
+    write /sys/module/process_reclaim/parameters/pressure_max 70
+    write /sys/module/process_reclaim/parameters/per_swap_size 512
+    write /sys/module/process_reclaim/parameters/swap_opt_eff 30
+
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
 
