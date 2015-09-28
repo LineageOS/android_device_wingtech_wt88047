@@ -114,7 +114,8 @@ PRODUCT_PACKAGES += \
     init.cne.rc \
     init.target.rc \
     init.target.power.rc \
-    init.qcom.usb.rc
+    init.qcom.usb.rc \
+    memcheck
 
 # Sensor HAL
 PRODUCT_PACKAGES += \
