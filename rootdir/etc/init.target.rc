@@ -60,6 +60,9 @@ on post-fs-data
      mkdir /data/dpm/nsrm 0771 system system
      chown system system /data/dpm/nsrm
 
+on init
+    write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
+
 on property:service.bootanim.exit=1
     start memcheck
 
