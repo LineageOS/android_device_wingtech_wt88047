@@ -28,7 +28,6 @@ TARGET_BOOTLOADER_BOARD_NAME :=
 # Kernel
 TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8916
 TARGET_KERNEL_CONFIG := cyanogenmod_wt88047_defconfig
-BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 
 # CPU
 TARGET_CPU_CORTEX_A53 := true
