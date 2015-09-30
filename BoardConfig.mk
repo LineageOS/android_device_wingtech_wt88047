@@ -87,6 +87,10 @@ BOARD_SEPOLICY_DIRS += \
 
 BOARD_SEPOLICY_UNION += \
     memcheck.te \
+    irsc_util.te \
+    mm-qcamerad.te \
+    system_server.te \
+    file_contexts
 
 # inherit from the proprietary version
 -include vendor/wingtech/wt88047/BoardConfigVendor.mk
