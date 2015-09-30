@@ -102,6 +102,7 @@ service dpmd /system/bin/dpmd
 
 service memcheck /system/bin/memcheck
     user root
+    group system
     disabled
     oneshot
 
