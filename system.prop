@@ -20,7 +20,7 @@ ril.subscription.types=NV,RUIM
 persist.radio.rat_on=combine
 persist.radio.no_cons_man_roam=1
 
-ro.telephony.default_network=9
+ro.telephony.default_network=22
 ro.ril.multi_rat_capable=true
 
 # Disable mobile data at first boot
