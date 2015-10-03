@@ -10,7 +10,7 @@ persist.dpm.feature=3
 persist.data.target=dpm1
 
 # Display
-ro.sf.lcd_density=312
+ro.sf.lcd_density=320
 
 # Radio
 persist.radio.multisim.config=dsds
