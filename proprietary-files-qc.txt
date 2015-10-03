@@ -237,6 +237,7 @@ bin/mm-pp-daemon
 vendor/lib/libdisp-aba.so
 -vendor/lib/libmm-abl.so
 vendor/lib/libmm-abl-oem.so
+vendor/lib/libmm-qdcm.so
 
 # Qualcomm framework
 bin/irsc_util
