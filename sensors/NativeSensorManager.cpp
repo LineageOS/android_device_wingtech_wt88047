@@ -637,7 +637,6 @@ int NativeSensorManager::activate(int handle, int enable)
 	struct listnode *node;
 	struct SensorContext *ctx;
 	struct SensorRefMap *item;
-	int sensor_disabled = 0;
 
 	list = getInfoByHandle(handle);
 	if (list == NULL) {
@@ -645,25 +644,14 @@ int NativeSensorManager::activate(int handle, int enable)
 		return -EINVAL;
 	}
 
-	if (enable == 0) {
-		ALOGV("list->enable = 0;  [Stop reading events and using Listener list].\n");
-		list->enable = 0;
-	}
-
 	/* Search for the background sensor for the sensor specified by handle. */
 	list_for_each(node, &list->dep_list) {
 		item = node_to_item(node, struct SensorRefMap, list);
 		if (enable) {
-			/*
-			 * Register Listeners and then Enable the background sensor.
-			 * un-register a listener on it if we fail to enable. We register
-			 * the Listeners before enableing because the events might start
-			 * before the enable system call returns to us.
-			 */
-			registerListener(item->ctx, list);
+			/* Enable the background sensor and register a listener on it. */
 			err = item->ctx->driver->enable(item->ctx->sensor->handle, 1);
-			if (err) {
-				unregisterListener(item->ctx, list);
+			if (!err) {
+				registerListener(item->ctx, list);
 			}
 		} else {
 			/* The background sensor has other listeners, we need
@@ -672,37 +660,20 @@ int NativeSensorManager::activate(int handle, int enable)
 			 */
 			if (!list_empty(&item->ctx->listener)) {
 				unregisterListener(item->ctx, list);
-
-				/*
-				 * Perhaps we should disable the sensor before unregisterListener();
-				 * when list_lenght() == 1. Know of no such list function.
-				 */
-				if (list_empty(&item->ctx->listener)) {
-					item->ctx->driver->enable(item->ctx->sensor->handle, 0);
-					sensor_disabled = 1;
-				}
-
-				/* We're de-activiating the hardware sensor itself */
+				/* We're activiating the hardware sensor itself */
 				if ((item->ctx == list) && (item->ctx->enable))
 					item->ctx->enable = 0;
 				syncDelay(item->ctx->sensor->handle);
 			}
 
-			/*
-			 * Disable the background sensor if it doesn't have any listeners
-			 *  and wasn't done before cleaning ctx->enable above.
-			 */
-			if (list_empty(&item->ctx->listener) && !sensor_disabled) {
-				ALOGE("%s: list_empty() and !sensor_disabled; Do it now.", __func__);
+			/* Disable the background sensor if it doesn't have any listeners. */
+			if (list_empty(&item->ctx->listener)) {
 				item->ctx->driver->enable(item->ctx->sensor->handle, 0);
 			}
 		}
 	}
 
-	if (enable) {
-		ALOGV("list->enable = 0;  [Start reading events and using Listener list].\n");
-		list->enable = enable;
-	}
+	list->enable = enable;
 
 	return err;
 }
@@ -801,28 +772,18 @@ int NativeSensorManager::readEvents(int handle, sensors_event_t* data, int count
 		return -EINVAL;
 	}
 	do {
-		/* Read events to data[0...n] */
 		nb = list->driver->readEvents(data, count);
 	} while ((nb == -EAGAIN) || (nb == -EINTR));
 
 	for (j = 0; j < nb; j++) {
 		list_for_each(node, &list->listener) {
 			item = node_to_item(node, struct SensorRefMap, list);
-			if (item->ctx == NULL) {
-				ALOGE("list->ctx == NULL; ERROR");
-			} else {
-				if (!item->ctx->enable)  {
-					ALOGE("!item->ctx->enable; ERROR");
-				} else {
-					if (item->ctx->driver == NULL) {
-						ALOGE("item->ctx->driver  == NULL; ERROR");
-					} else {
-						item->ctx->driver->injectEvents(&data[j], 1);
-					}
-				}
+			if (item->ctx->enable) {
+				item->ctx->driver->injectEvents(&data[j], 1);
 			}
 		}
 	}
+
 	if (list->enable)
 		return nb;
 

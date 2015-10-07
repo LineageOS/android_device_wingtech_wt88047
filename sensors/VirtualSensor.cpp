@@ -119,7 +119,7 @@ int VirtualSensor::injectEvents(sensors_event_t* data, int count)
 			}
 
 		} else {
-			ALOGE("%s: Circular buffer is full; ERROR!\n", __func__);
+			ALOGW("Circular buffer is full\n");
 		}
 	}
 
