@@ -227,7 +227,6 @@ vendor/lib/libOmxQcelp13Dec.so
 vendor/lib/libSHIMDivxDrm.so
 
 # Perf
-bin/msm_irqbalance
 -bin/perfd
 bin/mpdecision
 vendor/lib/libqti-perfd-client.so
