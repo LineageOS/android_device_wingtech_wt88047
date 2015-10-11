@@ -24,7 +24,7 @@ ifneq ($(call is-platform-sdk-version-at-least,18),true)
 LOCAL_SHARED_LIBRARIES += \
     libmedia_native \
 
-LOCAL_CFLAGS += -DUSE_JB_MR1
+LOCAL_CFLAGS += -DUSE_JB_MR1 -DCONFIG_WT88047_CAMERA
 
 endif
 

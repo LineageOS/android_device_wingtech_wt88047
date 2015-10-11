@@ -15,7 +15,7 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
 LOCAL_CFLAGS += -DUSE_ION
 endif
 
-LOCAL_CFLAGS += -D_ANDROID_
+LOCAL_CFLAGS += -D_ANDROID_ -DCONFIG_WT88047_CAMERA
 
 LOCAL_SRC_FILES:= \
         src/mm_qcamera_main_menu.c \
@@ -112,7 +112,7 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
 LOCAL_CFLAGS += -DUSE_ION
 endif
 
-LOCAL_CFLAGS += -D_ANDROID_
+LOCAL_CFLAGS += -D_ANDROID_ -DCONFIG_WT88047_CAMERA
 
 LOCAL_SRC_FILES:= \
         src/mm_qcamera_main_menu.c \

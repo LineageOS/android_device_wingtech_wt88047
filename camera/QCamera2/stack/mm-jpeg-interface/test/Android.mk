@@ -8,7 +8,7 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS := -DCAMERA_ION_HEAP_ID=ION_IOMMU_HEAP_ID
 LOCAL_CFLAGS += -Wall -Wextra -Werror -Wno-unused-parameter
-LOCAL_CFLAGS += -D_ANDROID_
+LOCAL_CFLAGS += -D_ANDROID_ -DCONFIG_WT88047_CAMERA
 LOCAL_CFLAGS += -include mm_jpeg_dbg.h
 
 ifeq ($(strip $(TARGET_USES_ION)),true)
@@ -51,7 +51,7 @@ LOCAL_MODULE_TAGS := optional
 
 LOCAL_CFLAGS := -DCAMERA_ION_HEAP_ID=ION_IOMMU_HEAP_ID
 LOCAL_CFLAGS += -Wall -Wextra -Werror -Wno-unused-parameter
-LOCAL_CFLAGS += -D_ANDROID_
+LOCAL_CFLAGS += -D_ANDROID_ -DCONFIG_WT88047_CAMERA
 LOCAL_CFLAGS += -include mm_jpeg_dbg.h
 
 ifeq ($(strip $(TARGET_USES_ION)),true)
