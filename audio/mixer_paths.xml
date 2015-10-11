@@ -58,9 +58,9 @@
     <ctl name="IIR1 INP2 Volume" value="84" />
     <ctl name="IIR1 INP3 Volume" value="84" />
     <ctl name="IIR1 INP4 Volume" value="84" />
-    <ctl name="ADC1 Volume" value="6" />
-    <ctl name="ADC2 Volume" value="6" />
-    <ctl name="ADC3 Volume" value="6" />
+    <ctl name="ADC1 Volume" value="9" />
+    <ctl name="ADC2 Volume" value="9" />
+    <ctl name="ADC3 Volume" value="9" />
     <ctl name="DEC1 Volume" value="84" />
     <ctl name="DEC2 Volume" value="84" />
     <ctl name="DEC2 MUX" value="ZERO" />
@@ -562,11 +562,14 @@
         <ctl name="Lineout_1 amp" value="ENABLE"/>
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="SPK DAC Switch" value="1" />
+        <ctl name="RX3 Digital Volume" value="84" />
     </path>
 
     <path name="speaker-mic">
         <path name="adc1" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
+        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="DEC1 Volume" value="84" />
     </path>
 
     <path name="handset">
@@ -580,6 +583,8 @@
     <path name="handset-mic">
         <path name="adc1" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
+        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="DEC1 Volume" value="84" />
     </path>
 
     <path name="headphones">
@@ -589,12 +594,16 @@
         <ctl name="RDAC2 MUX" value="RX2" />
         <ctl name="HPHL" value="Switch" />
         <ctl name="HPHR" value="Switch" />
+        <ctl name="RX1 Digital Volume" value="84" />
+        <ctl name="RX2 Digital Volume" value="84" />
     </path>
 
     <path name="headset-mic">
         <path name="adc2" />
         <ctl name="ADC2 MUX" value="INP2" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
+        <ctl name="ADC2 Volume" value="9" />
+        <ctl name="DEC2 Volume" value="84" />
     </path>
 
     <path name="sidetone-iir">
@@ -607,7 +616,7 @@
 
     <path name="sidetone-handset">
         <path name="sidetone-iir" />
-        <ctl name="IIR1 INP1 Volume" value="53" />
+        <ctl name="IIR1 INP1 Volume" value="0" />
         <ctl name="RX1 MIX2 INP1" value="IIR1" />
     </path>
 
@@ -615,7 +624,7 @@
         <path name="sidetone-iir" />
         <ctl name="RX1 MIX2 INP1" value="IIR1" />
         <ctl name="RX2 MIX2 INP1" value="IIR1" />
-        <ctl name="IIR1 INP1 Volume" value="53" />
+        <ctl name="IIR1 INP1 Volume" value="0" />
     </path>
 
     <path name="voice-handset">
@@ -693,6 +702,10 @@
         <ctl name="MI2S_TX Channels" value="Two" />
         <ctl name="ADC2 MUX" value="INP3" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
+        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="ADC3 Volume" value="9" />
+        <ctl name="DEC1 Volume" value="84" />
+        <ctl name="DEC2 Volume" value="84" />
     </path>
 
     <path name="dmic-endfire">
@@ -753,6 +766,7 @@
         <ctl name="RDAC2 MUX" value="RX2" />
         <ctl name="HPHL" value="Switch" />
         <ctl name="HPHR" value="Switch" />
+        <ctl name="RX1 Digital Volume" value="84" />
     </path>
 
     <path name="voice-tty-full-headphones">
@@ -773,6 +787,8 @@
     <path name="voice-tty-full-headset-mic">
         <path name="adc2" />
         <ctl name="ADC2 MUX" value="INP2" />
+        <ctl name="ADC2 Volume" value="9" />
+        <ctl name="DEC2 Volume" value="84" />
     </path>
 
     <path name="voice-tty-hco-headset-mic">
@@ -781,6 +797,8 @@
 
     <path name="voice-tty-vco-handset-mic">
         <path name="adc1" />
+        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="DEC1 Volume" value="84" />
     </path>
 
     <path name="listen-handset-mic">
