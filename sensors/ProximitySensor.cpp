@@ -168,6 +168,14 @@ int ProximitySensor::enable(int32_t, int en) {
             ALOGE("invalid sensor index:%d\n", sensor_index);
             return -1;
         }
+
+        mEnabled = flags;
+        /**
+         * this is an on-change sensor. it might not get a reading for a while
+         * and Android requires a reading as soon as it is turned on.
+         * re-send the last reading.
+         */
+        mHasPendingEvent = flags;
         fd = open(input_sysfs_path, O_RDWR);
         if (fd >= 0) {
             char buf[2];
@@ -179,7 +187,6 @@ int ProximitySensor::enable(int32_t, int en) {
             }
             write(fd, buf, sizeof(buf));
             close(fd);
-            mEnabled = flags;
             return 0;
         } else {
             ALOGE("open %s failed.(%s)\n", input_sysfs_path, strerror(errno));
