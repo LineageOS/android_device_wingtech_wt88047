@@ -48,7 +48,7 @@
 GyroSensor::GyroSensor()
 	: SensorBase(NULL, GYRO_INPUT_DEV_NAME),
 	  mEnabled(0),
-	  mInputReader(4),
+	  mInputReader(6),
 	  mHasPendingEvent(false),
 	  mEnabledTime(0)
 {
@@ -73,7 +73,7 @@ GyroSensor::GyroSensor()
 GyroSensor::GyroSensor(struct SensorContext *context)
 	: SensorBase(NULL, NULL),
 	  mEnabled(0),
-	  mInputReader(4),
+	  mInputReader(6),
 	  mHasPendingEvent(false),
 	  mEnabledTime(0)
 {
@@ -92,7 +92,7 @@ GyroSensor::GyroSensor(struct SensorContext *context)
 GyroSensor::GyroSensor(char *name)
 	: SensorBase(NULL, GYRO_INPUT_DEV_NAME),
 	  mEnabled(0),
-	  mInputReader(4),
+	  mInputReader(6),
 	  mHasPendingEvent(false),
 	  mEnabledTime(0)
 {
@@ -247,15 +247,15 @@ again:
 				break;
 				case SYN_REPORT:
 					{
-						if(mUseAbsTimeStamp != true) {
-							mPendingEvent.timestamp = timevalToNano(event->time);
-						}
-						if (mEnabled) {
+						if (mEnabled && mUseAbsTimeStamp) {
 							if(mPendingEvent.timestamp >= mEnabledTime) {
 								*data++ = mPendingEvent;
 								numEventReceived++;
 							}
 							count--;
+							mUseAbsTimeStamp = false;
+						} else {
+							ALOGE_IF(!mUseAbsTimeStamp, "GyroSensor:timestamp not received");
 						}
 					}
 				break;

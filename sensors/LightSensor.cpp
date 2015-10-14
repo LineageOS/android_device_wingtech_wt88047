@@ -266,13 +266,13 @@ int LightSensor::readEvents(sensors_event_t* data, int count)
 				break;
 				case SYN_REPORT:
 					{
-						if(mUseAbsTimeStamp != true) {
-							mPendingEvent.timestamp = timevalToNano(event->time);
-						}
-						if (mEnabled) {
+						if (mEnabled && mUseAbsTimeStamp) {
 							*data++ = mPendingEvent;
-							count--;
 							numEventReceived++;
+							count--;
+							mUseAbsTimeStamp = false;
+						} else {
+							ALOGE_IF(!mUseAbsTimeStamp, "LightSensor:timestamp not received");
 						}
 					}
 				break;
