@@ -84,9 +84,17 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
 PRODUCT_PACKAGES += \
     gps.msm8916
 
-# Include IMSEnabler
+# IMS
 PRODUCT_PACKAGES += \
-    IMSEnabler
+    IMSEnabler \
+    init.qti.ims.sh \
+    ims \
+    imscmlibrary
+
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/ims/imscm.xml:system/etc/permissions/imscm.xml \
+    $(LOCAL_PATH)/configs/ims/ims.xml:system/etc/permissions/ims.xml \
+    $(LOCAL_PATH)/configs/ims/qti_permissions.xml:system/etc/permissions/qti_permissions.xml
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/flp.conf:system/etc/flp.conf \
@@ -115,7 +123,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/media_profiles.xml:system/etc/media_profiles.xml
 
 PRODUCT_PACKAGES += \
-    init.qti.ims.sh \
     libqcomvisualizer \
     libqcompostprocbundle \
     fstab.qcom \
@@ -142,9 +149,3 @@ PRODUCT_COPY_FILES += \
 
 # Inherit the rest from msm8916-common
 $(call inherit-product, device/cyanogen/msm8916-common/msm8916.mk)
-
-# VT
-PRODUCT_PACKAGES += \
-    libvt_jni \
-    libimscamera_jni \
-    qti_permissions.xml
