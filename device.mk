@@ -145,6 +145,10 @@ PRODUCT_PACKAGES += \
     libcalmodule_common \
     sensors.msm8916
 
+# BoringSSL compatability wrapper
+PRODUCT_PACKAGES += \
+    libboringssl-compat
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
 
