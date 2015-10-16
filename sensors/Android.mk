@@ -41,7 +41,6 @@ LOCAL_SRC_FILES :=	\
 		CompassSensor.cpp		\
 		Accelerometer.cpp				\
 		Gyroscope.cpp				\
-		Bmp180.cpp				\
 		InputEventReader.cpp \
 		CalibrationManager.cpp \
 		NativeSensorManager.cpp \

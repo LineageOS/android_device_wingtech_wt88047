@@ -47,7 +47,6 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include "ProximitySensor.h"
 #include "CompassSensor.h"
 #include "GyroSensor.h"
-#include "PressureSensor.h"
 #include "VirtualSensor.h"
 
 #include "sensors_extension.h"

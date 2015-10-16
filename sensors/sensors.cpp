@@ -38,7 +38,6 @@
 #include "AkmSensor.h"
 #include "CompassSensor.h"
 #include "GyroSensor.h"
-#include "PressureSensor.h"
 
 #include "NativeSensorManager.h"
 #include "sensors_extension.h"
