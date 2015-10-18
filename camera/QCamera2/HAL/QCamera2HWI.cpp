@@ -1208,6 +1208,25 @@ int QCamera2HardwareInterface::openCamera()
        }
     }
 
+    //check if video preview 480p support is enabled
+    property_get("persist.camera.480p_preview.enable", value, "0");
+    enable_4k2k = atoi(value) > 0 ? 1 : 0;
+    ALOGD("%s: enable_480p_preview is %d", __func__, enable_4k2k);
+    if (!enable_4k2k) {
+       //if the 480p size exists in the supported preview size, remove it
+       bool found;
+       cam_dimension_t size_480p;
+       size_480p.width = 720;
+       size_480p.height = 480;
+
+       found = removeSizeFromList(gCamCapability[mCameraId]->preview_sizes_tbl,
+                                  gCamCapability[mCameraId]->preview_sizes_tbl_cnt,
+                                  size_480p);
+       if (found) {
+          gCamCapability[mCameraId]->preview_sizes_tbl_cnt--;
+       }
+    }
+
     int32_t rc = m_postprocessor.init(jpegEvtHandle, this);
     if (rc != 0) {
         ALOGE("Init Postprocessor failed");
