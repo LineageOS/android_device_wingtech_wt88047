@@ -58,9 +58,9 @@
     <ctl name="IIR1 INP2 Volume" value="84" />
     <ctl name="IIR1 INP3 Volume" value="84" />
     <ctl name="IIR1 INP4 Volume" value="84" />
-    <ctl name="ADC1 Volume" value="9" />
-    <ctl name="ADC2 Volume" value="9" />
-    <ctl name="ADC3 Volume" value="9" />
+    <ctl name="ADC1 Volume" value="6" />
+    <ctl name="ADC2 Volume" value="6" />
+    <ctl name="ADC3 Volume" value="6" />
     <ctl name="DEC1 Volume" value="84" />
     <ctl name="DEC2 Volume" value="84" />
     <ctl name="DEC2 MUX" value="ZERO" />
@@ -568,7 +568,7 @@
     <path name="speaker-mic">
         <path name="adc1" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="ADC1 Volume" value="6" />
         <ctl name="DEC1 Volume" value="84" />
     </path>
 
@@ -583,7 +583,7 @@
     <path name="handset-mic">
         <path name="adc1" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="ADC1 Volume" value="6" />
         <ctl name="DEC1 Volume" value="84" />
     </path>
 
@@ -602,7 +602,7 @@
         <path name="adc2" />
         <ctl name="ADC2 MUX" value="INP2" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC2 Volume" value="9" />
+        <ctl name="ADC2 Volume" value="6" />
         <ctl name="DEC2 Volume" value="84" />
     </path>
 
@@ -651,6 +651,8 @@
 
     <path name="speaker-and-headphones">
         <path name="headphones" />
+        <ctl name="RX1 Digital Volume" value="65" />
+        <ctl name="RX2 Digital Volume" value="65" />
         <path name="speaker" />
         <ctl name="Lineout_1 amp" value="DUALMODE"/>
     </path>
@@ -702,8 +704,8 @@
         <ctl name="MI2S_TX Channels" value="Two" />
         <ctl name="ADC2 MUX" value="INP3" />
         <ctl name="IIR1 INP1 MUX" value="DEC1" />
-        <ctl name="ADC1 Volume" value="9" />
-        <ctl name="ADC3 Volume" value="9" />
+        <ctl name="ADC1 Volume" value="6" />
+        <ctl name="ADC3 Volume" value="6" />
         <ctl name="DEC1 Volume" value="84" />
         <ctl name="DEC2 Volume" value="84" />
     </path>
@@ -787,7 +789,7 @@
     <path name="voice-tty-full-headset-mic">
         <path name="adc2" />
         <ctl name="ADC2 MUX" value="INP2" />
-        <ctl name="ADC2 Volume" value="9" />
+        <ctl name="ADC2 Volume" value="6" />
         <ctl name="DEC2 Volume" value="84" />
     </path>
 
@@ -797,7 +799,7 @@
 
     <path name="voice-tty-vco-handset-mic">
         <path name="adc1" />
-        <ctl name="ADC1 Volume" value="9" />
+        <ctl name="ADC1 Volume" value="6" />
         <ctl name="DEC1 Volume" value="84" />
     </path>
 
