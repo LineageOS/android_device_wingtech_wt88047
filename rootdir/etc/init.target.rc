@@ -84,15 +84,6 @@ on property:ro.config.low_mem=true
     write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 100
 
-    # KSM options
-    write /sys/kernel/mm/ksm/pages_to_scan 100
-    write /sys/kernel/mm/ksm/sleep_millisecs 500
-    write /sys/kernel/mm/ksm/deferred_timer 1
-    write /sys/kernel/mm/ksm/run 1
-
-    # Lock sleep_millisecs
-    chmod 0444 /sys/kernel/mm/ksm/sleep_millisecs
-
 service sdcard /system/bin/sdcard -u 1023 -g 1023 -l /data/media /mnt/shell/emulated
     class late_start
 
