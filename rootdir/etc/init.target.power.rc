@@ -17,8 +17,8 @@ on enable-target-low-power
     write /proc/sys/kernel/sched_ravg_hist_size 3
 
     # HMP Task packing settings for 8916
-    write /proc/sys/kernel/sched_small_task 20
-    write /proc/sys/kernel/sched_mostly_idle_load 30
+    write /proc/sys/kernel/sched_small_task 50
+    write /proc/sys/kernel/sched_mostly_idle_load 50
     write /proc/sys/kernel/sched_mostly_idle_nr_run 3
 
     # disable thermal core_control to update interactive governor settings
@@ -27,19 +27,18 @@ on enable-target-low-power
     # enable governor
     write /sys/devices/system/cpu/cpu0/online 1
     write /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor "interactive"
-    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 800000
+    write /sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq 400000
     # enable thermal core_control now
     write /sys/module/msm_thermal/core_control/enabled 1
 
-    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay "25000 1094400:50000"
+    write /sys/devices/system/cpu/cpufreq/interactive/above_hispeed_delay "25000 1094400:50000 1152000:12500"
     write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 90
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 30000
     write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 998400
     write /sys/devices/system/cpu/cpufreq/interactive/io_is_busy 0
     write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 50000
-    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "1 800000:85 998400:90 1094400:80"
+    write /sys/devices/system/cpu/cpufreq/interactive/target_loads "85 998400:90 1094400:95"
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 50000
-    write /sys/devices/system/cpu/cpufreq/interactive/max_freq_hysteresis 50000
 
     # bring all CPUs online
     write /sys/devices/system/cpu/cpu1/online 1
@@ -54,8 +53,8 @@ on enable-target-low-power
     chmod 664 /sys/devices/system/cpu/cpu3/online
 
     write /sys/module/cpu_boost/parameters/boost_ms 20
-    write /sys/module/cpu_boost/parameters/sync_threshold 1094400
-    write /sys/module/cpu_boost/parameters/input_boost_freq 800000
+    write /sys/module/cpu_boost/parameters/sync_threshold 998400
+    write /sys/module/cpu_boost/parameters/input_boost_freq 1094400
     write /sys/module/cpu_boost/parameters/input_boost_ms 40
 
     start mpdecision
