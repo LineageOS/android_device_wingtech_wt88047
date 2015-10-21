@@ -32,3 +32,6 @@ persist.camera.tn.disable=1
 
 # use 3 threads max for dex2oat
 ro.sys.fw.dex2oat_thread_count=3
+
+# relax sensor fusion mag field filter
+ro.fusion.magfield.max=250
