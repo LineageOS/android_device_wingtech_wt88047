@@ -9,6 +9,12 @@ LOCAL_MODULE := libloc_api_v02
 
 LOCAL_MODULE_TAGS := optional
 
+ifeq ($(TARGET_DEVICE),apq8026_lw)
+LOCAL_CFLAGS += -DPDK_FEATURE_SET
+else ifeq ($(BOARD_VENDOR_QCOM_LOC_PDK_FEATURE_SET),true)
+LOCAL_CFLAGS += -DPDK_FEATURE_SET
+endif
+
 LOCAL_SHARED_LIBRARIES := \
     libutils \
     libcutils \
@@ -54,4 +60,4 @@ LOCAL_PRELINK_MODULE := false
 include $(BUILD_SHARED_LIBRARY)
 
 endif # not BUILD_TINY_ANDROID
-endif # QCPATH
+endif #QCPATH
