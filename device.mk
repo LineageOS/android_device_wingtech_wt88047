@@ -80,6 +80,10 @@ ADDITIONAL_DEFAULT_PROPERTIES += \
 PRODUCT_PACKAGES += \
     gps.msm8916
 
+# CNE and DPM symbol
+PRODUCT_PACKAGES += \
+    librendang
+
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
     CNEService \
