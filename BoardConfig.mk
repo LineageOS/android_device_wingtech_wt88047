@@ -19,9 +19,6 @@ include device/cyanogen/msm8916-common/BoardConfigCommon.mk
 DEVICE_PATH := device/wingtech/wt88047
 TARGET_SPECIFIC_HEADER_PATH := $(DEVICE_PATH)/include
 
-# Enables CSVT
-TARGET_USES_CSVT := true
-
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME :=
 
