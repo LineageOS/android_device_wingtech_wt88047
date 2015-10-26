@@ -36,7 +36,7 @@ BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 TARGET_CPU_CORTEX_A53 := true
 
 # WT88047 init
-TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_PATH)/init/init_wt88047.c
+TARGET_LIBINIT_DEFINES_FILE := $(DEVICE_PATH)/init/init_wt88047.cpp
 TARGET_UNIFIED_DEVICE := true
 
 # Bluetooth
