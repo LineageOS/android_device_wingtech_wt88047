@@ -30,6 +30,7 @@
 #include <sys/sysinfo.h>
 #include <sys/system_properties.h>
 #include <cutils/log.h>
+#include <stdbool.h>
 
 #include "property_service.h"
 
