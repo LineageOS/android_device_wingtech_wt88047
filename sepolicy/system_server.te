@@ -1,2 +1,0 @@
-# For libcalmodule_akm.so
-allow system_server default_prop:property_service set;
