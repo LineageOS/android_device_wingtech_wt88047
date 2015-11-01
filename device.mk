@@ -60,10 +60,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.io.scheduler=bfq
 
-# Enable USB OTG in storage setting
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.isUsbOtgEnabled=true
-
 # Enable ART small mode
 PRODUCT_PROPERTY_OVERRIDES += \
     dalvik.vm.dex2oat-filter=interpret-only \
