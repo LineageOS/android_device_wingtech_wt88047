@@ -73,7 +73,7 @@ on post-fs-data
 
 on init
     # Preload the BoringSSL wrapper
-    export LD_PRELOAD /system/lib/libboringssl-compat.so
+    export LD_PRELOAD /system/lib/libboringssl-compat.so:/vendor/lib/libNimsWrap.so
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
 on property:service.bootanim.exit=1
