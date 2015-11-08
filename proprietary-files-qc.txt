@@ -208,7 +208,7 @@ etc/firmware/a300_pm4.fw
 #IMS
 #ims.xml
 #imslibrary
--vendor/app/ims/ims.apk
+-app/ims/ims.apk
 #vendor/app/ims/lib/arm/libimscamera_jni.so
 #vendor/app/ims/lib/arm/libimsmedia_jni.so
 vendor/lib/libimscamera_jni.so
