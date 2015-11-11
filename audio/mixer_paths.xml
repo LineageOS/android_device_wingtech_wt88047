@@ -559,7 +559,8 @@
         <ctl name="MI2S_RX Channels" value="One" />
         <ctl name="RX1 MIX1 INP1" value="RX1" />
         <ctl name="HPHL" value="Switch" />
-        <ctl name="Lineout_1 amp" value="ENABLE"/>
+        <ctl name="Lineout_1 amp" value="DISABLE" />
+        <ctl name="Lineout_1 amp" value="ENABLE" />
         <ctl name="RX3 MIX1 INP1" value="RX1" />
         <ctl name="SPK DAC Switch" value="1" />
         <ctl name="RX3 Digital Volume" value="84" />
@@ -654,7 +655,8 @@
         <ctl name="RX1 Digital Volume" value="65" />
         <ctl name="RX2 Digital Volume" value="65" />
         <path name="speaker" />
-        <ctl name="Lineout_1 amp" value="DUALMODE"/>
+        <ctl name="Lineout_1 amp" value="DISABLE" />
+        <ctl name="Lineout_1 amp" value="DUALMODE" />
     </path>
 
     <path name="usb-headphones">
