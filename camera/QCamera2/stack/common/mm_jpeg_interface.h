@@ -95,16 +95,16 @@ typedef struct {
   uint32_t sequence;          /* for jpeg bit streams, assembling is based on sequence. sequence starts from 0 */
   uint8_t *buf_vaddr;        /* ptr to buf */
   int fd;                    /* fd of buf */
-  size_t buf_size;         /* total size of buf (header + image) */
+  uint32_t buf_size;         /* total size of buf (header + image) */
   mm_jpeg_format_t format;   /* buffer format*/
   cam_frame_len_offset_t offset; /* offset of all the planes */
-  uint32_t index; /* index used to identify the buffers */
+  int index; /* index used to identify the buffers */
 } mm_jpeg_buf_t;
 
 typedef struct {
   uint8_t *buf_vaddr;        /* ptr to buf */
   int fd;                    /* fd of buf */
-  size_t buf_filled_len;   /* used for output image. filled by the client */
+  uint32_t buf_filled_len;   /* used for output image. filled by the client */
 } mm_jpeg_output_t;
 
 typedef enum {
@@ -156,8 +156,7 @@ typedef struct {
   /* num of buf in src img */
   uint32_t num_dst_bufs;
 
-  /* should create thumbnail from main image or not */
-  uint32_t encode_thumbnail;
+  int8_t encode_thumbnail;
 
   /* src img bufs */
   mm_jpeg_buf_t src_main_buf[MM_JPEG_MAX_BUF];
@@ -184,22 +183,19 @@ typedef struct {
   mm_jpeg_dim_t thumb_dim;
 
   /* rotation informaiton */
-  uint32_t rotation;
+  int rotation;
 
   /* thumb rotation informaiton */
-  uint32_t thumb_rotation;
+  int thumb_rotation;
 
   /* main image dimension */
   mm_jpeg_dim_t main_dim;
 
   /* enable encoder burst mode */
-  uint32_t burst_mode;
+  int8_t burst_mode;
 
   /* get memory function ptr */
   int (*get_memory)( omx_jpeg_ouput_buf_t *p_out_buf);
-
-  /* release memory function ptr */
-  int (*put_memory)( omx_jpeg_ouput_buf_t *p_out_buf);
 } mm_jpeg_encode_params_t;
 
 typedef struct {
@@ -231,7 +227,7 @@ typedef struct {
   mm_jpeg_dim_t thumb_dim;
 
   /* rotation informaiton */
-  uint32_t rotation;
+  int rotation;
 
   /* main image dimension */
   mm_jpeg_dim_t main_dim;
@@ -249,18 +245,16 @@ typedef struct {
   /* 3a parameters */
   mm_jpeg_exif_params_t cam_exif_params;
 
-  /* work buf */
-  mm_jpeg_buf_t work_buf;
 } mm_jpeg_encode_job_t;
 
 typedef struct {
   /* active indices of the buffers for encoding */
-  int32_t src_index;
-  int32_t dst_index;
+  uint32_t src_index;
+  uint32_t dst_index;
   uint32_t tmb_dst_index;
 
   /* rotation informaiton */
-  uint32_t rotation;
+  int rotation;
 
   /* main image  */
   mm_jpeg_dim_t main_dim;

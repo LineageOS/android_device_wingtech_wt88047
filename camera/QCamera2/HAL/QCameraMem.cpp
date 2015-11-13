@@ -178,7 +178,7 @@ int QCameraMemory::getSize(int index) const
  *
  * RETURN     : number of buffers allocated
  *==========================================================================*/
-uint8_t QCameraMemory::getCnt() const
+int QCameraMemory::getCnt() const
 {
     return mBufferCount;
 }
