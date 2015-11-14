@@ -273,7 +273,7 @@ typedef struct {
   void *handle;
   void *mem_hdl;
   int8_t isheap;
-  int size; /*input*/
+  size_t size; /*input*/
   void *vaddr;
   int fd;
 } omx_jpeg_ouput_buf_t;
