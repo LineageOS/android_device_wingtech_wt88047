@@ -333,7 +333,7 @@ vendor/lib/libsystem_health_mon.so
 vendor/lib/libxml.so
 
 # Thermal
-bin/thermal-engine
+vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
