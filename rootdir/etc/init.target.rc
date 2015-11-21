@@ -48,6 +48,13 @@ on boot
     chmod 0664 /sys/class/power_supply/battery/current_now
     chmod 0664 /sys/class/power_supply/battery/voltage_now
 
+    # YAS537 magnetic sensor
+    chown system input /sys/class/sensors/yas537-mag/hard_offset
+    chown system system /sys/class/sensors/yas537-mag/self_test
+    chmod 0664 /sys/class/sensors/yas537-mag/hard_offset
+    chmod 0664 /sys/class/sensors/yas537-mag/self_test
+    write /sys/class/sensors/yas537-mag/position 5
+
     # Set per_process_reclaim tuning parameters
     write /sys/module/process_reclaim/parameters/enable_process_reclaim 1
     write /sys/module/process_reclaim/parameters/pressure_min 50
