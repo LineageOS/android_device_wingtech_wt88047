@@ -21,7 +21,7 @@ ril.subscription.types=NV,RUIM
 persist.radio.rat_on=combine
 persist.radio.no_cons_man_roam=1
 
-ro.telephony.default_network=22,22
+ro.telephony.default_network=9,1
 ro.telephony.ril.config=simactivation
 ro.ril.multi_rat_capable=true
 
