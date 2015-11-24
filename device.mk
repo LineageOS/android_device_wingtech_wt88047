@@ -58,7 +58,8 @@ PRODUCT_PACKAGES += \
 
 # IO Scheduler
 PRODUCT_PROPERTY_OVERRIDES += \
-    sys.io.scheduler=bfq
+    sys.io.scheduler=bfq \
+    ro.min_freq_0=400000
 
 # Enable USB OTG in storage setting
 PRODUCT_PROPERTY_OVERRIDES += \
