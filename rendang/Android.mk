@@ -17,9 +17,11 @@ LOCAL_PATH := $(call my-dir)
 include $(CLEAR_VARS)
 
 LOCAL_SRC_FILES := \
+    p_dec.c \
+    p_open.c \
     rendang.cpp
 
-LOCAL_SHARED_LIBRARIES := libbinder
+LOCAL_SHARED_LIBRARIES := libbinder libcrypto
 
 LOCAL_MODULE := librendang
 LOCAL_MODULE_TAGS := optional
