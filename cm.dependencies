@@ -4,10 +4,6 @@
     "target_path": "device/cyanogen/msm8916-common"
   },
   {
-    "repository": "android_external_sony_boringssl-compat",
-    "target_path": "external/sony/boringssl-compat"
-  },
-  {
     "repository": "android_external_stlport",
     "target_path": "external/stlport"
   }

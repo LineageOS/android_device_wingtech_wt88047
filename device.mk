@@ -151,10 +151,6 @@ PRODUCT_PACKAGES += \
     libcalmodule_common \
     sensors.msm8916
 
-# BoringSSL compatability wrapper
-PRODUCT_PACKAGES += \
-    libboringssl-compat
-
 # Build libstlport for legacy blobs
 PRODUCT_PACKAGES += \
     libstlport
