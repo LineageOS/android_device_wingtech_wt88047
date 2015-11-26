@@ -149,6 +149,7 @@ vendor/lib/libdpmnsrm.so
 bin/qseecomd
 lib/libdrmdecrypt.so
 vendor/lib/drm/libdrmwvmplugin.so
+vendor/lib/libprdrmdecrypt.so
 vendor/lib/libdrmfs.so
 vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
