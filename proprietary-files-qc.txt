@@ -207,8 +207,6 @@ vendor/lib/libbccQTI.so
 # Graphics firmware
 etc/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw
-vendor/firmware/a330_pfp.fw
-vendor/firmware/a330_pm4.fw
 
 #IMS
 #ims.xml
