@@ -18,6 +18,9 @@
 
     <bool name="allow_emergency_numbers_in_call_log">true</bool>
 
+    <!-- Flag indicating if the phone is a world phone -->
+    <bool name="world_phone">true</bool>
+
     <!-- Show APN Settings for some CDMA carriers -->
     <bool name="config_show_apn_setting_cdma">true</bool>
 
