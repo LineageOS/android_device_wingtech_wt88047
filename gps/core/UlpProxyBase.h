@@ -30,9 +30,7 @@
 #define ULP_PROXY_BASE_H
 
 #include <gps_extended.h>
-
-struct FlpExtLocation_s;
-struct FlpExtBatchOptions;
+#include "fused_location_extended.h"
 
 namespace loc_core {
 
@@ -75,7 +73,7 @@ public:
                                               bool active) {
         return false;
     }
-    inline virtual bool reportPositions(const struct FlpExtLocation_s* locations,
+    inline virtual bool reportPositions(const FlpExtLocation* locations,
                                         int32_t number_of_locations) {
         return false;
     }
