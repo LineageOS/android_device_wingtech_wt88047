@@ -6,7 +6,6 @@ persist.audio.fluence.speaker=true
 
 # Connectivity Engine support
 persist.cne.feature=4
-persist.dpm.feature=3
 persist.data.target=dpm1
 persist.data.qmi.adb_logmask=0
 
@@ -15,18 +14,13 @@ ro.sf.lcd_density=320
 
 # Radio
 persist.radio.multisim.config=dsds
-ril.ecclist=112,911,110,122,119,120,000,118
-ril.ecclist1=112,911,110,122,119,120,000,118
+persist.radio.custom_ecc=1
+persist.radio.ecc_hard_1=112,911,110,122,119,120,000,118
+persist.radio.ecc_hard_count=1
 ril.subscription.types=NV,RUIM
-persist.radio.rat_on=combine
-persist.radio.no_cons_man_roam=1
 
 ro.telephony.default_network=9,1
 ro.telephony.ril.config=simactivation
-ro.ril.multi_rat_capable=true
-
-# Disable mobile data at first boot
-ro.com.android.mobiledata=true
 
 # Disable the thumbnail encoding in order to reduce the power
 persist.camera.tn.disable=1
