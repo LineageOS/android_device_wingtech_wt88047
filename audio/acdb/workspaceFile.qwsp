@@ -1,12 +1,12 @@
 <WorkSpace_Data WSVersID="Badger_3">
   <ACDBFile_Paths>
-    <ACDBFile_Paths path="MTP_Bluetooth_cal.acdb" />
-    <ACDBFile_Paths path="MTP_General_cal.acdb" />
-    <ACDBFile_Paths path="MTP_Global_cal.acdb" />
-    <ACDBFile_Paths path="MTP_Handset_cal.acdb" />
-    <ACDBFile_Paths path="MTP_Hdmi_cal.acdb" />
-    <ACDBFile_Paths path="MTP_Headset_cal.acdb" />
-    <ACDBFile_Paths path="MTP_Speaker_cal.acdb" />
+    <ACDBFile_Paths path="Bluetooth_cal.acdb" />
+    <ACDBFile_Paths path="General_cal.acdb" />
+    <ACDBFile_Paths path="Global_cal.acdb" />
+    <ACDBFile_Paths path="Handset_cal.acdb" />
+    <ACDBFile_Paths path="Hdmi_cal.acdb" />
+    <ACDBFile_Paths path="Headset_cal.acdb" />
+    <ACDBFile_Paths path="Speaker_cal.acdb" />
   </ACDBFile_Paths>
   <GUI_Data>
   </GUI_Data>
