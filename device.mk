@@ -149,6 +149,10 @@ PRODUCT_PACKAGES += \
     libcalmodule_common \
     sensors.msm8916
 
+# Prebuilt webview
+PRODUCT_PACKAGES += \
+    webview
+
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
 
