@@ -17,14 +17,8 @@ persist.radio.multisim.config=dsds
 ril.ecclist=112,911,110,122,119,120,000,118
 ril.ecclist1=112,911,110,122,119,120,000,118
 ril.subscription.types=NV,RUIM
-persist.radio.rat_on=combine
-persist.radio.no_cons_man_roam=1
 
-ro.telephony.default_network=22
-ro.ril.multi_rat_capable=true
-
-# Disable mobile data at first boot
-ro.com.android.mobiledata=true
+ro.telephony.default_network=9,1
 
 # Disable the thumbnail encoding in order to reduce the power
 persist.camera.tn.disable=1
