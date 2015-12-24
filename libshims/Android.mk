@@ -16,14 +16,22 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := \
-    p_dec.c \
-    p_open.c \
-    rendang.cpp
+LOCAL_SRC_FILES := parcel/parcel.cpp
 
-LOCAL_SHARED_LIBRARIES := libbinder libcrypto
+LOCAL_SHARED_LIBRARIES := libbinder
+LOCAL_MODULE := libshim_parcel
+LOCAL_MODULE_TAGS := optional
+LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 
-LOCAL_MODULE := librendang
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
+
+LOCAL_SRC_FILES := openinit/p_dec.c openinit/p_open.c
+
+LOCAL_C_INCLUDES := openinit
+LOCAL_SHARED_LIBRARIES := libcrypto
+LOCAL_MODULE := libshim_openinit
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 

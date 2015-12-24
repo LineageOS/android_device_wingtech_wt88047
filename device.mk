@@ -83,7 +83,11 @@ PRODUCT_PACKAGES += \
 
 # CNE and DPM symbol
 PRODUCT_PACKAGES += \
-    librendang
+    libshim_parcel
+
+# Widevine DRM symbol, boringssl-compat subset
+PRODUCT_PACKAGES += \
+    libshim_openinit
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
