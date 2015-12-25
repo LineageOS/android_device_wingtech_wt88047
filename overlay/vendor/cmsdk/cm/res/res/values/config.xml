@@ -22,4 +22,9 @@
     <integer name="config_proximityCheckTimeout">100</integer>
     <bool name="config_proximityCheckOnWakeEnabledByDefault">true</bool>
 
+    <!-- Default wi-fi hotspot ssid -->
+    <string name="config_wifiHotSpotSsid" translatable="false">Redmi 2</string>
+    <!-- Default wi-fi direct name -->
+    <string name="config_wifiDirectName" translatable="false">Redmi 2</string>
+
 </resources>
