@@ -1,0 +1,2 @@
+# For compass calibration module
+allow system_server compass_prop:property_service set;
