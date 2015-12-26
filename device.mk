@@ -56,9 +56,6 @@ PRODUCT_PACKAGES += \
     camera.msm8916 \
     libmm-qcamera
 
-PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-    camera2.portability.force_api=1
-
 # IO Scheduler
 PRODUCT_PROPERTY_OVERRIDES += \
     sys.io.scheduler=bfq \
