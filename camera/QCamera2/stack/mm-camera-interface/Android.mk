@@ -21,7 +21,7 @@ ifeq ($(call is-board-platform-in-list,msm8974 msm8916 msm8226 msm8610),true)
     LOCAL_CFLAGS += -DVENUS_PRESENT
 endif
 
-LOCAL_CFLAGS += -D_ANDROID_ -DCONFIG_WT88047_CAMERA
+LOCAL_CFLAGS += -D_ANDROID_
 LOCAL_COPY_HEADERS_TO := mm-camera-interface
 LOCAL_COPY_HEADERS += ../common/cam_intf.h
 LOCAL_COPY_HEADERS += ../common/cam_types.h
