@@ -17,7 +17,7 @@ LOCAL_SRC_FILES := \
         QCameraThermalAdapter.cpp \
         wrapper/QualcommCamera.cpp
 
-LOCAL_CFLAGS = -Wall -Wextra -Werror -DCONFIG_WT88047_CAMERA -DVANILLA_HAL
+LOCAL_CFLAGS = -Wall -Wextra -Werror -DVANILLA_HAL
 
 LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/../stack/common \
