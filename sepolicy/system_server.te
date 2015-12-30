@@ -1,2 +1,4 @@
 # For compass calibration module
 allow system_server compass_prop:property_service set;
+
+allow system_server storage_stub_file:dir { getattr };
