@@ -1,1 +1,0 @@
-allow vold mkfs_exec:file { execute read open execute_no_trans };
