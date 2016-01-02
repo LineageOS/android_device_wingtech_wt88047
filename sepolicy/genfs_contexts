@@ -1,1 +1,0 @@
-genfscon exfat / u:object_r:sdcard_external:s0
