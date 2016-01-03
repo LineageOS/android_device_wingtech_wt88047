@@ -210,16 +210,19 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         property_set("ro.product.device", "HM2014817");
         property_set("ro.product.model", "2014817");
         property_set("ro.product.name", "2014817");
+        property_set("telephony.lteOnCdmaDevice", "0");
     } else if (strcmp(board_id, "S88047D1") == 0) {
         property_set("ro.build.product", "HM2014819");
         property_set("ro.product.device", "HM2014819");
         property_set("ro.product.model", "2014819");
         property_set("ro.product.name", "2014819");
+        property_set("telephony.lteOnCdmaDevice", "0");
     } else if (strcmp(board_id, "S88047C1") == 0) {
         property_set("ro.build.product", "HM2014818");
         property_set("ro.product.device", "HM2014818");
         property_set("ro.product.model", "2014818");
         property_set("ro.product.name", "2014818");
+        property_set("telephony.lteOnCdmaDevice", "0");
     } else if (strcmp(board_id, "S88047B2") == 0) {
         property_set("ro.build.product", "HM2014821");
         property_set("ro.product.device", "HM2014821");
@@ -239,11 +242,13 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         property_set("ro.product.device", "HM2014813");
         property_set("ro.product.model", "2014813");
         property_set("ro.product.name", "2014813");
+        property_set("telephony.lteOnCdmaDevice", "0");
     } else { /* including S88047A2 and S88047A1 */
         property_set("ro.build.product", "HM2014811");
         property_set("ro.product.device", "HM2014811");
         property_set("ro.product.model", "2014811");
         property_set("ro.product.name", "2014811");
+        property_set("telephony.lteOnCdmaDevice", "0");
     }
 
     /* Unified description and fingerprint for now */
