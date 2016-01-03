@@ -31,9 +31,6 @@ BOARD_KERNEL_CMDLINE += phy-msm-usb.floated_charger_enable=1
 TARGET_KERNEL_SOURCE := kernel/cyanogen/msm8916
 TARGET_KERNEL_CONFIG := cyanogenmod_wt88047_defconfig
 
-# Set vold to use native exfat driver
-TARGET_KERNEL_HAVE_EXFAT := true
-
 # CPU
 TARGET_CPU_CORTEX_A53 := true
 
