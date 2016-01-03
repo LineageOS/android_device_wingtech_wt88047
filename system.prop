@@ -22,6 +22,7 @@ persist.radio.rat_on=combine
 
 ro.telephony.default_network=9,1
 ro.telephony.ril.config=simactivation
+ro.ril.multi_rat_capable=true
 
 # Disable the thumbnail encoding in order to reduce the power
 persist.camera.tn.disable=1
