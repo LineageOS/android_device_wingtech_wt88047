@@ -10,7 +10,7 @@ persist.data.target=dpm1
 persist.data.qmi.adb_logmask=0
 
 # Display
-ro.sf.lcd_density=320
+ro.sf.lcd_density=300
 
 # Radio
 persist.radio.multisim.config=dsds
