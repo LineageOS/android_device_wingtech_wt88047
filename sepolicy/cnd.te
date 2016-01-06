@@ -1,0 +1,2 @@
+allow cnd wifi_data_file:dir { write add_name remove_name };
+allow cnd wifi_data_file:sock_file { create setattr unlink };
