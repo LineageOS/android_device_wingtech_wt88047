@@ -13,6 +13,7 @@ persist.data.qmi.adb_logmask=0
 ro.sf.lcd_density=320
 
 # Radio
+rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so
 persist.radio.multisim.config=dsds
 persist.radio.custom_ecc=1
 persist.radio.ecc_hard_1=112,911,110,122,119,120,000,118
