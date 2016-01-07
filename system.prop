@@ -13,6 +13,7 @@ persist.data.target=dpm1
 ro.sf.lcd_density=320
 
 # Radio
+rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so
 persist.radio.multisim.config=dsds
 ril.ecclist=112,911,110,122,119,120,000,118
 ril.ecclist1=112,911,110,122,119,120,000,118
