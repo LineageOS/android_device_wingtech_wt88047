@@ -1010,7 +1010,8 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(int cameraId)
       mMetadataJob(-1),
       mReprocJob(-1),
       mRawdataJob(-1),
-      mPreviewFrameSkipValid(0)
+      mPreviewFrameSkipValid(0),
+      mNumPreviewFaces(-1)
 {
     getLogLevel();
     mCameraDevice.common.tag = HARDWARE_DEVICE_TAG;
@@ -1724,10 +1725,12 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(cam_stream_type_t st
         break;
     case CAM_STREAM_TYPE_VIDEO:
         {
+            //Use uncached allocation by default
+            bCachedMem = QCAMERA_ION_USE_NOCACHE;
             char value[PROPERTY_VALUE_MAX];
-            property_get("persist.camera.mem.usecache", value, "1");
-            if (atoi(value) == 0) {
-                bCachedMem = QCAMERA_ION_USE_NOCACHE;
+            property_get("persist.camera.mem.usecache", value, "0");
+            if (atoi(value) == 1) {
+                bCachedMem = QCAMERA_ION_USE_CACHE;
             }
             ALOGD("%s: vidoe buf using cached memory = %d", __func__, bCachedMem);
             mem = new QCameraVideoMemory(mGetMemory, bCachedMem);
@@ -1847,7 +1850,6 @@ QCameraHeapMemory *QCamera2HardwareInterface::allocateStreamInfoBuf(
         }
         break;
     case CAM_STREAM_TYPE_VIDEO:
-        streamInfo->useAVTimer = mParameters.isAVTimerEnabled();
     case CAM_STREAM_TYPE_PREVIEW:
         if (mParameters.getRecordingHintValue()) {
             const char* dis_param = mParameters.get(QCameraParameters::KEY_QC_DIS);
@@ -2052,6 +2054,7 @@ int QCamera2HardwareInterface::startPreview()
 int QCamera2HardwareInterface::stopPreview()
 {
     CDBG_HIGH("%s: E", __func__);
+    mNumPreviewFaces = -1;
     // stop preview stream
     stopChannel(QCAMERA_CH_TYPE_ZSL);
     stopChannel(QCAMERA_CH_TYPE_PREVIEW);
@@ -5224,6 +5227,26 @@ QCameraChannel *QCamera2HardwareInterface::getChannelByHandle(uint32_t channelHa
 
     return NULL;
 }
+/*===========================================================================
+ * FUNCTION   : needPreviewFDCallback
+ *
+ * DESCRIPTION: decides if needPreviewFDCallback
+ *
+ * PARAMETERS :
+ *   @fd_data : number of faces
+ *
+ * RETURN     : bool type of status
+ *              true  -- success
+ *              fale -- failure code
+ *==========================================================================*/
+bool QCamera2HardwareInterface::needPreviewFDCallback(uint8_t num_faces)
+{
+    if (num_faces == 0 && mNumPreviewFaces == 0) {
+        return false;
+    }
+
+    return true;
+}
 
 /*===========================================================================
  * FUNCTION   : processFaceDetectionReuslt
@@ -5246,7 +5269,8 @@ int32_t QCamera2HardwareInterface::processFaceDetectionResult(cam_face_detection
 
     qcamera_face_detect_type_t fd_type = fd_data->fd_type;
     if ((NULL == mDataCb) ||
-        (fd_type == QCAMERA_FD_PREVIEW && !msgTypeEnabled(CAMERA_MSG_PREVIEW_METADATA)) ||
+        (fd_type == QCAMERA_FD_PREVIEW && (!msgTypeEnabled(CAMERA_MSG_PREVIEW_METADATA) ||
+        (!needPreviewFDCallback(fd_data->num_faces_detected)))) ||
 #ifndef VANILLA_HAL
         (fd_type == QCAMERA_FD_SNAPSHOT && !msgTypeEnabled(CAMERA_MSG_META_DATA))
 #else
@@ -5305,6 +5329,7 @@ int32_t QCamera2HardwareInterface::processFaceDetectionResult(cam_face_detection
     unsigned char *faceData = NULL;
     if(fd_type == QCAMERA_FD_PREVIEW){
         faceData = pFaceResult;
+        mNumPreviewFaces = fd_data->num_faces_detected;
     }else if(fd_type == QCAMERA_FD_SNAPSHOT){
 #ifndef VANILLA_HAL
         //need fill meta type and meta data len first
