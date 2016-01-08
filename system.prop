@@ -20,7 +20,6 @@ persist.radio.ecc_hard_count=1
 ril.subscription.types=NV,RUIM
 persist.radio.rat_on=combine
 
-ro.telephony.default_network=9,1
 ro.telephony.ril.config=simactivation
 ro.ril.multi_rat_capable=true
 
