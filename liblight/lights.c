@@ -42,14 +42,10 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 static struct light_state_t g_attention;
 static struct light_state_t g_notification;
 static struct light_state_t g_battery;
-static struct light_state_t g_buttons;
 static uint32_t g_battery_color = 0;
 
 const char *const LCD_FILE
         = "/sys/class/leds/lcd-backlight/brightness";
-
-const char *const BUTTONS_FILE
-        = "/sys/class/leds/button-backlight/brightness";
 
 const char *const RED_LED_FILE
         = "/sys/class/leds/red/brightness";
@@ -211,24 +207,16 @@ set_speaker_light_locked(struct light_device_t *dev,
         sprintf(breath_pattern,"1 2 1 2");
     }
 
-    if (is_lit(&g_buttons)) {
-        // This is acting as the home button, skip the delay
-        // since this needs to respond immediately.
-        write_int(RED_LED_FILE, red);
-        write_int(GREEN_LED_FILE, green);
-        write_int(BLUE_LED_FILE, blue);
-    } else {
-        write_string(RED_BREATH_FILE, breath_pattern);
-        write_int(RED_BLINK_FILE, blink);
-        write_string(GREEN_BREATH_FILE, breath_pattern);
-        write_int(GREEN_BLINK_FILE, blink);
-        write_string(BLUE_BREATH_FILE, breath_pattern);
-        write_int(BLUE_BLINK_FILE, blink);
+    write_string(RED_BREATH_FILE, breath_pattern);
+    write_int(RED_BLINK_FILE, blink);
+    write_string(GREEN_BREATH_FILE, breath_pattern);
+    write_int(GREEN_BLINK_FILE, blink);
+    write_string(BLUE_BREATH_FILE, breath_pattern);
+    write_int(BLUE_BLINK_FILE, blink);
 
-        write_int(RED_LED_FILE, red);
-        write_int(GREEN_LED_FILE, green);
-        write_int(BLUE_LED_FILE, blue);
-    }
+    write_int(RED_LED_FILE, red);
+    write_int(GREEN_LED_FILE, green);
+    write_int(BLUE_LED_FILE, blue);
 
     return 0;
 }
@@ -237,9 +225,7 @@ static void
 handle_speaker_light_locked(struct light_device_t *dev)
 {
     set_speaker_light_locked(dev, NULL);
-    if (is_lit(&g_buttons)) {
-        set_speaker_light_locked(dev, &g_buttons);
-    } else if (is_lit(&g_attention)) {
+    if (is_lit(&g_attention)) {
         set_speaker_light_locked(dev, &g_attention);
     } else if (is_lit(&g_notification)) {
         set_speaker_light_locked(dev, &g_notification);
@@ -254,31 +240,11 @@ set_light_backlight(UNUSED struct light_device_t *dev,
 {
     int err = 0;
     int brightness = rgb_to_brightness(state);
-    bool is_display_on = (brightness > 0) ? true : false;
 
     pthread_mutex_lock(&g_lock);
     err = write_int(LCD_FILE, brightness);
-    g_battery.color = is_display_on ? 0 : g_battery_color;
     handle_speaker_light_locked(dev);
     pthread_mutex_unlock(&g_lock);
-
-    return err;
-}
-
-static int
-set_light_buttons(UNUSED struct light_device_t *dev,
-        UNUSED const struct light_state_t *state)
-{
-    int err = 0;
-#if 0
-    int brightness = rgb_to_brightness(state);
-    pthread_mutex_lock(&g_lock);
-    g_buttons = *state;
-    g_buttons.color = brightness ? 0x00ffffff : 0;
-    err = write_int(BUTTONS_FILE, brightness);
-    handle_speaker_light_locked(dev);
-    pthread_mutex_unlock(&g_lock);
-#endif
 
     return err;
 }
@@ -345,8 +311,6 @@ static int open_lights(const struct hw_module_t *module, const char *name,
 
     if (0 == strcmp(LIGHT_ID_BACKLIGHT, name))
         set_light = set_light_backlight;
-    else if (0 == strcmp(LIGHT_ID_BUTTONS, name))
-        set_light = set_light_buttons;
     else if (0 == strcmp(LIGHT_ID_NOTIFICATIONS, name))
         set_light = set_light_notifications;
     else if (0 == strcmp(LIGHT_ID_ATTENTION, name))
