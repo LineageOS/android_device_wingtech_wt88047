@@ -226,6 +226,8 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         property_set("ro.product.name", "2014818");
         property_set("ro.telephony.default_network", "9,1");
         property_set("telephony.lteOnCdmaDevice", "0");
+        property_set("persist.dbg.volte_avail_ovr", "1");
+        property_set("persist.dbg.vt_avail_ovr", "1");
     } else if (strcmp(board_id, "S88047B2") == 0) {
         property_set("ro.build.product", "HM2014821");
         property_set("ro.product.device", "HM2014821");
@@ -242,11 +244,18 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
         property_set("ro.telephony.default_network", "22,1");
         property_set("telephony.lteOnCdmaDevice", "1");
         property_set("persist.radio.sglte.eons_domain", "ps");
-    } else if (strcmp(board_id, "S86047A1") == 0) {
+    } else if ((strcmp(board_id, "S86047A1") == 0) || (strcmp(board_id, "S86047A1_CD") == 0)) {
         property_set("ro.build.product", "HM2014813");
         property_set("ro.product.device", "HM2014813");
         property_set("ro.product.model", "2014813");
         property_set("ro.product.name", "2014813");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
+    } else if ((strcmp(board_id, "S86047A2") == 0) || (strcmp(board_id, "S86047A2_CD") == 0)) {
+        property_set("ro.build.product", "HM2014112");
+        property_set("ro.product.device", "HM2014112");
+        property_set("ro.product.model", "2014112");
+        property_set("ro.product.name", "2014112");
         property_set("ro.telephony.default_network", "9,1");
         property_set("telephony.lteOnCdmaDevice", "0");
     } else { /* including S88047A2 and S88047A1 */
@@ -259,8 +268,8 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     }
 
     /* Unified description and fingerprint for now */
-    property_set("ro.build.description", "2014811-user 4.4.4 KTU84P HM2014811 release-keys");
-    property_set("ro.build.fingerprint", "Xiaomi/2014811/HM2014811:4.4.4/KTU84P/V6.6.7.0.KHJMICF:user/release-keys");
+    property_set("ro.build.description", "wt88047-user 5.1.1 LMY47V 6.1.28 release-keys");
+    property_set("ro.build.fingerprint", "Xiaomi/wt88047/wt88047:5.1.1/LMY47V/6.1.28:user/release-keys");
 
     ERROR("Setup %s properties done!\n", board_id);
 
