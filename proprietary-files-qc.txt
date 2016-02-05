@@ -180,6 +180,7 @@ vendor/lib/libxtwifi_zpp_adaptor.so
 # Compass
 vendor/lib/libcalmodule_akm.so
 vendor/lib/libcalmodule_yamaha.so
+vendor/lib/libcalmodule_gyroscope.so
 
 # Graphics
 vendor/lib/egl/eglsubAndroid.so
