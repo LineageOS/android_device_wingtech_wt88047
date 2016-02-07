@@ -124,11 +124,9 @@ etc/permissions/com.quicinc.cne.xml
 -priv-app/CNEService/CNEService.apk
 vendor/lib/libcne.so
 vendor/lib/libcneapiclient.so
-vendor/lib/libcneconn.so
 vendor/lib/libcneqmiutils.so
 vendor/lib/libmasc.so
 vendor/lib/libNimsWrap.so
-vendor/lib/libvendorconn.so
 vendor/lib/libwqe.so
 vendor/lib/libxml.so
 
@@ -140,10 +138,14 @@ etc/dpm/nsrm/NsrmConfiguration.xml
 etc/permissions/dpmapi.xml
 -framework/com.qti.dpmframework.jar
 -framework/dpmapi.jar
+vendor/lib/libcneconn.so
 vendor/lib/libdpmctmgr.so
 vendor/lib/libdpmfdmgr.so
 vendor/lib/libdpmframework.so
 vendor/lib/libdpmnsrm.so
+vendor/lib/libdpmtcm.so
+vendor/lib/libqmi_client_helper.so
+vendor/lib/libvendorconn.so
 
 # DRM
 bin/qseecomd
@@ -288,7 +290,6 @@ vendor/lib/libqcci_legacy.so
 vendor/lib/libqdi.so
 vendor/lib/libqdp.so
 vendor/lib/libqmi_cci.so
-vendor/lib/libqmi_client_helper.so
 vendor/lib/libqmi_client_qmux.so
 vendor/lib/libqmi_common_so.so
 vendor/lib/libqmi_csi.so
