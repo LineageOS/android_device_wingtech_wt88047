@@ -27,7 +27,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := boringssl/p_dec.c boringssl/p_open.c
+LOCAL_SRC_FILES := boringssl/p_dec.c boringssl/p_open.c boringssl/cipher.c
 
 LOCAL_C_INCLUDES := boringssl
 LOCAL_SHARED_LIBRARIES := libcrypto
