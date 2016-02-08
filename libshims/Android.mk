@@ -27,11 +27,11 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 
-LOCAL_SRC_FILES := openinit/p_dec.c openinit/p_open.c
+LOCAL_SRC_FILES := boringssl/p_dec.c boringssl/p_open.c
 
-LOCAL_C_INCLUDES := openinit
+LOCAL_C_INCLUDES := boringssl
 LOCAL_SHARED_LIBRARIES := libcrypto
-LOCAL_MODULE := libshim_openinit
+LOCAL_MODULE := libshim_boringssl
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_CLASS := SHARED_LIBRARIES
 
