@@ -14,7 +14,6 @@ vendor/lib/libFlacSwDec.so
 vendor/lib/soundfx/libqcbassboost.so
 vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
-vendor/lib/libvoice-svc.so
 
 # Battery
 bin/vm_bms
@@ -254,6 +253,7 @@ vendor/lib/lib-rtpcommon.so
 vendor/lib/lib-rtpcore.so
 vendor/lib/lib-rtpdaemoninterface.so
 vendor/lib/lib-rtpsl.so
+vendor/lib/libvoice-svc.so
 
 # Media
 lib/libOmxVdecHevc.so
