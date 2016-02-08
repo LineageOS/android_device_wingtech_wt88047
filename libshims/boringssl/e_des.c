@@ -1,4 +1,3 @@
-/* crypto/cipher.c */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *
@@ -56,11 +55,44 @@
  * [including the GNU Public Licence.] */
 
 #include <openssl/cipher.h>
+#include <openssl/des.h>
+#include <openssl/obj.h>
 
-int EVP_EncryptFinal(EVP_CIPHER_CTX *ctx, uint8_t *out, int *out_len) {
-  return EVP_EncryptFinal_ex(ctx, out, out_len);
+typedef struct {
+  union {
+    double align;
+    DES_key_schedule ks;
+  } ks;
+} EVP_DES_KEY;
+
+static int des_init_key(EVP_CIPHER_CTX *ctx, const uint8_t *key,
+                        const uint8_t *iv, int enc) {
+  DES_cblock *deskey = (DES_cblock *)key;
+  EVP_DES_KEY *dat = (EVP_DES_KEY *)ctx->cipher_data;
+
+  DES_set_key(deskey, &dat->ks.ks);
+  return 1;
 }
 
-int EVP_DecryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *out_len) {
-  return EVP_EncryptFinal_ex(ctx, out, out_len);
+static int des_ecb_cipher(EVP_CIPHER_CTX *ctx, uint8_t *out, const uint8_t *in,
+                          size_t in_len) {
+  if (in_len < ctx->cipher->block_size) {
+    return 1;
+  }
+  in_len -= ctx->cipher->block_size;
+
+  EVP_DES_KEY *dat = (EVP_DES_KEY *) ctx->cipher_data;
+  for (size_t i = 0; i <= in_len; i += ctx->cipher->block_size) {
+    DES_ecb_encrypt((DES_cblock *) (in + i), (DES_cblock *) (out + i),
+                    &dat->ks.ks, ctx->encrypt);
+  }
+  return 1;
 }
+
+static const EVP_CIPHER des_ecb = {
+    NID_des_ecb,         8 /* block_size */,  8 /* key_size */,
+    0 /* iv_len */,      sizeof(EVP_DES_KEY), EVP_CIPH_ECB_MODE,
+    NULL /* app_data */, des_init_key,        des_ecb_cipher,
+    NULL /* cleanup */,  NULL /* ctrl */, };
+
+const EVP_CIPHER *EVP_des_ecb(void) { return &des_ecb; }
