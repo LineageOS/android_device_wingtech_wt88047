@@ -62,5 +62,5 @@ int EVP_EncryptFinal(EVP_CIPHER_CTX *ctx, uint8_t *out, int *out_len) {
 }
 
 int EVP_DecryptFinal(EVP_CIPHER_CTX *ctx, unsigned char *out, int *out_len) {
-  return EVP_EncryptFinal_ex(ctx, out, out_len);
+  return EVP_DecryptFinal_ex(ctx, out, out_len);
 }
