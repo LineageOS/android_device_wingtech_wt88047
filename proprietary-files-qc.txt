@@ -234,6 +234,7 @@ vendor/lib/lib-rcsjni.so
 
 #IMS_CONNECTIONMANAGER
 bin/imscmservice
+vendor/lib/lib-ims-rcscmjni.so
 vendor/lib/lib-imsrcscmservice.so
 vendor/lib/lib-imsrcscmclient.so
 vendor/lib/lib-imsrcscm.so
