@@ -88,7 +88,7 @@ PRODUCT_PACKAGES += \
 
 # Widevine DRM symbol, boringssl-compat subset
 PRODUCT_PACKAGES += \
-    libshim_openinit
+    libshim_boringssl
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
