@@ -41,3 +41,6 @@ persist.camera.pip.support=0
 
 # Disable all camera debug
 persist.camera.hal.debug.mask=0
+
+# Always use GPU for screen compositing
+debug.sf.disable_hwc=1
