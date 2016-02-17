@@ -313,6 +313,7 @@ etc/permissions/qcrilhook.xml
 -framework/qcrilhook.jar
 vendor/lib/libcneapiclient.so
 vendor/lib/libconfigdb.so
+vendor/lib/liblqe.so
 vendor/lib/libmdmdetect.so
 vendor/lib/libnetmgr.so
 vendor/lib/libperipheral_client.so
