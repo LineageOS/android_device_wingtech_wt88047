@@ -170,7 +170,7 @@ on post-fs-data
      chown system system /data/dpm/nsrm
 
 on init
-    export LD_SHIM_LIBS /system/vendor/lib/libcne.so|libshim_parcel.so:/system/vendor/lib/libWVStreamControlAPI_L3.so|libshim_boringssl.so
+    export LD_SHIM_LIBS /system/vendor/lib/libWVStreamControlAPI_L3.so|libshim_boringssl.so
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
 on property:service.bootanim.exit=1
