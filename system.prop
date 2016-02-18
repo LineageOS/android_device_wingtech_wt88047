@@ -11,6 +11,8 @@ persist.data.qmi.adb_logmask=0
 
 # Display
 ro.sf.lcd_density=320
+# GPU for screen compositing
+debug.sf.disable_hwc=0
 
 # Radio
 rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so
@@ -20,12 +22,15 @@ persist.radio.ecc_hard_1=112,911,110,122,119,120,000,118
 persist.radio.ecc_hard_count=1
 ril.subscription.types=RUIM
 persist.radio.rat_on=combine
-
 ro.telephony.ril.config=simactivation
 ro.ril.multi_rat_capable=true
 
 # Disable the thumbnail encoding in order to reduce the power
 persist.camera.tn.disable=1
+# System property for PIP support
+persist.camera.pip.support=0
+# Disable all camera debug
+persist.camera.hal.debug.mask=0
 
 # use 3 threads max for dex2oat
 ro.sys.fw.dex2oat_thread_count=3
@@ -35,12 +40,3 @@ ro.fusion.magfield.max=250
 
 # Factory Reset Protection
 ro.frp.pst=/dev/block/bootdevice/by-name/config
-
-# System property for PIP support
-persist.camera.pip.support=0
-
-# Disable all camera debug
-persist.camera.hal.debug.mask=0
-
-# Always use GPU for screen compositing
-debug.sf.disable_hwc=1
