@@ -36,6 +36,7 @@ vendor/lib/libmmcamera2_imglib_modules.so
 vendor/lib/libmmcamera2_isp_modules.so
 vendor/lib/libmmcamera2_is.so
 vendor/lib/libmmcamera2_pproc_modules.so
+vendor/lib/libmmcamera2_q3a_core.so
 vendor/lib/libmmcamera2_sensor_modules.so
 vendor/lib/libmmcamera2_stats_algorithm.so
 vendor/lib/libmmcamera2_stats_modules.so
@@ -45,6 +46,8 @@ vendor/lib/libmmcamera_faceproc.so
 vendor/lib/libmmcamera_hdr_gb_lib.so
 vendor/lib/libmmcamera_hdr_lib.so
 vendor/lib/libmmcamera_imglib.so
+vendor/lib/libmmcamera_pdaf.so
+vendor/lib/libmmcamera_pdafcamif.so
 vendor/lib/libmmcamera_tintless_algo.so
 vendor/lib/libmmcamera_tintless_bg_pca_algo.so
 vendor/lib/libmmcamera_wavelet_lib.so
@@ -56,18 +59,27 @@ vendor/lib/liboemcamera.so
 vendor/lib/libqomx_jpegenc.so
 
 # Camera Actuator
-vendor/lib/libactuator_dw9714_13p1ba.so
-vendor/lib/libactuator_dw9714_13p1ba_camcorder.so
-vendor/lib/libactuator_dw9714_13p1ba_camera.so
-vendor/lib/libactuator_dw9714_13p1ba_sunny.so
-vendor/lib/libactuator_dw9714_13p1ba_sunny_camcorder.so
-vendor/lib/libactuator_dw9714_13p1ba_sunny_camera.so
-vendor/lib/libactuator_dw9718s.so
-vendor/lib/libactuator_dw9718s_camcorder.so
-vendor/lib/libactuator_dw9718s_camera.so
+vendor/lib/libactuator_dw9714.so
+vendor/lib/libactuator_dw9714_camcorder.so
+vendor/lib/libactuator_dw9714_camera.so
+vendor/lib/libactuator_dw9714_13p1ba_h2x.so
+vendor/lib/libactuator_dw9714_13p1ba_h2x_camcorder.so
+vendor/lib/libactuator_dw9714_13p1ba_h2x_camera.so
+vendor/lib/libactuator_dw9714_meituosi_h2x.so
+vendor/lib/libactuator_dw9714_meituosi_h2x_camcorder.so
+vendor/lib/libactuator_dw9714_meituosi_h2x_camera.so
+vendor/lib/libactuator_dw9714_sikao_h2x.so
+vendor/lib/libactuator_dw9714_sikao_h2x_camcorder.so
+vendor/lib/libactuator_dw9714_sikao_h2x_camera.so
 vendor/lib/libactuator_rohm_bu64243gwz.so
 vendor/lib/libactuator_rohm_bu64243gwz_camcorder.so
 vendor/lib/libactuator_rohm_bu64243gwz_camera.so
+vendor/lib/libactuator_rohm_bu64243gwz_a11.so
+vendor/lib/libactuator_rohm_bu64243gwz_a11_camcorder.so
+vendor/lib/libactuator_rohm_bu64243gwz_a11_camera.so
+vendor/lib/libactuator_rohm_bu64243gwz_h2x.so
+vendor/lib/libactuator_rohm_bu64243gwz_h2x_camcorder.so
+vendor/lib/libactuator_rohm_bu64243gwz_h2x_camera.so
 
 # Camera Chromatix
 vendor/lib/libchromatix_ov2680_common.so
