@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -42,13 +42,9 @@ class QCameraHeapMemory;
 class QCameraAllocator {
 public:
     virtual QCameraMemory *allocateStreamBuf(cam_stream_type_t stream_type,
-                                             int size,
-                                             int stride,
-                                             int scanline,
-                                             uint8_t &bufferCnt) = 0;
+            size_t size, int stride, int scanline, uint8_t &bufferCnt) = 0;
     virtual int32_t allocateMoreStreamBuf(QCameraMemory *mem_obj,
-                                          int size,
-                                          uint8_t &bufferCnt) = 0;
+            size_t size, uint8_t &bufferCnt) = 0;
     virtual QCameraHeapMemory *allocateStreamInfoBuf(cam_stream_type_t stream_type) = 0;
     virtual ~QCameraAllocator() {}
 };

@@ -1,4 +1,4 @@
-/* Copyright (c) 2012,2014 The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundataion. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -63,7 +63,7 @@ public:
                          bool bDynallocBuf);
     virtual int32_t processZoomDone(preview_stream_ops_t *previewWindow,
                                     cam_crop_data_t &crop_info);
-    virtual int32_t bufDone(int index);
+    virtual int32_t bufDone(uint32_t index);
     virtual int32_t bufDone(const void *opaque, bool isMetaData);
     virtual int32_t processDataNotify(mm_camera_super_buf_t *bufs);
     virtual int32_t start();
@@ -85,12 +85,14 @@ public:
     int32_t getFrameDimension(cam_dimension_t &dim);
     int32_t getFormat(cam_format_t &fmt);
     QCameraMemory *getStreamBufs() {return mStreamBufs;};
+    QCameraHeapMemory *getStreamInfoBuf() {return mStreamInfoBuf;};
     uint32_t getMyServerID();
     cam_stream_type_t getMyType();
+    cam_stream_type_t getMyOriginalType();
     int32_t acquireStreamBufs();
 
     int32_t mapBuf(uint8_t buf_type, uint32_t buf_idx,
-                   int32_t plane_idx, int fd, uint32_t size);
+            int32_t plane_idx, int fd, size_t size);
     int32_t unmapBuf(uint8_t buf_type, uint32_t buf_idx, int32_t plane_idx);
     int32_t setParameter(cam_stream_parm_buffer_t &param);
     int32_t getParameter(cam_stream_parm_buffer_t &param);
@@ -105,10 +107,11 @@ public:
 
     uint8_t getBufferCount() { return mNumBufs; }
     uint32_t getChannelHandle() { return mChannelHandle; }
+    int32_t getNumQueuedBuf();
 
-    int mDumpFrame;
-    int mDumpMetaFrame;
-    int mDumpSkipCnt;
+    uint32_t mDumpFrame;
+    uint32_t mDumpMetaFrame;
+    uint32_t mDumpSkipCnt;
 
     void cond_wait();
     void cond_signal();
@@ -170,8 +173,8 @@ private:
             mm_camera_map_unmap_ops_tbl_t *ops_tbl,
             void *user_data);
 
-    static int32_t invalidate_buf(int index, void *user_data);
-    static int32_t clean_invalidate_buf(int index, void *user_data);
+    static int32_t invalidate_buf(uint32_t index, void *user_data);
+    static int32_t clean_invalidate_buf(uint32_t index, void *user_data);
 
     int32_t getBufs(cam_frame_len_offset_t *offset,
                      uint8_t *num_bufs,
@@ -179,8 +182,8 @@ private:
                      mm_camera_buf_def_t **bufs,
                      mm_camera_map_unmap_ops_tbl_t *ops_tbl);
     int32_t putBufs(mm_camera_map_unmap_ops_tbl_t *ops_tbl);
-    int32_t invalidateBuf(int index);
-    int32_t cleanInvalidateBuf(int index);
+    int32_t invalidateBuf(uint32_t index);
+    int32_t cleanInvalidateBuf(uint32_t index);
     int32_t calcOffset(cam_stream_info_t *streamInfo);
     int32_t unmapStreamInfoBuf();
     int32_t releaseStreamInfoBuf();

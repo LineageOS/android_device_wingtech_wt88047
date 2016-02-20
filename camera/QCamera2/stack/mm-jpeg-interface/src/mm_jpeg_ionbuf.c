@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -61,10 +61,10 @@ void *buffer_allocate(buffer_t *p_buffer, int cached)
   }
 
   /* Make it page size aligned */
-  p_buffer->alloc.len = (p_buffer->alloc.len + 4095) & (~4095);
+  p_buffer->alloc.len = (p_buffer->alloc.len + 4095U) & (~4095U);
   lrc = ioctl(p_buffer->ion_fd, ION_IOC_ALLOC, &p_buffer->alloc);
   if (lrc < 0) {
-    CDBG_ERROR("%s :ION allocation failed len %d", __func__,
+    CDBG_ERROR("%s :ION allocation failed len %zu", __func__,
       p_buffer->alloc.len);
     goto ION_ALLOC_FAILED;
   }
@@ -114,7 +114,7 @@ ION_ALLOC_FAILED:
 int buffer_deallocate(buffer_t *p_buffer)
 {
   int lrc = 0;
-  int lsize = (p_buffer->size + 4095) & (~4095);
+  size_t lsize = (p_buffer->size + 4095U) & (~4095U);
 
   struct ion_handle_data lhandle_data;
   lrc = munmap(p_buffer->addr, lsize);
@@ -151,8 +151,8 @@ int buffer_invalidate(buffer_t *p_buffer)
   cache_inv_data.vaddr = p_buffer->addr;
   cache_inv_data.fd = p_buffer->ion_info_fd.fd;
   cache_inv_data.handle = p_buffer->ion_info_fd.handle;
-  cache_inv_data.length = p_buffer->size;
-  custom_data.cmd = ION_IOC_INV_CACHES;
+  cache_inv_data.length = (unsigned int)p_buffer->size;
+  custom_data.cmd = (unsigned int)ION_IOC_INV_CACHES;
   custom_data.arg = (unsigned long)&cache_inv_data;
 
   lrc = ioctl(p_buffer->ion_fd, ION_IOC_CUSTOM, &custom_data);

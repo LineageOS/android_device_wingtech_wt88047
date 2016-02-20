@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -272,7 +272,7 @@ static int submain();
  *==========================================================================*/
 int keypress_to_event(char keypress)
 {
-  char out_buf = INVALID_KEY_PRESS;
+  int out_buf = INVALID_KEY_PRESS;
   if ((keypress >= 'A' && keypress <= 'Z') ||
     (keypress >= 'a' && keypress <= 'z')) {
     out_buf = tolower(keypress);
@@ -285,7 +285,7 @@ int keypress_to_event(char keypress)
 
 int next_menu(menu_id_change_t current_menu_id, char keypress, camera_action_t * action_id_ptr, int * action_param)
 {
-  char output_to_event;
+  int output_to_event;
   menu_id_change_t next_menu_id = MENU_ID_INVALID;
   * action_id_ptr = ACTION_NO_ACTION;
 
@@ -475,7 +475,7 @@ int next_menu(menu_id_change_t current_menu_id, char keypress, camera_action_t *
       printf("MENU_ID_GET_CTRL_VALUE\n");
       * action_id_ptr = ACTION_GET_CTRL_VALUE;
       if (output_to_event > 0 &&
-        output_to_event <= sizeof(get_ctrl_tbl)/sizeof(get_ctrl_tbl[0])) {
+        output_to_event <= (int)(sizeof(get_ctrl_tbl)/sizeof(get_ctrl_tbl[0]))) {
           next_menu_id = MENU_ID_MAIN;
           * action_param = output_to_event;
       }
@@ -571,7 +571,7 @@ int next_menu(menu_id_change_t current_menu_id, char keypress, camera_action_t *
     case MENU_ID_ZOOMCHANGE:
       * action_id_ptr = ACTION_SET_ZOOM;
       if (output_to_event > 0 &&
-        output_to_event <= sizeof(zoom_tbl)/sizeof(zoom_tbl[0])) {
+        output_to_event <= (int)(sizeof(zoom_tbl)/sizeof(zoom_tbl[0]))) {
           next_menu_id = MENU_ID_MAIN;
           * action_param = output_to_event;
       } else {
@@ -1090,8 +1090,8 @@ int decrease_saturation (void) {
 int take_jpeg_snapshot(mm_camera_test_obj_t *test_obj, int is_burst_mode)
 {
   CDBG_HIGH("\nEnter take_jpeg_snapshot!!\n");
-  int rc = MM_CAMERA_OK;
-  if(MM_CAMERA_OK != (rc = mm_app_take_picture(test_obj, is_burst_mode))) {
+  int rc = mm_app_take_picture (test_obj, (uint8_t)is_burst_mode);
+  if (MM_CAMERA_OK != rc) {
     CDBG_ERROR("%s: mm_app_take_picture() err=%d\n", __func__, rc);
   }
   return rc;
@@ -1574,7 +1574,7 @@ int filter_resolutions(mm_camera_lib_handle *lib_handle,
             if ( ( tbl[i].width == camera_cap.picture_sizes_tbl[j].width ) &&
                  ( tbl[i].height == camera_cap.picture_sizes_tbl[j].height ) ) {
                 tbl[i].supported = 1;
-                rc = i;
+                rc = (int)i;
                 break;
             }
         }
@@ -1651,8 +1651,10 @@ static int submain()
     uint8_t wnr_enabled = 0;
     mm_camera_lib_handle lib_handle;
     int num_cameras;
-    int available_sensors = sizeof(sensor_tbl) / sizeof(sensor_tbl[0]);
-    int available_snap_sizes = sizeof(dimension_tbl)/sizeof(dimension_tbl[0]);
+    int available_sensors =
+        (int)(sizeof(sensor_tbl) / sizeof(sensor_tbl[0]));
+    int available_snap_sizes =
+        (int)(sizeof(dimension_tbl)/sizeof(dimension_tbl[0]));
     int i,c;
     mm_camera_lib_snapshot_params snap_dim;
     snap_dim.width = DEFAULT_SNAPSHOT_WIDTH;
@@ -1683,7 +1685,7 @@ static int submain()
     } else {
         i = filter_resolutions(&lib_handle,
                                 dimension_tbl,
-                                available_snap_sizes);
+                                (size_t)available_snap_sizes);
         if ( ( i < 0 ) || ( i >= available_snap_sizes ) ) {
             CDBG_ERROR("%s:filter_resolutions()\n", __func__);
             goto ERROR;

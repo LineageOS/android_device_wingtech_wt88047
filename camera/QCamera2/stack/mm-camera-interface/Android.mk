@@ -17,7 +17,7 @@ ifeq ($(strip $(TARGET_USES_ION)),true)
     LOCAL_CFLAGS += -DUSE_ION
 endif
 
-ifeq ($(call is-board-platform-in-list,msm8974 msm8916 msm8226 msm8610),true)
+ifeq ($(call is-board-platform-in-list,msm8974 msm8916 msm8226 msm8610 msm8909),true)
     LOCAL_CFLAGS += -DVENUS_PRESENT
 endif
 
@@ -41,7 +41,7 @@ ifneq ($(call is-platform-sdk-version-at-least,17),true)
   LOCAL_CFLAGS += -include bionic/libc/kernel/common/linux/socket.h
   LOCAL_CFLAGS += -include bionic/libc/kernel/common/linux/un.h
 endif
-LOCAL_CFLAGS += -Wall -Werror
+LOCAL_CFLAGS += -Wall -Wextra -Werror
 
 LOCAL_SRC_FILES := $(MM_CAM_FILES)
 

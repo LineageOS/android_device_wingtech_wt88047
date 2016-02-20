@@ -1,4 +1,4 @@
-/* Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -32,9 +32,6 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <string.h>
-#include <sys/socket.h>
-#include <sys/uio.h>
-#include <sys/un.h>
 
 #include "mm_camera_dbg.h"
 #include "mm_camera_sock.h"
@@ -51,7 +48,7 @@
 int mm_camera_socket_create(int cam_id, mm_camera_sock_type_t sock_type)
 {
     int socket_fd;
-    struct sockaddr_un sock_addr;
+    mm_camera_sock_addr_t sock_addr;
     int sktype;
     int rc;
 
@@ -74,16 +71,18 @@ int mm_camera_socket_create(int cam_id, mm_camera_sock_type_t sock_type)
     }
 
     memset(&sock_addr, 0, sizeof(sock_addr));
-    sock_addr.sun_family = AF_UNIX;
-    snprintf(sock_addr.sun_path, UNIX_PATH_MAX, "/data/cam_socket%d", cam_id);
-    if((rc = connect(socket_fd, (struct sockaddr *) &sock_addr,
-      sizeof(sock_addr))) != 0) {
+    sock_addr.addr_un.sun_family = AF_UNIX;
+    snprintf(sock_addr.addr_un.sun_path, UNIX_PATH_MAX, "/data/misc/camera/cam_socket%d",
+        cam_id);
+    rc = connect(socket_fd, &sock_addr.addr, sizeof(sock_addr.addr_un));
+    if (0 != rc) {
       close(socket_fd);
       socket_fd = -1;
       CDBG_ERROR("%s: socket_fd=%d %s ", __func__, socket_fd, strerror(errno));
     }
 
-    CDBG("%s: socket_fd=%d %s", __func__, socket_fd, sock_addr.sun_path);
+    CDBG("%s: socket_fd=%d %s", __func__, socket_fd,
+        sock_addr.addr_un.sun_path);
     return socket_fd;
 }
 
@@ -115,7 +114,7 @@ void mm_camera_socket_close(int fd)
 int mm_camera_socket_sendmsg(
   int fd,
   void *msg,
-  uint32_t buf_size,
+  size_t buf_size,
   int sendfd)
 {
     struct msghdr msgh;
@@ -135,7 +134,8 @@ int mm_camera_socket_sendmsg(
     iov[0].iov_len = buf_size;
     msgh.msg_iov = iov;
     msgh.msg_iovlen = 1;
-    CDBG("%s: iov_len=%d", __func__, iov[0].iov_len);
+    CDBG("%s: iov_len=%llu", __func__,
+            (unsigned long long int)iov[0].iov_len);
 
     msgh.msg_control = NULL;
     msgh.msg_controllen = 0;
@@ -207,7 +207,8 @@ int mm_camera_socket_recvmsg(
       return rcvd_len;
     }
 
-    CDBG("%s:  msg_ctrl %p len %d", __func__, msgh.msg_control, msgh.msg_controllen);
+    CDBG("%s:  msg_ctrl %p len %zu", __func__, msgh.msg_control,
+        msgh.msg_controllen);
 
     if( ((cmsghp = CMSG_FIRSTHDR(&msgh)) != NULL) &&
         (cmsghp->cmsg_len == CMSG_LEN(sizeof(int))) ) {
