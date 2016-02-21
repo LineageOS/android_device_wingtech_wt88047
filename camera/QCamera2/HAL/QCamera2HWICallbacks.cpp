@@ -496,7 +496,7 @@ bool QCamera2HardwareInterface::TsMakeupProcess(mm_camera_buf_def_t *pFrame,
     const char* pch_makeup_enable = mParameters.get(QCameraParameters::KEY_TS_MAKEUP);
     pthread_mutex_unlock(&m_parm_lock);
     if (pch_makeup_enable == NULL) {
-        CDBG_HIGH("%s pch_makeup_enable = null",__func__);
+        CDBG("%s pch_makeup_enable = null",__func__);
         return bRet = false;
     }
     bool enableMakeUp = (strcmp(pch_makeup_enable,"On") == 0)&& faceRect.left > -1 ;

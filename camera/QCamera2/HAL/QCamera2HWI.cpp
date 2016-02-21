@@ -985,6 +985,7 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(uint32_t cameraId)
       mMsgEnabled(0),
       mStoreMetaDataInFrame(0),
       m_stateMachine(this),
+      m_smThreadActive(true),
       m_postprocessor(this),
       m_thermalAdapter(QCameraThermalAdapter::getInstance()),
       m_cbNotifier(this),
@@ -1087,8 +1088,11 @@ QCamera2HardwareInterface::~QCamera2HardwareInterface()
     mDefferedWorkThread.sendCmd(CAMERA_CMD_TYPE_STOP_DATA_PROC, TRUE, TRUE);
     mDefferedWorkThread.exit();
 
-    closeCamera();
+    lockAPI();
+    m_smThreadActive = false;
+    unlockAPI();
     m_stateMachine.releaseThread();
+    closeCamera();
     pthread_mutex_destroy(&m_lock);
     pthread_cond_destroy(&m_cond);
     pthread_mutex_destroy(&m_evtLock);
@@ -1567,12 +1571,14 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
                   with number being 'zslQBuffers + minCircularBufNum'
                   we see preview buffers sometimes get dropped at CPP
                   and super buf is not forming in ZSL Q for long time. */
-
                 bufferCnt = zslQBuffers + minCircularBufNum +
                         mParameters.getNumOfExtraBuffersForImageProc() +
                         EXTRA_ZSL_PREVIEW_STREAM_BUF +
                         mParameters.getNumOfExtraBuffersForPreview() +
                         mParameters.getNumOfExtraHDRInBufsIfNeeded();
+                if (isLongshotSnapLimited() && mLongshotEnabled) {
+                    bufferCnt = mParameters.getNumOfBuffersForLongshotLimitedMode();
+                }
             } else {
                 bufferCnt = CAMERA_MIN_STREAMING_BUFFERS +
                         mParameters.getMaxUnmatchedFramesInQueue() +
@@ -1607,6 +1613,9 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
                     // ZSL Burst or Longshot case
                     bufferCnt = zslQBuffers + minCircularBufNum +
                             mParameters.getNumOfExtraBuffersForImageProc();
+                    if (isLongshotSnapLimited() && mLongshotEnabled) {
+                        bufferCnt = mParameters.getNumOfBuffersForLongshotLimitedMode();
+                    }
                 }
                 if (getSensorType() == CAM_SENSOR_YUV &&
                     !gCamCapability[mCameraId]->use_pix_for_SOC) {
@@ -1670,6 +1679,9 @@ uint8_t QCamera2HardwareInterface::getBufNumRequired(cam_stream_type_t stream_ty
             }
             if (bufferCnt > maxStreamBuf) {
                 bufferCnt = maxStreamBuf;
+            }
+            if (mParameters.isZSLMode() && isLongshotSnapLimited() && mLongshotEnabled) {
+                bufferCnt = mParameters.getNumOfBuffersForLongshotLimitedMode();
             }
             bufferCnt += minUndequeCount;
         }
@@ -3164,7 +3176,6 @@ int QCamera2HardwareInterface::cancelPicture()
     unconfigureAdvancedCapture();
 
     mParameters.setDisplayFrame(TRUE);
-
     if (mParameters.isZSLMode()) {
         QCameraPicChannel *pZSLChannel =
             (QCameraPicChannel *)m_channels[QCAMERA_CH_TYPE_ZSL];
@@ -3625,6 +3636,8 @@ int QCamera2HardwareInterface::sendCommand(int32_t command,
         }
         break;
     case CAMERA_CMD_LONGSHOT_OFF:
+        /* Longshot off command is sent after receiving all JPEG CB's
+           for the issued TakePictures()*/
         if ( mLongshotEnabled && m_stateMachine.isCaptureRunning() ) {
             cancelPicture();
             processEvt(QCAMERA_SM_EVT_SNAPSHOT_DONE, NULL);
@@ -3639,6 +3652,19 @@ int QCamera2HardwareInterface::sendCommand(int32_t command,
         mPrepSnapRun = false;
         mLongshotEnabled = false;
         rc = mParameters.setLongshotEnable(mLongshotEnabled);
+        break;
+    case CAMERA_CMD_STOP_LONGSHOT:
+         /*Stop command is sent after receiving all the required YUV
+           callbacks or releasing the shutter before reaching Max number*/
+        if (mLongshotEnabled && m_stateMachine.isCaptureRunning() &&
+            isLongshotSnapLimited()) {
+            QCameraChannel *pZSLChannel = m_channels[QCAMERA_CH_TYPE_ZSL];
+            CDBG_HIGH("%s: CAMERA_CMD_STOP_LONGSHOT", __func__);
+            if (isZSLMode() && (NULL != pZSLChannel) && mPrepSnapRun)
+                mCameraHandle->ops->stop_zsl_snapshot(
+                        mCameraHandle->camera_handle,
+                        pZSLChannel->getMyHandle());
+            }
         break;
     case CAMERA_CMD_HISTOGRAM_ON:
     case CAMERA_CMD_HISTOGRAM_OFF:
@@ -3807,7 +3833,13 @@ int QCamera2HardwareInterface::dump(int /*fd*/)
  *==========================================================================*/
 int QCamera2HardwareInterface::processAPI(qcamera_sm_evt_enum_t api, void *api_payload)
 {
-    return m_stateMachine.procAPI(api, api_payload);
+    int ret = DEAD_OBJECT;
+
+    if (m_smThreadActive) {
+        ret = m_stateMachine.procAPI(api, api_payload);
+    }
+
+    return ret;
 }
 
 /*===========================================================================
@@ -4684,11 +4716,9 @@ int32_t QCamera2HardwareInterface::addPreviewChannel()
     QCameraChannel *pChannel = NULL;
 
     if (m_channels[QCAMERA_CH_TYPE_PREVIEW] != NULL) {
-        // Using the no preview torch WA it is possible
-        // to already have a preview channel present before
-        // start preview gets called.
-        CDBG_HIGH(" %s : Preview Channel already added!", __func__);
-        return NO_ERROR;
+        CDBG_HIGH("%s : Preview Channel already added and so delete it", __func__);
+        delete m_channels[QCAMERA_CH_TYPE_PREVIEW];
+        m_channels[QCAMERA_CH_TYPE_PREVIEW] = NULL;
     }
 
     pChannel = new QCameraChannel(mCameraHandle->camera_handle,

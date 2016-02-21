@@ -461,6 +461,7 @@ typedef struct {
     char video_dev_name[MM_CAMERA_MAX_NUM_SENSORS][MM_CAMERA_DEV_NAME_LEN];
     mm_camera_obj_t *cam_obj[MM_CAMERA_MAX_NUM_SENSORS];
     struct camera_info info[MM_CAMERA_MAX_NUM_SENSORS];
+    uint8_t is_yuv[MM_CAMERA_MAX_NUM_SENSORS]; // 1=CAM_SENSOR_YUV, 0=CAM_SENSOR_RAW
 } mm_camera_ctrl_t;
 
 typedef enum {

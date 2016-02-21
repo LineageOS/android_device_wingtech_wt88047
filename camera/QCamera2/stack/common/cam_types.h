@@ -57,7 +57,7 @@
 #define MAX_NUM_STREAMS          8
 #define CHROMATIX_SIZE 21292
 #define COMMONCHROMATIX_SIZE 42044
-#define AFTUNE_SIZE 5000  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
+#define AFTUNE_SIZE 5200  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
 #define MAX_SCALE_SIZES_CNT 8
 #define MAX_SAMP_DECISION_CNT     64
 

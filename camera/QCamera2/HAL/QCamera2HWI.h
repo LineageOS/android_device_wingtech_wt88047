@@ -441,6 +441,7 @@ private:
                 1 : mParameters.getNumOfSnapshots());
     };
     bool isLongshotEnabled() { return mLongshotEnabled; };
+    bool isLongshotSnapLimited() { return mParameters.isLongshotSnapsLimited(); };
     uint8_t getBufNumRequired(cam_stream_type_t stream_type);
     bool needFDMetadata(qcamera_ch_type_enum_t channel_type);
     bool removeSizeFromList(cam_dimension_t* size_list, size_t length,
@@ -541,6 +542,7 @@ private:
     void                          *mCallbackCookie;
 
     QCameraStateMachine m_stateMachine;   // state machine
+    bool m_smThreadActive;
     QCameraPostProcessor m_postprocessor; // post processor
     QCameraThermalAdapter &m_thermalAdapter;
     QCameraCbNotifier m_cbNotifier;
