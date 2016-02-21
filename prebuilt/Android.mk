@@ -29,7 +29,7 @@ LOCAL_SRC_FILES := webview.apk
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE_SUFFIX := $(COMMON_ANDROID_PACKAGE_SUFFIX)
 LOCAL_MODULE_CLASS := APPS
-LOCAL_CERTIFICATE := platform
+LOCAL_CERTIFICATE := PRESIGNED
 LOCAL_REQUIRED_MODULES := libwebviewchromium \
     libwebviewchromium_loader \
     libwebviewchromium_plat_support
