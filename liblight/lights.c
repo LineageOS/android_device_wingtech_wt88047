@@ -266,21 +266,6 @@ nearest_color(unsigned int r, unsigned int g, unsigned int b)
 }
 
 static int
-set_light_backlight(struct light_device_t* dev,
-        struct light_state_t const* state)
-{
-    int err = 0;
-    int brightness = rgb_to_brightness(state);
-    if(!dev) {
-        return -1;
-    }
-    pthread_mutex_lock(&g_lock);
-    err = write_int(LCD_FILE, brightness);
-    pthread_mutex_unlock(&g_lock);
-    return err;
-}
-
-static int
 set_speaker_light_locked(struct light_device_t* dev,
         struct light_state_t const* state)
 {
@@ -380,6 +365,22 @@ handle_speaker_battery_locked(struct light_device_t* dev)
     } else {
         set_speaker_light_locked(dev, &g_battery);
     }
+}
+
+static int
+set_light_backlight(struct light_device_t* dev,
+        struct light_state_t const* state)
+{
+    int err = 0;
+    int brightness = rgb_to_brightness(state);
+    if(!dev) {
+        return -1;
+    }
+    pthread_mutex_lock(&g_lock);
+    err = write_int(LCD_FILE, brightness);
+    handle_speaker_battery_locked(dev);
+    pthread_mutex_unlock(&g_lock);
+    return err;
 }
 
 static int
