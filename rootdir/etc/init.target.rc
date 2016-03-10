@@ -56,6 +56,10 @@ on boot
     chmod 0664 /sys/class/power_supply/battery/current_now
     chmod 0664 /sys/class/power_supply/battery/voltage_now
 
+    # USB online state
+    chown system system /sys/class/power_supply/usb/online
+    chmod 0664 /sys/class/power_supply/usb/online
+
     # MPU6050 accelerometer
     chown system system /sys/class/sensors/MPU6050-accel/calibrate
     chown system system /sys/class/sensors/MPU6050-accel/enable
