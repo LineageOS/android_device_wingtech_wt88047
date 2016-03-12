@@ -40,7 +40,6 @@ static pthread_mutex_t g_lock = PTHREAD_MUTEX_INITIALIZER;
 static struct light_state_t g_notification;
 static struct light_state_t g_battery;
 static struct light_state_t g_attention;
-static uint32_t g_battery_color = 0;
 
 char const*const RED_LED_FILE
         = "/sys/class/leds/red/brightness";
@@ -71,9 +70,6 @@ char const*const GREEN_BREATH_FILE
 
 char const*const BLUE_BREATH_FILE
         = "/sys/class/leds/blue/led_time";
-
-char const*const USB_ONLINE_FILE
-        = "/sys/class/power_supply/usb/online";
 
 struct color {
     unsigned int r, g, b;
@@ -218,27 +214,6 @@ write_str(char const* path, char *value)
     } else {
         if (already_warned == 0) {
             ALOGE("write_str failed to open %s\n", path);
-            already_warned = 1;
-        }
-        return -errno;
-    }
-}
-
-static int
-read_int(char const* path)
-{
-    int fd;
-    static int already_warned = 0;
-
-    fd = open(path, O_RDWR);
-    if (fd >= 0) {
-        char buffer[5];
-        ssize_t amt = read(fd, buffer, sizeof(buffer));
-        close(fd);
-        return amt == -1 ? -errno : atoi(buffer);
-    } else {
-        if (already_warned == 0) {
-            ALOGE("read_int failed to open %s\n", path);
             already_warned = 1;
         }
         return -errno;
@@ -403,7 +378,6 @@ set_light_backlight(struct light_device_t* dev,
     }
     pthread_mutex_lock(&g_lock);
     err = write_int(LCD_FILE, brightness);
-    g_battery.color = read_int(USB_ONLINE_FILE) ? g_battery_color : 0;
     handle_speaker_battery_locked(dev);
     pthread_mutex_unlock(&g_lock);
     return err;
@@ -415,7 +389,6 @@ set_light_battery(struct light_device_t* dev,
 {
     pthread_mutex_lock(&g_lock);
     g_battery = *state;
-    g_battery_color = g_battery.color;
     handle_speaker_battery_locked(dev);
     pthread_mutex_unlock(&g_lock);
     return 0;
