@@ -197,8 +197,8 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     UNUSED(msm_ver);
     UNUSED(board_type);
 
-    rc = property_get("ro.cm.device", device);
-    if (!rc || !ISMATCH(device, "wt88047"))
+    rc = property_get("ro.product.name", device);
+    if (!rc || (strstr(device, "wt88047") == NULL))
         return;
 
     import_kernel_cmdline(0, import_kernel_nv);
