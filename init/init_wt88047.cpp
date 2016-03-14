@@ -47,7 +47,6 @@
 
 #include "init_msm.h"
 
-#if 0
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 #define ALPHABET_LEN 256
@@ -58,7 +57,6 @@
 #define IMG_VER_STR_LEN 24
 #define IMG_VER_BUF_LEN 255
 #define IMG_SZ 32000 * KB    /* MMAP 32000K of modem, modem partition is 64000K */
-#endif
 
 static char board_id[32];
 
@@ -78,7 +76,6 @@ static void import_kernel_nv(char *name, int in_qemu)
     }
 }
 
-#if 0
 /* Boyer-Moore string search implementation from Wikipedia */
 
 /* Return longest suffix length of suffix ending at str[p] */
@@ -189,14 +186,11 @@ err_fd_close:
 err_ret:
     return ret;
 }
-#endif
 
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
     char device[PROP_VALUE_MAX];
-#if 0
     char modem_version[IMG_VER_BUF_LEN];
-#endif
     int rc;
 
     UNUSED(msm_id);
@@ -279,13 +273,11 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
 
     ERROR("Setup %s properties done!\n", board_id);
 
-#if 0
     rc = get_img_version(modem_version, IMG_VER_BUF_LEN);
     if (!rc) {
         property_set("gsm.version.baseband", modem_version);
         ERROR("Detected modem version=%s\n", modem_version);
     }
-#endif
 
     return;
 }
