@@ -12,7 +12,7 @@ persist.data.qmi.adb_logmask=0
 # Display
 ro.sf.lcd_density=320
 # GPU for screen compositing
-debug.sf.disable_hwc=0
+debug.sf.disable_hwc=1
 
 # Radio
 rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so
