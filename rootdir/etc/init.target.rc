@@ -226,3 +226,13 @@ service memcheck /system/bin/memcheck
     group root
     class late_start
     oneshot
+
+on property:sys.boot_completed=1
+    start config_lineout
+
+service config_lineout /system/bin/sh /system/etc/init.lineout.sh
+    user root
+    group root
+    class late_start
+    oneshot
+    disabled
