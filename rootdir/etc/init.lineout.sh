@@ -30,8 +30,6 @@ h2w=`cat /sys/class/switch/h2w/state`
 
 if [ "$h2w" = "0" ]; then
     tinymix "Lineout_1 amp" "DISABLE"
-    sleep 1
-    tinymix "Lineout_1 amp" "ENABLE"
 else
     tinymix "Lineout_1 amp" "DUALMODE"
     sleep 1
