@@ -276,38 +276,6 @@ int ProximitySensor::readEvents(sensors_event_t* data, int count)
     return numEventReceived;
 }
 
-int ProximitySensor::setDelay(int32_t, int64_t ns)
-{
-    int fd;
-    char propBuf[PROPERTY_VALUE_MAX];
-    char buf[80];
-    int len;
-
-    property_get("sensors.light.loopback", propBuf, "0");
-    if (strcmp(propBuf, "1") == 0) {
-        ALOGE("sensors.light.loopback is set");
-        return 0;
-    }
-    int delay_ms = ns / 1000000;
-    strlcpy(&input_sysfs_path[input_sysfs_path_len],
-                SYSFS_POLL_DELAY, SYSFS_MAXLEN);
-    fd = open(input_sysfs_path, O_RDWR);
-    if (fd < 0) {
-        ALOGE("open %s failed.(%s)\n", input_sysfs_path, strerror(errno));
-        return -1;
-    }
-    snprintf(buf, sizeof(buf), "%d", delay_ms);
-    len = write(fd, buf, ssize_t(strlen(buf)+1));
-    if (len < ssize_t(strlen(buf) + 1)) {
-        ALOGE("write %s failed\n", buf);
-        close(fd);
-        return -1;
-    }
-
-    close(fd);
-    return 0;
-}
-
 float ProximitySensor::indexToValue(size_t index) const
 {
     return index * PROXIMITY_THRESHOLD;
