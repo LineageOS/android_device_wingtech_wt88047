@@ -70,7 +70,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Charger
 ADDITIONAL_DEFAULT_PROPERTIES += \
     ro.usb.vid=2717 \
-    ro.usb.id.charge=F006 \
+    ro.usb.id.midi=90BA \
+    ro.usb.id.midi_adb=90BB \
     ro.usb.id.mtp=ff60 \
     ro.usb.id.mtp_adb=ff68 \
     ro.usb.id.ptp=ff10 \
