@@ -60,11 +60,7 @@ GyroSensor::GyroSensor()
 	if (data_fd) {
 		strlcpy(input_sysfs_path, "/sys/class/input/", sizeof(input_sysfs_path));
 		strlcat(input_sysfs_path, input_name, sizeof(input_sysfs_path));
-#ifdef TARGET_8610
-		strlcat(input_sysfs_path, "/device/", sizeof(input_sysfs_path));
-#else
 		strlcat(input_sysfs_path, "/device/device/", sizeof(input_sysfs_path));
-#endif
 		input_sysfs_path_len = strlen(input_sysfs_path);
 		enable(0, 1);
 	}

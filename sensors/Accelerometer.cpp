@@ -63,14 +63,6 @@ AccelSensor::AccelSensor()
 		strlcat(input_sysfs_path, input_name, sizeof(input_sysfs_path));
 		strlcat(input_sysfs_path, SYSFS_I2C_SLAVE_PATH, sizeof(input_sysfs_path));
 		input_sysfs_path_len = strlen(input_sysfs_path);
-#ifdef TARGET_8610
-		if (access(input_sysfs_path, F_OK)) {
-			input_sysfs_path_len -= strlen(SYSFS_I2C_SLAVE_PATH);
-			strcpy(&input_sysfs_path[input_sysfs_path_len],
-					SYSFS_INPUT_DEV_PATH);
-			input_sysfs_path_len += strlen(SYSFS_INPUT_DEV_PATH);
-		}
-#endif
 		enable(0, 1);
 	}
 }
