@@ -139,6 +139,11 @@
     -->
     <integer name="config_doubleTapOnHomeBehavior">0</integer>
 
+    <!-- Doze mode -->
+    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
+    <integer name="config_screenBrightnessDoze">5</integer>
+    <bool name="config_dozeAfterScreenOff">true</bool>
+
     <!-- Whether to enable auto provisioning the app for new SIM card on boot.-->
     <!--bool name="config_auto_provision_enable">true</bool-->
 
