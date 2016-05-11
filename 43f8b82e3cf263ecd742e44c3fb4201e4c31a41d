@@ -16,6 +16,29 @@
       "revId": "43f8b82e3cf263ecd742e44c3fb4201e4c31a41d",
       "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_e0bb57c1",
+        "filename": "keylayout/ft5x06_ts.kl",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2936
+      },
+      "writtenOn": "2016-05-11T04:31:26Z",
+      "side": 1,
+      "message": "If you\u0027re making these virtual, do so in a separate commit.",
+      "range": {
+        "startLine": 30,
+        "startChar": 22,
+        "endLine": 30,
+        "endChar": 29
+      },
+      "revId": "43f8b82e3cf263ecd742e44c3fb4201e4c31a41d",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
     }
   ]
 }
