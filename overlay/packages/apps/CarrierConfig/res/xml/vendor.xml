@@ -2,7 +2,6 @@
 <carrier_config_list>
 <carrier_config>
 <boolean name="world_phone_bool" value="true" />
-<boolean name="show_cdma_choices_bool" value="true" />
 <boolean name="show_apn_setting_cdma_bool" value="true" />
 </carrier_config>
 </carrier_config_list>
