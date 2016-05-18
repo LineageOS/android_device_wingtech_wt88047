@@ -45,7 +45,7 @@
 #include "log.h"
 #include "util.h"
 
-#include "init_msm.h"
+#include "init_msm8916.h"
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
@@ -187,15 +187,11 @@ err_ret:
     return ret;
 }
 
-void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
+void init_target_properties()
 {
     char device[PROP_VALUE_MAX];
     char modem_version[IMG_VER_BUF_LEN];
     int rc;
-
-    UNUSED(msm_id);
-    UNUSED(msm_ver);
-    UNUSED(board_type);
 
     rc = property_get("ro.product.name", device);
     if (!rc || (strstr(device, "wt88047") == NULL))
