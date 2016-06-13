@@ -520,6 +520,7 @@ int QCamera2HardwareInterface::recording_enabled(struct camera_device *device)
 void QCamera2HardwareInterface::release_recording_frame(
             struct camera_device *device, const void *opaque)
 {
+    int32_t ret = NO_ERROR;
     ATRACE_CALL();
     QCamera2HardwareInterface *hw =
         reinterpret_cast<QCamera2HardwareInterface *>(device->priv);
@@ -534,11 +535,19 @@ void QCamera2HardwareInterface::release_recording_frame(
     CDBG("%s: E", __func__);
 
     //Close and delete duplicated native handle and FD's
-    QCameraVideoMemory::closeNativeHandle(opaque, hw->mStoreMetaDataInFrame > 0);
+    if ((hw->mVideoMem != NULL)&&(hw->mStoreMetaDataInFrame>0)) {
+        ret = hw->mVideoMem->closeNativeHandle(opaque,TRUE);
+        if (ret != NO_ERROR) {
+            ALOGE("Invalid video metadata");
+            return;
+        }
+    } else {
+        ALOGW("Possible FD leak. Release recording called after stop");
+    }
 
     hw->lockAPI();
     qcamera_api_result_t apiResult;
-    int32_t ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
+    ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
     if (ret == NO_ERROR) {
         hw->waitAPIResult(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, &apiResult);
     }
@@ -1021,7 +1030,8 @@ QCamera2HardwareInterface::QCamera2HardwareInterface(uint32_t cameraId)
       mPreviewFrameSkipValid(0),
       mNumPreviewFaces(-1),
       mAdvancedCaptureConfigured(false),
-      mFPSReconfigure(false)
+      mFPSReconfigure(false),
+      mVideoMem(NULL)
 {
 #ifdef TARGET_TS_MAKEUP
     mMakeUpBuf = NULL;
@@ -1783,7 +1793,9 @@ QCameraMemory *QCamera2HardwareInterface::allocateStreamBuf(
             bCachedMem = mParameters.isVideoBuffersCached();
             CDBG_HIGH("%s: %s video buf allocated ", __func__,
                     (bCachedMem == 0) ? "Uncached" : "Cached" );
-            mem = new QCameraVideoMemory(mGetMemory, bCachedMem);
+            QCameraVideoMemory *videoMemory = new QCameraVideoMemory(mGetMemory, bCachedMem);
+            mem = videoMemory;
+            mVideoMem = videoMemory;
         }
         break;
     case CAM_STREAM_TYPE_DEFAULT:
@@ -2176,6 +2188,7 @@ int QCamera2HardwareInterface::startRecording()
 {
     int32_t rc = NO_ERROR;
     CDBG_HIGH("%s: E", __func__);
+    mVideoMem = NULL;
     if (mParameters.getRecordingHintValue() == false) {
         CDBG_HIGH("%s: start recording when hint is false, stop preview first", __func__);
         stopPreview();
@@ -2257,6 +2270,7 @@ int QCamera2HardwareInterface::stopRecording()
         }
     }
 #endif
+    mVideoMem = NULL;
     CDBG_HIGH("%s: X", __func__);
     return rc;
 }
