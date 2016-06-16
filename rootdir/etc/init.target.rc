@@ -165,10 +165,6 @@ on charger
    chmod 0664 /sys/class/power_supply/battery/current_now
    chmod 0664 /sys/class/power_supply/battery/voltage_now
 
-on post-fs-data
-     mkdir /data/dpm/nsrm 0771 system system
-     chown system system /data/dpm/nsrm
-
 on init
     export LD_SHIM_LIBS /system/vendor/lib/libWVStreamControlAPI_L3.so|libshim_boringssl.so
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
@@ -179,14 +175,6 @@ on property:service.bootanim.exit=1
     swapon_all fstab.qcom
     write /proc/sys/vm/page-cluster 0
     write /proc/sys/vm/swappiness 100
-
-service cnd /system/bin/cnd
-    class late_start
-    socket cnd stream 660 root inet
-
-service dpmd /system/bin/dpmd
-    class late_start
-    socket dpmd stream 660 root system
 
 service imsqmidaemon /system/bin/imsqmidaemon
     class main
