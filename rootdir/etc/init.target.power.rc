@@ -47,6 +47,12 @@ on enable-target-low-power
     write /sys/class/devfreq/1c00000.qcom,kgsl-3d0/governor "msm-adreno-tz"
     write /sys/class/devfreq/qcom,cpubw.30/governor "cpufreq"
 
+    # Update foreground and background cpusets
+    write /dev/cpuset/foreground/cpus 0-3
+    write /dev/cpuset/foreground/boost/cpus 0-3
+    write /dev/cpuset/background/cpus 0
+    write /dev/cpuset/system-background/cpus 0-1
+
 on charger
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
     write /sys/module/msm_thermal/core_control/enabled 0
