@@ -3,8 +3,8 @@ on early-init
 on enable-target-low-power
 
     # Adaptive LMK
-    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
-    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
+    # write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    # write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
 
     write /sys/module/lpm_levels/parameters/sleep_disabled 0
 
@@ -13,8 +13,8 @@ on enable-target-low-power
     write /proc/sys/kernel/sched_ravg_hist_size 3
 
     # HMP Task packing settings for 8916
-    write /proc/sys/kernel/sched_small_task 50
-    write /proc/sys/kernel/sched_mostly_idle_load 50
+    write /proc/sys/kernel/sched_small_task 20
+    write /proc/sys/kernel/sched_mostly_idle_load 30
     write /proc/sys/kernel/sched_mostly_idle_nr_run 3
 
     # disable thermal core_control to update scaling_min_freq
