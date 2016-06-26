@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5faad753_f56729b6",
+        "filename": "board/00-qcom-platform-msm8916.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-06-26T12:25:38Z",
+      "side": 1,
+      "message": "I don\u0027t think this is already defined in the build system based on your ARCH.",
+      "revId": "62df44ccff78de72e8dd92e60487a947b62fc488",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_9506f5cd",
+        "filename": "board/00-qcom-platform-msm8916.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-06-26T12:25:38Z",
+      "side": 1,
+      "message": "Actually, if you define\n\n    DEVICE_PATH :\u003d device/wingtech/wt88047\n\nin BoardConfig.mk, you can just use $(DEVICE_PATH) in all your board/*.mk makefiles",
+      "revId": "62df44ccff78de72e8dd92e60487a947b62fc488",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5faad753_b50bf1d3",
+        "filename": "board/filesystem.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-06-26T12:25:38Z",
+      "side": 1,
+      "message": "Might want to force secure discard due to CDD specifications?",
+      "revId": "62df44ccff78de72e8dd92e60487a947b62fc488",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
