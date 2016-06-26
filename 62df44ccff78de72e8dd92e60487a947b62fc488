@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5faad753_7511f903",
+        "filename": "board/00-qcom-platform-msm8916.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-06-26T12:26:24Z",
+      "side": 1,
+      "message": "Oops, I meant to say that _I think_ this is already defined.",
+      "parentUuid": "5faad753_f56729b6",
+      "revId": "62df44ccff78de72e8dd92e60487a947b62fc488",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5faad753_9506f5cd",
         "filename": "board/00-qcom-platform-msm8916.mk",
         "patchSetId": 1
