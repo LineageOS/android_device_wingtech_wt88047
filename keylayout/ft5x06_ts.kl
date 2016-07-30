@@ -26,6 +26,6 @@
 
 # /sys/board_properties/virtualkeys.ft5x06_ts
 
-key 158    BACK
-key 139    MENU
-key 172    HOME
+key 158    BACK          VIRTUAL
+key 139    APP_SWITCH    VIRTUAL
+key 172    HOME          VIRTUAL
