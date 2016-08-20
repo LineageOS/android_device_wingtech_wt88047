@@ -31,7 +31,7 @@
 #include <stddef.h>
 
 #include <stdbool.h>
-#include <stdint.h>
+#include <inttypes.h>
 
 #include "qmi_client.h"
 #include "qmi_idl_lib.h"
@@ -95,7 +95,7 @@ typedef struct
 }locClientEventIndTableStructT;
 
 
-static locClientEventIndTableStructT locClientEventIndTable[]= {
+static const locClientEventIndTableStructT locClientEventIndTable[]= {
 
   // position report ind
   { QMI_LOC_EVENT_POSITION_REPORT_IND_V02,
@@ -253,7 +253,20 @@ static locClientEventIndTableStructT locClientEventIndTable[]= {
   // Batching Status event
   { QMI_LOC_EVENT_BATCHING_STATUS_IND_V02,
     sizeof(qmiLocEventBatchingStatusIndMsgT_v02),
-    QMI_LOC_EVENT_MASK_BATCHING_STATUS_V02}
+    QMI_LOC_EVENT_MASK_BATCHING_STATUS_V02},
+
+  // TDP download
+  { QMI_LOC_EVENT_GDT_DOWNLOAD_BEGIN_REQ_IND_V02,
+    sizeof(qmiLocEventGdtDownloadBeginReqIndMsgT_v02),
+    0},
+
+  { QMI_LOC_EVENT_GDT_RECEIVE_DONE_IND_V02,
+    sizeof(qmiLocEventGdtReceiveDoneIndMsgT_v02),
+    0},
+
+  { QMI_LOC_EVENT_GDT_DOWNLOAD_END_REQ_IND_V02,
+    sizeof(qmiLocEventGdtDownloadEndReqIndMsgT_v02),
+    0}
 };
 
 /* table to relate the respInd Id with its size */
@@ -263,7 +276,7 @@ typedef struct
   size_t   respIndSize;
 }locClientRespIndTableStructT;
 
-static locClientRespIndTableStructT locClientRespIndTable[]= {
+static const locClientRespIndTableStructT locClientRespIndTable[]= {
 
   // get service revision ind
   { QMI_LOC_GET_SERVICE_REVISION_IND_V02,
@@ -581,7 +594,25 @@ static locClientRespIndTableStructT locClientRespIndTable[]= {
      sizeof(qmiLocInjectTimeZoneInfoIndMsgT_v02)},
 
    { QMI_LOC_QUERY_AON_CONFIG_IND_V02,
-     sizeof(qmiLocQueryAonConfigIndMsgT_v02)}
+     sizeof(qmiLocQueryAonConfigIndMsgT_v02)},
+
+    // for GTP
+   { QMI_LOC_GTP_AP_STATUS_IND_V02,
+     sizeof(qmiLocGtpApStatusIndMsgT_v02) },
+
+    // for GDT
+   { QMI_LOC_GDT_DOWNLOAD_BEGIN_STATUS_IND_V02,
+     sizeof(qmiLocGdtDownloadBeginStatusIndMsgT_v02) },
+
+   { QMI_LOC_GDT_DOWNLOAD_READY_STATUS_IND_V02,
+    sizeof(qmiLocGdtDownloadReadyStatusIndMsgT_v02) },
+
+   { QMI_LOC_GDT_RECEIVE_DONE_STATUS_IND_V02,
+    sizeof(qmiLocGdtReceiveDoneStatusIndMsgT_v02) },
+
+   { QMI_LOC_GDT_DOWNLOAD_END_STATUS_IND_V02,
+     sizeof(qmiLocGdtDownloadEndStatusIndMsgT_v02) }
+
 };
 
 
@@ -663,7 +694,7 @@ static bool locClientGetSizeAndTypeByIndId (uint32_t indId, size_t *pIndSize,
         QMI_LOC service.
 */
 static void checkQmiMsgsSupported(
-  uint32_t*                reqIdArray,
+  const uint32_t*          reqIdArray,
   int                      reqIdArrayLength,
   qmiLocGetSupportMsgT_v02 *pResponse,
   uint64_t*                supportedMsg)
@@ -1448,6 +1479,36 @@ static bool validateRequest(
         break;
     }
 
+    case QMI_LOC_GTP_AP_STATUS_REQ_V02:
+    {
+        *pOutLen = sizeof(qmiLocGtpApStatusReqMsgT_v02);
+        break;
+    }
+
+    case QMI_LOC_GDT_DOWNLOAD_BEGIN_STATUS_REQ_V02:
+    {
+        *pOutLen = sizeof(qmiLocGdtDownloadBeginStatusReqMsgT_v02);
+        break;
+    }
+
+    case QMI_LOC_GDT_DOWNLOAD_READY_STATUS_REQ_V02:
+    {
+        *pOutLen = sizeof(qmiLocGdtDownloadReadyStatusReqMsgT_v02);
+        break;
+    }
+
+    case QMI_LOC_GDT_RECEIVE_DONE_STATUS_REQ_V02:
+    {
+        *pOutLen = sizeof(qmiLocGdtReceiveDoneStatusReqMsgT_v02);
+        break;
+    }
+
+    case QMI_LOC_GDT_DOWNLOAD_END_STATUS_REQ_V02:
+    {
+        *pOutLen = sizeof(qmiLocGdtDownloadEndStatusReqMsgT_v02);
+        break;
+    }
+
     // ALL requests with no payload
     case QMI_LOC_GET_SERVICE_REVISION_REQ_V02:
     case QMI_LOC_GET_FIX_CRITERIA_REQ_V02:
@@ -2034,9 +2095,16 @@ locClientStatusEnumType locClientSupportMsgCheck(
   */
   static uint64_t supportedMsgChecked = 0;
 
+  // Validate input arguments
+  if(msgArray == NULL || supportedMsg == NULL) {
+
+    LOC_LOGE("%s:%d]: Input argument/s NULL", __func__, __LINE__);
+    return eLOC_CLIENT_FAILURE_INVALID_PARAMETER;
+  }
+
   if (isCheckedAlready) {
     // already checked modem
-    LOC_LOGV("%s:%d]: Already checked. The supportedMsgChecked is %lld\n",
+    LOC_LOGV("%s:%d]: Already checked. The supportedMsgChecked is %" PRId64 "\n",
              __func__, __LINE__, supportedMsgChecked);
     *supportedMsg = supportedMsgChecked;
     return eLOC_CLIENT_SUCCESS;
@@ -2096,7 +2164,7 @@ locClientStatusEnumType locClientSupportMsgCheck(
     // check every message listed in msgArray supported by modem or not
     checkQmiMsgsSupported(msgArray, msgArrayLength, &resp, &supportedMsgChecked);
 
-    LOC_LOGV("%s:%d]: supportedMsgChecked is %lld\n",
+    LOC_LOGV("%s:%d]: supportedMsgChecked is %" PRId64 "\n",
              __func__, __LINE__, supportedMsgChecked);
     *supportedMsg = supportedMsgChecked;
     isCheckedAlready = true;
@@ -2120,6 +2188,14 @@ locClientStatusEnumType locClientSupportMsgCheck(
 bool locClientGetSizeByRespIndId(uint32_t respIndId, size_t *pRespIndSize)
 {
   size_t idx = 0, respIndTableSize = 0;
+
+  // Validate input arguments
+  if(pRespIndSize == NULL)
+  {
+    LOC_LOGE("%s:%d]: size argument NULL !");
+    return false;
+  }
+
   respIndTableSize = (sizeof(locClientRespIndTable)/sizeof(locClientRespIndTableStructT));
   for(idx=0; idx<respIndTableSize; idx++ )
   {
@@ -2149,6 +2225,13 @@ bool locClientGetSizeByRespIndId(uint32_t respIndId, size_t *pRespIndSize)
 bool locClientGetSizeByEventIndId(uint32_t eventIndId, size_t *pEventIndSize)
 {
   size_t idx = 0, eventIndTableSize = 0;
+
+  // Validate input arguments
+  if(pEventIndSize == NULL)
+  {
+    LOC_LOGE("%s:%d]: size argument NULL !");
+    return false;
+  }
 
   // look in the event table
   eventIndTableSize =
