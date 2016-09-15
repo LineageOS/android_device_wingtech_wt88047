@@ -63,15 +63,35 @@ static char board_id[32];
 
 static void import_kernel_nv(const std::string& key, const std::string& value, bool for_emulator) {
 
-    char board_value[32];
-    const char s[2] = ":";
-    char *final_value;
+    char in_str[32], *board_value, *ptr;
+    int count = 0;
 
-    if (key == "board_id") {
-	strlcpy(board_value, value.c_str(), sizeof(board_value));
-	final_value = strtok(board_value, s);
-	strlcpy(board_id, final_value, sizeof(board_id));
+    // board_id=S88047C1:board_vol=1047620
+    // The above string can be broken down into three pieces
+    // key should contain "board_id" and value contains "S88047C1:board_vol"
+
+    if (strcmp(key.c_str(), "board_id")) {
+	/* not board_id */
+    	return;
     }
+
+    strncpy(in_str, value.c_str(), sizeof(in_str));
+    if (in_str[0] != '\0') {
+	ptr = in_str;
+	// delimiter or eol found
+	do {
+	    if (*ptr == ':') break;
+	    if (*ptr == '\0') break;
+	    ++count;
+	    ++ptr;
+	} while (ptr);
+
+	strncpy(board_id, value.c_str(), count);
+	board_id[count]='\0';
+	ERROR("\n **** READ BOARDID=%s **** \n",board_id);
+    }
+
+    return;
 }
 
 /* Boyer-Moore string search implementation from Wikipedia */
