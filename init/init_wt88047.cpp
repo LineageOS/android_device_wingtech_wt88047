@@ -42,11 +42,8 @@
 
 #include "property_service.h"
 #include "vendor_init.h"
-#include "property_service.h"
 #include "log.h"
 #include "util.h"
-
-#include "init_msm8916.h"
 
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
@@ -64,6 +61,25 @@ static char board_id[32];
 static void import_kernel_nv(const std::string& key, const std::string& value, bool for_emulator) {
 
     char board_value[32];
+
+    ERROR("\n **** PREMACA>   **** Key: %s Value:%s ****\n", key.c_str(),
+    value.c_str());
+
+    strlcpy(board_value, value.c_str(), sizeof(board_value));
+    if (board_value[0] != '\0') {
+        char *stripped_value = strchr(board_value, '=');
+        if (stripped_value != NULL) {
+            *stripped_value++ = 0;
+            if (!strcmp(board_value,"board_id"))
+            {
+                const char s[2] = ":";
+                stripped_value = strtok(stripped_value, s);
+                strlcpy(board_id, stripped_value, sizeof(board_id));
+            }
+        }
+    }
+
+/*
     const char s[2] = ":";
     char *final_value;
 
@@ -72,6 +88,7 @@ static void import_kernel_nv(const std::string& key, const std::string& value, b
 	final_value = strtok(board_value, s);
 	strlcpy(board_id, final_value, sizeof(board_id));
     }
+*/
 }
 
 /* Boyer-Moore string search implementation from Wikipedia */
@@ -185,7 +202,7 @@ err_ret:
     return ret;
 }
 
-void init_target_properties()
+void vendor_load_properties()
 {
     char modem_version[IMG_VER_BUF_LEN];
     int rc;
