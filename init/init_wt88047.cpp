@@ -60,35 +60,35 @@ static char board_id[32];
 
 static void import_kernel_nv(const std::string& key, const std::string& value, bool for_emulator) {
 
-    char board_value[32];
+    char in_str[32], *board_value, *ptr;
+    int count = 0;
 
-    ERROR("\n **** PREMACA>   **** Key: %s Value:%s ****\n", key.c_str(),
-    value.c_str());
+    // board_id=S88047C1:board_vol=1047620
+    // The above string can be broken down into three pieces
+    // key should contain "board_id" and value contains "S88047C1:board_vol"
 
-    strlcpy(board_value, value.c_str(), sizeof(board_value));
-    if (board_value[0] != '\0') {
-        char *stripped_value = strchr(board_value, '=');
-        if (stripped_value != NULL) {
-            *stripped_value++ = 0;
-            if (!strcmp(board_value,"board_id"))
-            {
-                const char s[2] = ":";
-                stripped_value = strtok(stripped_value, s);
-                strlcpy(board_id, stripped_value, sizeof(board_id));
-            }
-        }
+    if (strcmp(key.c_str(), "board_id")) {
+	/* not board_id */
+    	return;
     }
 
-/*
-    const char s[2] = ":";
-    char *final_value;
+    strncpy(in_str, value.c_str(), sizeof(in_str));
+    if (in_str[0] != '\0') {
+	ptr = in_str;
+	// delimiter or eol found
+	do {
+	    if (*ptr == ':') break;
+	    if (*ptr == '\0') break;
+	    ++count;
+	    ++ptr;
+	} while (ptr);
 
-    if (key == "board_id") {
-	strlcpy(board_value, value.c_str(), sizeof(board_value));
-	final_value = strtok(board_value, s);
-	strlcpy(board_id, final_value, sizeof(board_id));
+	strncpy(board_id, value.c_str(), count);
+	board_id[count]='\0';
+	ERROR("\n **** READ BOARDID=%s **** \n",board_id);
     }
-*/
+
+    return;
 }
 
 /* Boyer-Moore string search implementation from Wikipedia */
