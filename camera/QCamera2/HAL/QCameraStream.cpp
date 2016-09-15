@@ -1120,6 +1120,14 @@ int32_t QCameraStream::releaseBuffs()
 {
     int rc = NO_ERROR;
 
+    if (mBufAllocPid != 0) {
+        cond_signal(true);
+        CDBG_HIGH("%s: wait for buf allocation thread dead", __func__);
+        pthread_join(mBufAllocPid, NULL);
+        mBufAllocPid = 0;
+        CDBG_HIGH("%s: return from buf allocation thread", __func__);
+    }
+
     if (NULL != mBufDefs) {
         for (uint32_t i = 0; i < mNumBufs; i++) {
             rc = unmapBuf(CAM_MAPPING_BUF_TYPE_STREAM_BUF, i, -1);
