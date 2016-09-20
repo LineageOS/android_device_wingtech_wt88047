@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-     Copyright (C) 2015 The CyanogenMod Project
+<!-- Copyright (C) 2014 The CyanogenMod Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,15 +13,10 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
 <resources>
+    <!-- Flag indicating if the speed up audio on mt call code should be executed -->
 
-    <!-- Performance profiles -->
-    <string name="config_perf_profile_prop">powerhal</string>
-    <string name="config_perf_profile_default_entry">1</string>
-
-    <!-- Default wi-fi hotspot ssid -->
-    <string name="config_wifiHotSpotSsid" translatable="false">Redmi 2</string>
-    <!-- Default wi-fi direct name -->
-    <string name="config_wifiDirectName" translatable="false">Redmi 2</string>
-
+    <!-- Flag indicating if the tty is enabled -->
+    <bool name="tty_enabled">true</bool>
 </resources>
