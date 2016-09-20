@@ -1,3 +1,11 @@
+/persist/.genmac                                u:object_r:wifi_data_file:s0
+/persist/.bt_nv.bin                             u:object_r:bluetooth_data_file:s0
+
+/system/etc/init\.qcom\.bt\.sh                  u:object_r:bluetooth_loader_exec:s0
+
+/dev/smd3                                       u:object_r:hci_attach_dev:s0
+/dev/mmc3416x                                   u:object_r:sensors_device:s0
+
 /system/bin/memcheck u:object_r:memcheck_exec:s0
 /data/cam_socket[12] u:object_r:camera_socket:s0
 /dev/block/bootdevice/by-name/config u:object_r:frp_block_device:s0
