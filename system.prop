@@ -1,0 +1,90 @@
+# ActivityManager
+ro.config.max_starting_bg=8
+ro.sys.fw.use_trim_settings=true
+
+# Audio
+av.offload.enable=true
+av.streaming.offload.enable=true
+audio.offload.buffer.size.kb=64
+audio.offload.gapless.enabled=true
+audio.offload.min.duration.secs=30
+audio.offload.pcm.16bit.enable=false
+audio.offload.pcm.24bit.enable=true
+use.voice.path.for.pcm.voip=true
+vidc.enc.narrow.searchrange=1
+
+# Bluetooth
+ro.qualcomm.bt.hci_transport=smd
+
+# dex2oat
+dalvik.vm.dex2oat-filter=interpret-only
+dalvik.vm.image-dex2oat-filter=speed
+
+# Display
+debug.composition.type=c2d
+debug.sf.gpu_comp_tiling=1
+debug.mdpcomp.idletime=600
+persist.hwc.mdpcomp.enable=true
+persist.hwc.ptor.enable=true
+ro.opengles.version=196608
+debug.enable.sglscale=1
+
+# FRP
+ro.frp.pst=/dev/block/bootdevice/by-name/config
+
+# GPS
+persist.gps.qc_nlp_in_use=0
+ro.gps.agps_provider=1
+ro.qc.sdk.izat.premium.enabled=0
+ro.qc.sdk.izat.service_mask=0x0
+
+# Media
+mm.enable.smoothstreaming=true
+mm.disable.sec_smoothstreaming=true
+media.aac_51_output_enabled=true
+drm.service.enabled=1
+
+# Override minimum CPU frequency
+ro.min_freq_0=400000
+
+# USB ID
+ro.usb.vid=2717
+ro.usb.id.midi=90BA
+ro.usb.id.midi_adb=90BB
+ro.usb.id.mtp=ff60
+ro.usb.id.mtp_adb=ff68
+ro.usb.id.ptp=ff10
+ro.usb.id.ptp_adb=ff18
+ro.usb.id.ums=ff20
+ro.usb.id.ums_adb=ff28
+
+# NITZ
+persist.rild.nitz_plmn=
+persist.rild.nitz_long_ons_0=
+persist.rild.nitz_long_ons_1=
+persist.rild.nitz_long_ons_2=
+persist.rild.nitz_long_ons_3=
+persist.rild.nitz_short_ons_0=
+persist.rild.nitz_short_ons_1=
+persist.rild.nitz_short_ons_2=
+persist.rild.nitz_short_ons_3=
+
+# perf
+ro.core_ctl_min_cpu=2
+ro.core_ctl_max_cpu=4
+ro.min_freq_0=400000
+ro.vendor.extension_library=libqti-perfd-client.so
+
+# Radio
+persist.data.qmi.adb_logmask=0
+persist.radio.apm_sim_not_pwdn=1
+rild.libargs=-d /dev/smd0
+ro.telephony.call_ring.multiple=false
+ro.use_data_netmgrd=true
+
+# Time
+persist.timed.enable=true
+
+# WiFi
+ro.disableWifiApFirmwareReload=true
+wifi.interface=wlan0
