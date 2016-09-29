@@ -286,6 +286,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.target=dpm1 \
     persist.data.qmi.adb_logmask=0
 
+# Telephony-ext
+PRODUCT_PACKAGES += telephony-ext ims-ext-common
+PRODUCT_BOOT_JARS += telephony-ext
+
 # RIL
 PRODUCT_PACKAGES += \
     librmnetctl \
