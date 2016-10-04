@@ -32,7 +32,7 @@
 #include <cutils/log.h>
 #include <stdbool.h>
 
-#include "property_service.h"
+#include <cutils/properties.h>
 
 int main(int argc, char* argv[])
 {

@@ -137,6 +137,9 @@ const char QCameraParameters::KEY_QC_LONGSHOT_SUPPORTED[] = "longshot-supported"
 const char QCameraParameters::KEY_QC_ZSL_HDR_SUPPORTED[] = "zsl-hdr-supported";
 const char QCameraParameters::KEY_QC_AUTO_HDR_SUPPORTED[] = "auto-hdr-supported";
 
+const char QCameraParameters::WHITE_BALANCE_MANUAL_CCT[] = "manual-cct";
+const char QCameraParameters::FOCUS_MODE_MANUAL_POSITION[] = "manual";
+
 // Values for effect settings.
 const char QCameraParameters::EFFECT_EMBOSS[] = "emboss";
 const char QCameraParameters::EFFECT_SKETCH[] = "sketch";

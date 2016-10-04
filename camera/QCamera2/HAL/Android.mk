@@ -18,6 +18,8 @@ LOCAL_SRC_FILES := \
         wrapper/QualcommCamera.cpp
 
 LOCAL_CFLAGS = -Wall -Wextra -Werror -DDEFAULT_DENOISE_MODE_ON
+LOCAL_CFLAGS += -DHAS_MULTIMEDIA_HINTS
+LOCAL_CFLAGS += -DUSE_MEDIA_EXTENSIONS
 
 LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/../stack/common \
@@ -30,6 +32,13 @@ LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/../util \
         $(LOCAL_PATH)/wrapper
 
+LOCAL_C_INCLUDES += system/media/camera/include
+LOCAL_C_INCLUDES += \
+        $(TARGET_OUT_HEADERS)/qcom/display
+LOCAL_C_INCLUDES += \
+        $(call project-path-for,qcom-display)/libqservice
+LOCAL_C_INCLUDES += $(call project-path-for,qcom-display)/libgralloc
+
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include/media
 LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
@@ -39,6 +48,7 @@ LOCAL_SHARED_LIBRARIES += libmmcamera_interface libmmjpeg_interface
 
 LOCAL_MODULE_PATH := $(TARGET_OUT_SHARED_LIBRARIES)/hw
 LOCAL_MODULE := camera.$(TARGET_BOARD_PLATFORM)
+LOCAL_CLANG := false
 LOCAL_32_BIT_ONLY := true
 LOCAL_MODULE_TAGS := optional
 
