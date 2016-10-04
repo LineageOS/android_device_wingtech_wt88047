@@ -7,5 +7,6 @@ include $(CLEAR_VARS)
 LOCAL_SRC_FILES := healthd_board_wt88047.cpp
 LOCAL_MODULE := libhealthd.wt88047
 LOCAL_C_INCLUDES := system/core/healthd
+LOCAL_C_INCLUDES += system/core/healthd/include/healthd
 LOCAL_CFLAGS := -Werror
 include $(BUILD_STATIC_LIBRARY)

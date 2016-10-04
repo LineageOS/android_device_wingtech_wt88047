@@ -40,6 +40,7 @@
 #include <string.h>
 #include <unistd.h>
 
+#include "property_service.h"
 #include "vendor_init.h"
 #include "property_service.h"
 #include "log.h"
@@ -60,19 +61,16 @@
 
 static char board_id[32];
 
-static void import_kernel_nv(char *name, int in_qemu)
-{
-    if (*name != '\0') {
-        char *value = strchr(name, '=');
-        if (value != NULL) {
-            *value++ = 0;
-            if (!strcmp(name,"board_id"))
-            {
-                const char s[2] = ":";
-                value = strtok(value, s);
-                strlcpy(board_id, value, sizeof(board_id));
-            }
-        }
+static void import_kernel_nv(const std::string& key, const std::string& value, bool for_emulator) {
+
+    char board_value[32];
+    const char s[2] = ":";
+    char *final_value;
+
+    if (key == "board_id") {
+	strlcpy(board_value, value.c_str(), sizeof(board_value));
+	final_value = strtok(board_value, s);
+	strlcpy(board_id, final_value, sizeof(board_id));
     }
 }
 
@@ -189,12 +187,11 @@ err_ret:
 
 void init_target_properties()
 {
-    char device[PROP_VALUE_MAX];
     char modem_version[IMG_VER_BUF_LEN];
     int rc;
 
-    rc = property_get("ro.product.name", device);
-    if (!rc || (strstr(device, "wt88047") == NULL))
+    std::string product = property_get("ro.product.name");
+    if ((strstr(product.c_str(), "wt88047") == NULL))
         return;
 
     import_kernel_cmdline(0, import_kernel_nv);
