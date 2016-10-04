@@ -42,7 +42,8 @@ LOCAL_SRC_FILES := \
     src/mm_jpegdec.c
 
 LOCAL_MODULE           := libmmjpeg_interface
-LOCAL_32_BIT_ONLY      := true
+LOCAL_CLANG := false
+LOCAL_32_BIT_ONLY := true
 LOCAL_PRELINK_MODULE   := false
 LOCAL_SHARED_LIBRARIES := libdl libcutils liblog libqomx_core
 LOCAL_MODULE_TAGS := optional
