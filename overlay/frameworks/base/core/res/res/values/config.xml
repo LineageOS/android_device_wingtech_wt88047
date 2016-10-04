@@ -154,8 +154,8 @@
          memory over what the kernel keeps by default.  -1 keeps the default. -->
     <integer name="config_extraFreeKbytesAbsolute">61440</integer>
 
-    <!--  Disable Modem Profiles for CDMA -->
-    <bool name="config_fetch_apn_from_omh_card">false</bool>
+    <!--  Disable Modem Profiles for CDMA
+    <bool name="config_fetch_apn_from_omh_card">false</bool> -->
 
     <!-- Flag specifying whether VoLTE is available on device -->
     <bool name="config_device_volte_available">true</bool>
