@@ -15,6 +15,7 @@ vidc.enc.narrow.searchrange=1
 
 # Bluetooth
 ro.qualcomm.bt.hci_transport=smd
+qcom.bluetooth.soc=smd
 
 # dex2oat
 dalvik.vm.dex2oat-filter=interpret-only
