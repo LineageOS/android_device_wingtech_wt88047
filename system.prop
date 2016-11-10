@@ -17,6 +17,10 @@ vidc.enc.narrow.searchrange=1
 ro.qualcomm.bt.hci_transport=smd
 qcom.bluetooth.soc=smd
 
+# Camera
+media.stagefright.legacyencoder=true
+media.stagefright.less-secure=true
+
 # dex2oat
 dalvik.vm.dex2oat-filter=interpret-only
 dalvik.vm.image-dex2oat-filter=speed
