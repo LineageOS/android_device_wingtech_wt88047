@@ -1,1 +1,2 @@
 allow mpdecision proc:file write;
+allow mpdecision system_data_file:sock_file write;
