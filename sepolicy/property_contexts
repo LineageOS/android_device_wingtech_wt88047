@@ -1,2 +1,3 @@
-qualcomm.bt.                     u:object_r:bluetooth_prop:s0
-nosecure.akm.                     u:object_r:compass_prop:s0
+# commented, duplicate items
+# qualcomm.bt.                     u:object_r:bluetooth_prop:s0
+# nosecure.akm.                     u:object_r:compass_prop:s0
