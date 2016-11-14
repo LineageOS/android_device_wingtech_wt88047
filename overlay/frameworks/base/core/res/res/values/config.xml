@@ -362,6 +362,12 @@
     <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveNotificationLed">true</bool>
 
+    <!-- Enable doze mode -->
+    <bool name="config_dozeAfterScreenOff">true</bool>
+    <bool name="config_powerDecoupleInteractiveModeFromDisplay">true</bool>
+    <integer name="config_screenBrightnessDoze">17</integer>
+    <string name="config_dozeComponent">com.android.systemui/com.android.systemui.doze.DozeService</string>
+
     <!-- Does the notification LED support multiple colors?
                   Used to decide if the user can change the colors -->
     <bool name="config_multiColorNotificationLed">true</bool>
