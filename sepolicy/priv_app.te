@@ -1,0 +1,3 @@
+allow priv_app cache_private_backup_file:dir getattr;
+allow priv_app configfs:dir { read open };
+allow priv_app mnt_media_rw_file:dir getattr;
