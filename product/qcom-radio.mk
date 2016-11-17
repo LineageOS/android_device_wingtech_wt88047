@@ -11,4 +11,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.telephony.default_network=9,1 \
     ril.subscription.types=RUIM \
     persist.radio.rat_on=combine \
-    ro.ril.multi_rat_capable=true
+    ro.ril.multi_rat_capable=true \
+    persist.data.target=dpm1 \
+    persist.data.qmi.adb_logmask=0
+
+# Symbols
+PRODUCT_PACKAGES += \
+    libshim_parcel
