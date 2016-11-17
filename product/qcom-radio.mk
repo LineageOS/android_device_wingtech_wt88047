@@ -12,3 +12,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ril.subscription.types=RUIM \
     persist.radio.rat_on=combine \
     ro.ril.multi_rat_capable=true
+
+# CNE and DPM symbol
+PRODUCT_PACKAGES += \
+    libshim_parcel
