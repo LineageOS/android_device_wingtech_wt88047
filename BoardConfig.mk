@@ -172,10 +172,6 @@ TARGET_POWERHAL_VARIANT := qcom
 
 # Qualcomm support
 BOARD_USES_QC_TIME_SERVICES := true
-ifneq ($(QCPATH),)
-BOARD_USES_QCNE := true
-TARGET_LDPRELOAD := libNimsWrap.so
-endif
 BOARD_USES_QCOM_HARDWARE := true
 
 # Recovery

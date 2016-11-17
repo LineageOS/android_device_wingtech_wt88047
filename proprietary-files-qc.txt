@@ -112,40 +112,6 @@ vendor/lib/libmmcamera_ov2680_skuhf.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
 vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
 
-# CNE
-bin/cnd
-etc/cne/andsfCne.xml
-etc/cne/SwimConfig.xml
-etc/permissions/cneapiclient.xml
-etc/permissions/com.quicinc.cne.xml
--framework/cneapiclient.jar
--framework/com.quicinc.cne.jar
--priv-app/CNEService/CNEService.apk
-vendor/lib/libcne.so
-vendor/lib/libcneapiclient.so
-vendor/lib/libcneqmiutils.so
-vendor/lib/libmasc.so
-vendor/lib/libNimsWrap.so
-vendor/lib/libwqe.so
-vendor/lib/libxml.so
-
-
-# DPM
-bin/dpmd
-etc/dpm/dpm.conf
-etc/dpm/nsrm/NsrmConfiguration.xml
-etc/permissions/dpmapi.xml
--framework/com.qti.dpmframework.jar
--framework/dpmapi.jar
-vendor/lib/libcneconn.so
-vendor/lib/libdpmctmgr.so
-vendor/lib/libdpmfdmgr.so
-vendor/lib/libdpmframework.so
-vendor/lib/libdpmnsrm.so
-vendor/lib/libdpmtcm.so
-vendor/lib/libqmi_client_helper.so
-vendor/lib/libvendorconn.so
-
 # DRM
 bin/qseecomd
 lib/libdrmdecrypt.so
