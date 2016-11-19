@@ -236,8 +236,6 @@ void vendor_load_properties()
         property_set("ro.product.name", "2014818");
         property_set("ro.telephony.default_network", "9,1");
         property_set("telephony.lteOnCdmaDevice", "0");
-        property_set("persist.dbg.volte_avail_ovr", "1");
-        property_set("persist.dbg.vt_avail_ovr", "1");
     } else if (strcmp(board_id, "S88047B2") == 0) {
         property_set("ro.build.product", "HM2014821");
         property_set("ro.product.device", "HM2014821");
