@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_0a77c73c",
+        "filename": "BoardConfig.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "This is not a TWRP repository.",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 17,
+        "endChar": 25
+      },
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_ea736b4c",
+        "filename": "BoardConfig.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "no",
+      "range": {
+        "startLine": 61,
+        "startChar": 206,
+        "endLine": 61,
+        "endChar": 236
+      },
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_4a8edf27",
+        "filename": "BoardConfig.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "There\u0027s another way to do it.",
+      "range": {
+        "startLine": 149,
+        "startChar": 0,
+        "endLine": 149,
+        "endChar": 43
+      },
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_2a93a351",
+        "filename": "BoardConfig.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "You could just remove it.",
+      "range": {
+        "startLine": 171,
+        "startChar": 0,
+        "endLine": 171,
+        "endChar": 21
+      },
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_eaa88b78",
+        "filename": "overlay/frameworks/base/core/res/res/values/config.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "no",
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_4ab7ffd9",
+        "filename": "overlay/frameworks/base/core/res/res/values/config.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 326,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "You could likely just pick a commit that introduced this.",
+      "range": {
+        "startLine": 324,
+        "startChar": 3,
+        "endLine": 326,
+        "endChar": 7
+      },
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_8a98f76a",
+        "filename": "system.prop",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 1,
+      "message": "no",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 15
+      },
+      "revId": "439f7701552da9c27c058c117ea21b62b9f35a8a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}

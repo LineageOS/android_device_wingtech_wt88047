@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_2abc43ba",
+        "filename": "configs/media_codecs.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 0,
+      "message": "We have ffmpeg in 14.1",
+      "range": {
+        "startLine": 316,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 46
+      },
+      "revId": "e1de15e395477ed274b3fb313f568a0514f7e152",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_caa14f98",
+        "filename": "overlay/frameworks/base/core/res/res/values/config.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 0,
+      "message": "no",
+      "revId": "e1de15e395477ed274b3fb313f568a0514f7e152",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_aa9e9351",
+        "filename": "overlay/frameworks/base/core/res/res/values/config.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 0,
+      "message": "no",
+      "revId": "e1de15e395477ed274b3fb313f568a0514f7e152",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_6a9d9b58",
+        "filename": "rootdir/etc/fstab.qcom",
+        "patchSetId": 2
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 10067
+      },
+      "writtenOn": "2016-11-24T19:25:56Z",
+      "side": 0,
+      "message": "no",
+      "range": {
+        "startLine": 15,
+        "startChar": 122,
+        "endLine": 15,
+        "endChar": 158
+      },
+      "revId": "e1de15e395477ed274b3fb313f568a0514f7e152",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
