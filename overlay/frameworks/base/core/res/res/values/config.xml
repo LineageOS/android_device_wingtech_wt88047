@@ -128,7 +128,7 @@
          This needs to match the constants in
          services/core/java/com/android/server/policy/PhoneWindowManager.java
     -->
-    <integer name="config_longPressOnAppSwitchBehavior">8</integer>
+    <integer name="config_longPressOnAppSwitchBehavior">1</integer>
 
     <!-- Control the behavior when the user double-taps the home button.
             0 - Nothing
