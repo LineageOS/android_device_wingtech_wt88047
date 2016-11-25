@@ -197,6 +197,8 @@ public:
     static const char KEY_QC_MIN_WB_CCT[];
     static const char KEY_QC_MAX_WB_CCT[];
     static const char KEY_QC_LONG_SHOT[];
+    static const char WHITE_BALANCE_MANUAL_CCT[];
+    static const char FOCUS_MODE_MANUAL_POSITION[];
 
     static const char KEY_QC_MANUAL_FOCUS_POSITION[];
     static const char KEY_QC_MANUAL_FOCUS_POS_TYPE[];
