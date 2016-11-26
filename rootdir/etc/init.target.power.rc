@@ -71,10 +71,5 @@ on boot
 on property:init.svc.recovery=running
     trigger enable-target-low-power
 
-service mpdecision /system/bin/mpdecision --avg_comp
-   class late_start
-   user root
-   group system
-
 on property:dev.bootcomplete=1
     setprop sys.io.scheduler bfq
