@@ -25,8 +25,6 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-import init.target.power.rc
-
 on boot
     # Torch
     chown system camera /sys/class/leds/torch-light/brightness
