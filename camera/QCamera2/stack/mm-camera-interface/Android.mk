@@ -4,6 +4,11 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+LOCAL_CLANG_CFLAGS += \
+        -Wno-error=memsize-comparison \
+        -Wno-error=missing-field-initializers \
+        -Wno-error=pointer-bool-conversion
+
 MM_CAM_FILES := \
         src/mm_camera_interface.c \
         src/mm_camera.c \
