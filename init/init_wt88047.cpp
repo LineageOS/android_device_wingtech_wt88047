@@ -189,16 +189,15 @@ err_ret:
 
 void init_target_properties()
 {
-    char device[PROP_VALUE_MAX];
     char modem_version[IMG_VER_BUF_LEN];
     int rc;
 
-    rc = property_get("ro.product.name", device);
-    if (!rc || (strstr(device, "wt88047") == NULL))
+    std::string product = property_get("ro.product.name");
+    if ((strstr(product.c_str(), "wt88047") == NULL))
         return;
 
     import_kernel_cmdline(0, import_kernel_nv);
-    property_set("ro.product.board", board_id);
+    // property_set("ro.product.board", board_id);
     ERROR("Detected board ID=%s\n", board_id);
 
     if (strcmp(board_id, "S88047E1") == 0) {
