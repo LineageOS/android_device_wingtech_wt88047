@@ -25,32 +25,32 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <stdlib.h>
 #include <sys/sysinfo.h>
 
+#include "vendor_init.h"
 #include "property_service.h"
-
-char const *model;
-char const *buildproduct;
-
-void check_device()
-{
-    struct sysinfo sys;
-
-    sysinfo(&sys);
-
-    if (sys.totalram > 1024ull * 1024) {
-        model = "Redmi 2 Pro / Prime"
-        buildproduct = "wt88047"
-    } else {
-        model = "Redmi 2"
-        buildproduct = "wt88047"
-    }
-}
+#include "log.h"
+#include "util.h"
 
 void vendor_load_properties()
 {
-    check_device();
+    std::string platform = property_get("ro.board.platform");
+    if (platform != ANDROID_TARGET)
+        return;
+  
+    struct sysinfo sys;
+  
+    sysinfo(&sys);
 
-    property_set("ro.product.model", model);
-    property_set("ro.build.product", buildproduct);
+    if (sys.totalram > 1024ull * 1024) {
+        property_set("ro.product.model", "Redmi 2 Pro / Prime");
+    } else {
+        property_set("ro.product.model", "Redmi 2");
+    }
+
+    property_set("ro.product.device", "wt88047");
+    property_set("ro.build.product", "wt88047");
+    property_set("ro.build.description", "wt88047-user 5.1.1 LMY47V 6.1.28 release-keys");
+    property_set("ro.build.fingerprint", "Xiaomi/wt88047/wt88047:5.1.1/LMY47V/6.1.28:user/release-keys");
 }
