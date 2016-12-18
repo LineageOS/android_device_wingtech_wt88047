@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_beca026b",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-18T00:46:52Z",
+      "side": 1,
+      "message": "Why? I did not add c++ for a reason.",
+      "range": {
+        "startLine": 36,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 15
+      },
+      "revId": "fd302ada2a7faab60a02ec8a4117561bfd2ba328",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_1eca166c",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-18T00:46:52Z",
+      "side": 1,
+      "message": "Why set here? Isn\u0027t my script more elegant?",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 47,
+        "endChar": 64
+      },
+      "revId": "fd302ada2a7faab60a02ec8a4117561bfd2ba328",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_fec47a61",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-18T00:46:52Z",
+      "side": 1,
+      "message": "This does need to be changed. It is already wt88047 by default.",
+      "range": {
+        "startLine": 53,
+        "startChar": 4,
+        "endLine": 53,
+        "endChar": 48
+      },
+      "revId": "fd302ada2a7faab60a02ec8a4117561bfd2ba328",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_3ea432b9",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-18T00:46:52Z",
+      "side": 1,
+      "message": "Just why??? It is already set in device.mk",
+      "range": {
+        "startLine": 54,
+        "startChar": 4,
+        "endLine": 54,
+        "endChar": 90
+      },
+      "revId": "fd302ada2a7faab60a02ec8a4117561bfd2ba328",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_5ea12ea9",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-18T00:46:52Z",
+      "side": 1,
+      "message": "This too. It is already set in device.mk",
+      "range": {
+        "startLine": 55,
+        "startChar": 4,
+        "endLine": 55,
+        "endChar": 105
+      },
+      "revId": "fd302ada2a7faab60a02ec8a4117561bfd2ba328",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
