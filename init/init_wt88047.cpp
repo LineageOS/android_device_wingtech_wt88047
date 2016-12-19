@@ -26,7 +26,7 @@
  */
 
 #include <stdlib.h>
-#include <sys/sysinfo.h>
+#include <stdio.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
@@ -35,21 +35,90 @@
 
 #include "init_msm8916.h"
 
+static char board_id[32];
+
+static void import_cmdline(const std::string& key,
+        const std::string& value, bool for_emulator __attribute__((unused)))
+{
+    if (key.empty()) return;
+
+    if (key == "board_id") {
+        const char s[2] = ":";
+        char *board = strtok(value.c_str(), s);
+        strlcpy(board_id, board, sizeof(board_id));
+    }
+}
+
 void init_target_properties()
 {
+    std::string device;
 
-    std::string product = property_get("ro.product.name");
-    if ((strstr(product.c_str(), "wt88047") == NULL))
+    device = property_get("ro.cm.device");
+    if (device != "wt88047")
         return;
 
-    struct sysinfo sys;
+    import_kernel_cmdline(0, import_cmdline);
+    ERROR("Detected board ID=%s\n", board_id);
 
-    sysinfo(&sys);
-
-    if (sys.totalram < 2048ull * 1024 * 1024) {
-        property_set("ro.product.model", "Redmi 2");
-    } else {
-        property_set("ro.product.model", "Redmi 2 Pro / Prime");
+    if (strcmp(board_id, "S88047E1") == 0) {
+        property_set("ro.build.product", "HM2014817");
+        property_set("ro.product.device", "HM2014817");
+        property_set("ro.product.model", "2014817");
+        property_set("ro.product.name", "2014817");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
+    } else if (strcmp(board_id, "S88047D1") == 0) {
+        property_set("ro.build.product", "HM2014819");
+        property_set("ro.product.device", "HM2014819");
+        property_set("ro.product.model", "2014819");
+        property_set("ro.product.name", "2014819");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
+    } else if (strcmp(board_id, "S88047C1") == 0) {
+        property_set("ro.build.product", "HM2014818");
+        property_set("ro.product.device", "HM2014818");
+        property_set("ro.product.model", "2014818");
+        property_set("ro.product.name", "2014818");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
+        property_set("persist.dbg.volte_avail_ovr", "1");
+        property_set("persist.dbg.vt_avail_ovr", "1");
+    } else if (strcmp(board_id, "S88047B2") == 0) {
+        property_set("ro.build.product", "HM2014821");
+        property_set("ro.product.device", "HM2014821");
+        property_set("ro.product.model", "2014821");
+        property_set("ro.product.name", "2014821");
+        property_set("ro.telephony.default_network", "22,1");
+        property_set("telephony.lteOnCdmaDevice", "1");
+        property_set("persist.radio.sglte.eons_domain", "ps");
+    } else if (strcmp(board_id, "S88047B1") == 0) {
+        property_set("ro.build.product", "HM2014812");
+        property_set("ro.product.device", "HM2014812");
+        property_set("ro.product.model", "2014812");
+        property_set("ro.product.name", "2014812");
+        property_set("ro.telephony.default_network", "22,1");
+        property_set("telephony.lteOnCdmaDevice", "1");
+        property_set("persist.radio.sglte.eons_domain", "ps");
+    } else if ((strcmp(board_id, "S86047A1") == 0) || (strcmp(board_id, "S86047A1_CD") == 0)) {
+        property_set("ro.build.product", "HM2014813");
+        property_set("ro.product.device", "HM2014813");
+        property_set("ro.product.model", "2014813");
+        property_set("ro.product.name", "2014813");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
+    } else if ((strcmp(board_id, "S86047A2") == 0) || (strcmp(board_id, "S86047A2_CD") == 0)) {
+        property_set("ro.build.product", "HM2014112");
+        property_set("ro.product.device", "HM2014112");
+        property_set("ro.product.model", "2014112");
+        property_set("ro.product.name", "2014112");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
+    } else { /* including S88047A2 and S88047A1 */
+        property_set("ro.build.product", "HM2014811");
+        property_set("ro.product.device", "HM2014811");
+        property_set("ro.product.model", "2014811");
+        property_set("ro.product.name", "2014811");
+        property_set("ro.telephony.default_network", "9,1");
+        property_set("telephony.lteOnCdmaDevice", "0");
     }
-
 }
