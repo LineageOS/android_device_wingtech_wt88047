@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "5f681702_6a36df54",
+        "filename": "board/init.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-19T05:36:37Z",
+      "side": 0,
+      "message": "Why rename?",
+      "revId": "1c397dc3e1ea8c6db5e085729e2100b5aab19755",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5f681702_2a2ce700",
         "filename": "product/qcom-perf.mk",
         "patchSetId": 2
