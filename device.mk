@@ -24,8 +24,3 @@ include $(LOCAL_PATH)/product/*.mk
 
 # Inherit the rest from msm8916-common
 $(call inherit-product, device/cyanogen/msm8916-common/msm8916.mk)
-
-# Force legacy HAL1 HAX
-PRODUCT_PROPERTY_OVERRIDES += \
-    media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true
