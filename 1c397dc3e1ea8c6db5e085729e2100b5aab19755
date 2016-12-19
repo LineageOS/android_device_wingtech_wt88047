@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_2a2ce700",
+        "filename": "product/qcom-perf.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-19T05:35:28Z",
+      "side": 0,
+      "message": "No, keep it there.\nIf you want remove, separate it.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 24
+      },
+      "revId": "1c397dc3e1ea8c6db5e085729e2100b5aab19755",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
