@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_dbe0a799",
+        "filename": "product/qcom-radio.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2016-12-20T08:20:56Z",
+      "side": 0,
+      "message": "Please update commit so that this part will not be changed.",
+      "range": {
+        "startLine": 13,
+        "startChar": 4,
+        "endLine": 13,
+        "endChar": 33
+      },
+      "revId": "1ae3cad88806e0fd348125c2e43cd32ff692b8df",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
