@@ -152,8 +152,11 @@ on boot
     write /sys/module/process_reclaim/parameters/swap_opt_eff 30
 
     write /sys/block/mmcblk0/queue/add_random 0
-    write /sys/block/mmcblk0/queue/iosched/slice_idle 0
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
+
+    # Adaptive LMK
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 53059
 
 on charger
    wait /dev/block/bootdevice/by-name/system
