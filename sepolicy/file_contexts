@@ -1,3 +1,2 @@
-/system/bin/memcheck u:object_r:memcheck_exec:s0
 /data/cam_socket[12] u:object_r:camera_socket:s0
 /dev/block/bootdevice/by-name/config u:object_r:frp_block_device:s0
