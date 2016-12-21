@@ -40,6 +40,9 @@
 #include <string.h>
 #include <unistd.h>
 
+#include <android-base/file.h>
+#include <android-base/strings.h>
+
 #include "vendor_init.h"
 #include "property_service.h"
 #include "log.h"
@@ -60,8 +63,19 @@
 
 static char board_id[32];
 
-static void import_kernel_nv(char *name, int in_qemu)
+void import_entire_kernel_cmdline(bool in_qemu,
+                           const std::function<void(const std::string&, bool)>& fn) {
+    std::string cmdline;
+    android::base::ReadFileToString("/proc/cmdline", &cmdline);
+
+    for (const auto& entry : android::base::Split(android::base::Trim(cmdline), " ")) {
+        fn(entry, in_qemu);
+    }
+}
+
+static void import_cmdline(const std::string& key, bool for_emulator)
 {
+    const char *name = key.c_str();
     if (*name != '\0') {
         char *value = strchr(name, '=');
         if (value != NULL) {
@@ -196,8 +210,8 @@ void init_target_properties()
     if ((strstr(product.c_str(), "wt88047") == NULL))
         return;
 
-    import_kernel_cmdline(0, import_kernel_nv);
-    // property_set("ro.product.board", board_id);
+    import_entire_kernel_cmdline(0, import_cmdline);
+    property_set("ro.product.board", board_id);
     ERROR("Detected board ID=%s\n", board_id);
 
     if (strcmp(board_id, "S88047E1") == 0) {
