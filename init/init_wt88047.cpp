@@ -59,9 +59,10 @@
 #define IMG_SZ 32000 * KB    /* MMAP 32000K of modem, modem partition is 64000K */
 
 static char board_id[32];
-
-static void import_kernel_nv(char *name, int in_qemu)
+ 
+static void import_cmdline(const std::string& key, bool for_emulator)
 {
+    const char *name = key.c_str();
     if (*name != '\0') {
         char *value = strchr(name, '=');
         if (value != NULL) {
@@ -196,8 +197,8 @@ void init_target_properties()
     if ((strstr(product.c_str(), "wt88047") == NULL))
         return;
 
-    import_kernel_cmdline(0, import_kernel_nv);
-    // property_set("ro.product.board", board_id);
+    import_kernel_cmdline_legacy(0, import_cmdline);
+    property_set("ro.product.board", board_id);
     ERROR("Detected board ID=%s\n", board_id);
 
     if (strcmp(board_id, "S88047E1") == 0) {
