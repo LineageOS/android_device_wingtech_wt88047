@@ -194,7 +194,6 @@ vendor/lib/libOmxQcelp13Dec.so
 vendor/lib/libSHIMDivxDrm.so
 
 # Perf
-bin/msm_irqbalance
 vendor/bin/perfd
 vendor/lib/libqti-perfd-client.so
 
