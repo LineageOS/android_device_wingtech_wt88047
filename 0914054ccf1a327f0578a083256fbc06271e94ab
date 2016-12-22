@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_d94b8a56",
+        "filename": "rootdir/etc/init.target.rc",
+        "patchSetId": 5
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-12-22T10:55:23Z",
+      "side": 1,
+      "message": "You\u0027re making a pretty major, yet undocumented change here",
+      "revId": "0914054ccf1a327f0578a083256fbc06271e94ab",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_793cf6be",
+        "filename": "rootdir/etc/init.target.rc",
+        "patchSetId": 5
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-12-22T10:55:23Z",
+      "side": 1,
+      "message": "Unnecessary change",
+      "revId": "0914054ccf1a327f0578a083256fbc06271e94ab",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
