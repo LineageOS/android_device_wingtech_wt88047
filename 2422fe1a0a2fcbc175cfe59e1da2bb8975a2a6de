@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5f681702_8f7ee016",
+        "filename": "board/init.mk",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-12-23T02:43:14Z",
+      "side": 1,
+      "message": "Why override this?",
+      "revId": "2422fe1a0a2fcbc175cfe59e1da2bb8975a2a6de",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f681702_2f886c1d",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-12-23T02:43:14Z",
+      "side": 1,
+      "message": "It would be more appropriate to name this \"import_entire_kernel_cmdline\"",
+      "revId": "2422fe1a0a2fcbc175cfe59e1da2bb8975a2a6de",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
