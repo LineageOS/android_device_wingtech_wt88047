@@ -204,12 +204,6 @@ on property:sys.ims.DATA_DAEMON_STATUS=1
     start ims_rtp_daemon
     start imscmservice
 
-service memcheck /system/bin/memcheck
-    user root
-    group root
-    class late_start
-    oneshot
-
 on property:sys.boot_completed=1
     start config_lineout
 
