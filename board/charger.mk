@@ -1,3 +1,4 @@
-# Charger
+# Healthd
+BOARD_CHARGER_ENABLE_SUSPEND := true
 BOARD_CHARGER_DISABLE_INIT_BLANK := true
-BOARD_HAL_STATIC_LIBRARIES := libhealthd.wt88047
+BACKLIGHT_PATH := /sys/class/leds/lcd-backlight/brightness
