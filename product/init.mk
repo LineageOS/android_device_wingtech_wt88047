@@ -1,5 +1,4 @@
 # Init scripts
 PRODUCT_PACKAGES += \
     fstab.qcom \
-    init.target.rc \
-    memcheck
+    init.target.rc
