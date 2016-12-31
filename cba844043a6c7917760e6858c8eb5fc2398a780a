@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a1d315d_08cef783",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 7880
+      },
+      "writtenOn": "2016-12-31T23:18:05Z",
+      "side": 1,
+      "message": "I don\u0027t see how this is the case?",
+      "revId": "cba844043a6c7917760e6858c8eb5fc2398a780a",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
