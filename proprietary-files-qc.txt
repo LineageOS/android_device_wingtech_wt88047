@@ -100,16 +100,18 @@ vendor/lib/libchromatix_ov8865_sunny_liveshot.so
 vendor/lib/libchromatix_ov8865_sunny_preview.so
 vendor/lib/libchromatix_ov8865_sunny_snapshot.so
 
-# Camera firmware
+# Camera Firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
 etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
 
-# Camera Sensor
+# Camera Sensors
 vendor/lib/libmmcamera_ov2680_5987fhq.so
 vendor/lib/libmmcamera_ov2680_skuhf.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
+
+# Camera Eeprom
 vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
 
 # DRM
@@ -142,7 +144,7 @@ vendor/lib/libcalmodule_akm.so
 vendor/lib/libcalmodule_yamaha.so
 vendor/lib/libcalmodule_gyroscope.so
 
-# Graphics firmware
+# Graphics Firmware
 etc/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw
 
@@ -203,7 +205,7 @@ vendor/lib/libdisp-aba.so
 vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-qdcm.so
 
-# Qualcomm framework
+# Qualcomm Framework
 bin/irsc_util
 etc/data/dsi_config.xml
 etc/data/netmgr_config.xml
@@ -224,7 +226,6 @@ vendor/lib/libqmi.so
 vendor/lib/libsmemlog.so
 
 # Radio
--priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 -app/shutdownlistener/shutdownlistener.apk
 bin/netmgrd
 bin/qmuxd
@@ -236,6 +237,7 @@ etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar
 -framework/qcrilhook.jar
 vendor/lib/libcneapiclient.so
+-priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 vendor/lib/libconfigdb.so
 vendor/lib/liblqe.so
 vendor/lib/libmdmdetect.so
@@ -251,7 +253,7 @@ vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
-# Time services
+# Time Services
 -app/TimeService/TimeService.apk
 bin/time_daemon
 -vendor/lib/libtime_genoff.so
