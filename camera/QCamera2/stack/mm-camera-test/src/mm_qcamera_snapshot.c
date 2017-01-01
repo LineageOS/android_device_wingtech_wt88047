@@ -37,7 +37,7 @@ static void jpeg_encode_cb(jpeg_job_status_t status,
                            mm_jpeg_output_t *p_buf,
                            void *userData)
 {
-    int i = 0;
+    uint32_t i = 0;
     mm_camera_test_obj_t *pme = NULL;
     CDBG("%s: BEGIN\n", __func__);
 
@@ -179,7 +179,7 @@ int createEncodingSession(mm_camera_test_obj_t *test_obj,
 static void mm_app_snapshot_metadata_notify_cb(mm_camera_super_buf_t *bufs,
   void *user_data)
 {
-  int i = 0;
+  uint32_t i = 0;
   mm_camera_channel_t *channel = NULL;
   mm_camera_stream_t *p_stream = NULL;
   mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
@@ -265,7 +265,7 @@ static void mm_app_snapshot_notify_cb_raw(mm_camera_super_buf_t *bufs,
 {
 
     int rc;
-    int i = 0;
+    uint32_t i = 0;
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
     mm_camera_channel_t *channel = NULL;
     mm_camera_stream_t *m_stream = NULL;
@@ -333,7 +333,7 @@ static void mm_app_snapshot_notify_cb(mm_camera_super_buf_t *bufs,
 {
 
     int rc = 0;
-    int i = 0;
+    uint32_t i = 0;
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
     mm_camera_channel_t *channel = NULL;
     mm_camera_stream_t *p_stream = NULL;
@@ -599,7 +599,6 @@ int mm_app_start_capture(mm_camera_test_obj_t *test_obj,
     int32_t rc = MM_CAMERA_OK;
     mm_camera_channel_t *channel = NULL;
     mm_camera_stream_t *s_main = NULL;
-    mm_camera_stream_t *s_metadata = NULL;
     mm_camera_channel_attr_t attr;
 
     memset(&attr, 0, sizeof(mm_camera_channel_attr_t));
@@ -614,18 +613,7 @@ int mm_app_start_capture(mm_camera_test_obj_t *test_obj,
         CDBG_ERROR("%s: add channel failed", __func__);
         return -MM_CAMERA_E_GENERAL;
     }
-#if 0 // Removing metadata stream for snapshot in qcamera app.
-    s_metadata = mm_app_add_metadata_stream(test_obj,
-                                            channel,
-                                            mm_app_snapshot_metadata_notify_cb,
-                                            (void *)test_obj,
-                                            CAPTURE_BUF_NUM);
-     if (NULL == s_metadata) {
-        CDBG_ERROR("%s: add metadata stream failed\n", __func__);
-        mm_app_del_channel(test_obj, channel);
-        return -MM_CAMERA_E_GENERAL;
-    }
-#endif
+
     s_main = mm_app_add_snapshot_stream(test_obj,
                                         channel,
                                         NULL,
@@ -642,7 +630,6 @@ int mm_app_start_capture(mm_camera_test_obj_t *test_obj,
     if (MM_CAMERA_OK != rc) {
         CDBG_ERROR("%s:start zsl failed rc=%d\n", __func__, rc);
         mm_app_del_stream(test_obj, channel, s_main);
-        mm_app_del_stream(test_obj, channel, s_metadata);
         mm_app_del_channel(test_obj, channel);
         return rc;
     }
@@ -669,7 +656,7 @@ int mm_app_take_picture(mm_camera_test_obj_t *test_obj, uint8_t is_burst_mode)
 {
     CDBG_HIGH("\nEnter %s!!\n",__func__);
     int rc = MM_CAMERA_OK;
-    int num_snapshot = 1;
+    uint8_t num_snapshot = 1;
     int num_rcvd_snapshot = 0;
 
     if (is_burst_mode)
