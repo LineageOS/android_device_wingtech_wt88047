@@ -26,6 +26,6 @@
 
          For example, a device support pulsating, RGB notification and
          battery LEDs would set this config to 11. -->
-    <integer name="config_deviceLightCapabilities" translatable="false">1</integer>
+    <integer name="config_deviceLightCapabilities" translatable="false">11</integer>
 
 </resources>
