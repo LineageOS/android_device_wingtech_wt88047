@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_79053fc1",
+        "filename": "AndroidBoard.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 0,
+      "message": "Why?",
+      "revId": "438cfceb91041b35bd12ded994a54e1942019915",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_5963a3b1",
+        "filename": "AndroidProducts.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 0,
+      "message": "Why? We are definitely using full_wt88047.mk",
+      "revId": "438cfceb91041b35bd12ded994a54e1942019915",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_99edbbf2",
+        "filename": "board/filesystem.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 0,
+      "message": "Why are you removing this? Again removing ext4 functionality.",
+      "range": {
+        "startLine": 12,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 41
+      },
+      "revId": "438cfceb91041b35bd12ded994a54e1942019915",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_590a83d3",
+        "filename": "board/kernel.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 0,
+      "message": "Why? I see no use in this change, I actually prefer kumajaya\u0027s method",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 25
+      },
+      "revId": "438cfceb91041b35bd12ded994a54e1942019915",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_f9f82fc6",
+        "filename": "board/recovery.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 0,
+      "message": "What are you doing? You are basically disabling EXT4 for people to use and forcing people to use F2FS",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 34
+      },
+      "revId": "438cfceb91041b35bd12ded994a54e1942019915",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}

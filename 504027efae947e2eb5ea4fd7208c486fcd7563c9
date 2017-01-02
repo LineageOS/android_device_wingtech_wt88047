@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_d9f573cc",
+        "filename": "board/recovery.mk",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 1,
+      "message": "Should belong in filesystem.mk IMO",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 31
+      },
+      "revId": "504027efae947e2eb5ea4fd7208c486fcd7563c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_b902b7b2",
+        "filename": "extract-files.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 1,
+      "message": "Why? How does this improve functionality? It doesn\u0027t.",
+      "revId": "504027efae947e2eb5ea4fd7208c486fcd7563c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_792c1f4b",
+        "filename": "proprietary-files-qc.txt",
+        "patchSetId": 5
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-01-02T03:11:43Z",
+      "side": 1,
+      "message": "Why are you editing these? This file is actually generated...",
+      "revId": "504027efae947e2eb5ea4fd7208c486fcd7563c9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
