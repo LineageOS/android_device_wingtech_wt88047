@@ -1,12 +1,4 @@
 # Audio
-PRODUCT_PACKAGES += \
-    libqcomvisualizer \
-    libqcompostprocbundle
-
-# On boot audio lineout config
-PRODUCT_PACKAGES += \
-    init.lineout.sh
-
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/audio/acdb/QRD_Bluetooth_cal.acdb:system/etc/acdbdata/QRD/QRD_Bluetooth_cal.acdb \
     $(LOCAL_PATH)/audio/acdb/QRD_General_cal.acdb:system/etc/acdbdata/QRD/QRD_General_cal.acdb \
@@ -29,3 +21,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.audio.fluence.voicecall=true \
     persist.audio.fluence.voicerec=false \
     persist.audio.fluence.speaker=true
+
+# On boot audio lineout config
+PRODUCT_PACKAGES += \
+    init.lineout.sh
