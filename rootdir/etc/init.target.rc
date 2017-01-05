@@ -41,11 +41,6 @@ on boot
     chown system system /sys/class/leds/blue/led_time
     chown system system /sys/class/leds/blue/brightness
 
-    # Reset LEDs brightness
-    write /sys/class/leds/red/brightness 0
-    write /sys/class/leds/green/brightness 0
-    write /sys/class/leds/blue/brightness 0
-
     # charger
     chown system system /sys/class/power_supply/battery/capacity
     chmod 0660 /sys/class/power_supply/battery/capacity
