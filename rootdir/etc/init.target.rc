@@ -149,7 +149,7 @@ on boot
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
 
 on init
-    export LD_SHIM_LIBS /system/vendor/lib/libWVStreamControlAPI_L3.so|libshim_boringssl.so
+    export LD_SHIM_LIBS /system/vendor/lib/lib-imsvt.so|libshims_ims.so:/system/vendor/lib/libWVStreamControlAPI_L3.so|libshim_boringssl.so
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
 
 on post-fs
