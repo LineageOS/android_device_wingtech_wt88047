@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa3479d7_63259aaa",
+        "filename": "rootdir/etc/init.target.rc",
+        "patchSetId": 2
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 13648
+      },
+      "writtenOn": "2017-01-06T13:41:55Z",
+      "side": 1,
+      "message": "Can you have these? Two different exports?",
+      "range": {
+        "startLine": 152,
+        "startChar": 4,
+        "endLine": 153,
+        "endChar": 91
+      },
+      "revId": "e62ed0bc648f8baf9add17b7e8f9e6175612dcbf",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
