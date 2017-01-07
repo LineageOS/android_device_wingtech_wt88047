@@ -26,16 +26,9 @@
 #
 
 on boot
-
     # Torch
     chown system camera /sys/class/leds/torch-light/brightness
     chmod 0660 /sys/class/leds/torch-light/brightness
-
-    # charger
-    chown root system /sys/class/power_supply/bms/current_now
-    chown root system /sys/class/power_supply/bms/voltage_ocv
-    chmod 0664 /sys/class/power_supply/bms/current_now
-    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
 
     # LEDs
     chown system system /sys/class/leds/red/blink
@@ -47,6 +40,14 @@ on boot
     chown system system /sys/class/leds/blue/blink
     chown system system /sys/class/leds/blue/led_time
     chown system system /sys/class/leds/blue/brightness
+
+    # charger
+    chown system system /sys/class/power_supply/battery/capacity
+    chmod 0660 /sys/class/power_supply/battery/capacity
+    chown root /sys/class/power_supply/battery/current_now
+    chown root /sys/class/power_supply/battery/voltage_now
+    chmod 0664 /sys/class/power_supply/battery/current_now
+    chmod 0664 /sys/class/power_supply/battery/voltage_now
 
     # MPU6050 accelerometer
     chown system system /sys/class/sensors/MPU6050-accel/calibrate
@@ -148,6 +149,14 @@ on boot
     write /sys/block/mmcblk0/queue/add_random 0
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
 
+on charger
+   wait /dev/block/bootdevice/by-name/system
+   mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
+   chown root system /sys/class/power_supply/battery/current_now
+   chown root system /sys/class/power_supply/battery/voltage_now
+   chmod 0664 /sys/class/power_supply/battery/current_now
+   chmod 0664 /sys/class/power_supply/battery/voltage_now
+
 on init
     export LD_SHIM_LIBS /system/vendor/lib/lib-imsvt.so|libshims_ims.so:/system/vendor/lib/libWVStreamControlAPI_L3.so|libshim_boringssl.so
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
@@ -156,20 +165,6 @@ on post-fs
     write /sys/block/zram0/comp_algorithm lz4
     swapon_all /fstab.qcom
     write /proc/sys/vm/page-cluster 0
-
-on charger
-    wait /dev/block/bootdevice/by-name/system
-    mount ext4 /dev/block/bootdevice/by-name/system /system ro barrier=1
-    chown root system /sys/class/power_supply/bms/current_now
-    chown root system /sys/class/power_supply/bms/voltage_ocv
-    chmod 0664 /sys/class/power_supply/bms/current_now
-    chmod 0664 /sys/class/power_supply/bms/voltage_ocv
-    start vm_bms
-
-service vm_bms /system/bin/vm_bms
-    class core
-    user root
-    group root
 
 service imsqmidaemon /system/bin/imsqmidaemon
     class main
