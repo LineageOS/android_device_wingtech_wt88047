@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa3479d7_faa92b25",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1690
+      },
+      "writtenOn": "2017-01-08T03:01:11Z",
+      "side": 1,
+      "message": "You should add LineageOS",
+      "range": {
+        "startLine": 5,
+        "startChar": 0,
+        "endLine": 5,
+        "endChar": 39
+      },
+      "revId": "da6c135769c6102b700c2378236dcc88cd9c5f68",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa3479d7_daa66753",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1690
+      },
+      "writtenOn": "2017-01-08T03:01:11Z",
+      "side": 1,
+      "message": "what about this bracket if you are cleaning up the file",
+      "range": {
+        "startLine": 71,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 1
+      },
+      "revId": "da6c135769c6102b700c2378236dcc88cd9c5f68",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
