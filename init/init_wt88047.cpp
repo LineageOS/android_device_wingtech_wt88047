@@ -3,6 +3,7 @@
    Copyright (C) 2016, The CyanogenMod Project
    Copyright (C) 2015, Ketut P. Kumajaya
    Copyright (C) 2016, Nikolai Petrenko
+   Copyright (C) 2017, The LineageOS Project
 
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
@@ -46,10 +47,11 @@
 static std::string board_id;
 
 static void import_entire_kernel_cmdline(bool in_qemu,
-                           const std::function<void(const std::string&, bool)>& fn) {
+                           const std::function<void(const std::string&, bool)>& fn)
+{
     std::string cmdline;
     android::base::ReadFileToString("/proc/cmdline", &cmdline);
- 
+
     for (const auto& entry : android::base::Split(android::base::Trim(cmdline), " ")) {
         fn(entry, in_qemu);
     }
@@ -57,14 +59,14 @@ static void import_entire_kernel_cmdline(bool in_qemu,
 
 static void import_cmdline(const std::string& name, bool for_emulator)
 {
-    if(name.empty())
+    if (name.empty())
         return;
 
     std::string::size_type pos = name.find('=');
     std::string value = name.substr(pos + 1);
-    if (strstr(name.c_str(),"board_id") != NULL){
+    if (strstr(name.c_str(), "board_id") != NULL) {
         pos = value.find(':');
-        board_id = value.substr(0,pos);
+        board_id = value.substr(0, pos);
     }
 }
 
@@ -82,21 +84,18 @@ void init_target_properties()
         property_set("ro.product.model", "2014817");
         property_set("ro.product.name", "2014817");
         property_set("ro.telephony.default_network", "9,1");
-        property_set("telephony.lteOnCdmaDevice", "0");
     } else if (board_id == "S88047D1") {
         property_set("ro.build.product", "HM2014819");
         property_set("ro.product.device", "HM2014819");
         property_set("ro.product.model", "2014819");
         property_set("ro.product.name", "2014819");
         property_set("ro.telephony.default_network", "9,1");
-        property_set("telephony.lteOnCdmaDevice", "0");
     } else if (board_id == "S88047C1") {
         property_set("ro.build.product", "HM2014818");
         property_set("ro.product.device", "HM2014818");
         property_set("ro.product.model", "2014818");
         property_set("ro.product.name", "2014818");
         property_set("ro.telephony.default_network", "9,1");
-        property_set("telephony.lteOnCdmaDevice", "0");
         property_set("persist.dbg.volte_avail_ovr", "1");
         property_set("persist.dbg.vt_avail_ovr", "1");
     } else if (board_id == "S88047B2") {
@@ -121,21 +120,18 @@ void init_target_properties()
         property_set("ro.product.model", "2014813");
         property_set("ro.product.name", "2014813");
         property_set("ro.telephony.default_network", "9,1");
-        property_set("telephony.lteOnCdmaDevice", "0");
     } else if ((board_id == "S86047A2") || (board_id == "S86047A2_CD")) {
         property_set("ro.build.product", "HM2014112");
         property_set("ro.product.device", "HM2014112");
         property_set("ro.product.model", "2014112");
         property_set("ro.product.name", "2014112");
         property_set("ro.telephony.default_network", "9,1");
-        property_set("telephony.lteOnCdmaDevice", "0");
     } else { /* including S88047A2 and S88047A1 */
         property_set("ro.build.product", "HM2014811");
         property_set("ro.product.device", "HM2014811");
         property_set("ro.product.model", "2014811");
         property_set("ro.product.name", "2014811");
         property_set("ro.telephony.default_network", "9,1");
-        property_set("telephony.lteOnCdmaDevice", "0");
     }
 
     /* Unified description and fingerprint for now */
