@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa3479d7_47ce1b5c",
+        "filename": "init/init_wt88047.cpp",
+        "patchSetId": 7
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1690
+      },
+      "writtenOn": "2017-01-08T15:30:08Z",
+      "side": 1,
+      "message": "still needs\n   Copyright (C) 2017, The LineageOS Project",
+      "range": {
+        "startLine": 4,
+        "startChar": 40,
+        "endLine": 5,
+        "endChar": 39
+      },
+      "revId": "6a9f1c0cecf05bb280c613981e562ab9a00b02c3",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
