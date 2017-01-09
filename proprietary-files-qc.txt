@@ -149,19 +149,20 @@ etc/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw
 
 # IMS
+-framework/imscmlibrary.jar
 -vendor/app/ims/ims.apk
 -vendor/app/imssettings/imssettings.apk
--vendor/framework/imscmlibrary.jar
 bin/ims_rtp_daemon
 bin/imscmservice
 bin/imsdatadaemon
 bin/imsqmidaemon
+etc/permissions/ims.xml
 etc/permissions/imscm.xml
 etc/permissions/qti_permissions.xml
+vendor/lib/librcc.so
 vendor/lib/lib-dplmedia.so
 vendor/lib/lib-ims-rcscmjni.so
 vendor/lib/lib-imsSDP.so
-vendor/lib/lib-imscamera.so
 vendor/lib/lib-imsdpl.so
 vendor/lib/lib-imsqimf.so
 vendor/lib/lib-imsrcs.so
@@ -179,7 +180,6 @@ vendor/lib/lib-rtpdaemoninterface.so
 vendor/lib/lib-rtpsl.so
 vendor/lib/libimscamera_jni.so
 vendor/lib/libimsmedia_jni.so
-vendor/lib/libvcel.so
 vendor/lib/libvoice-svc.so
 
 # Media
