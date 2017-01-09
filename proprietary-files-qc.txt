@@ -125,9 +125,9 @@ vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
 vendor/lib/librpmb.so
 vendor/lib/libssd.so
-vendor/lib/libwvdrm_L3.so
+vendor/lib/libwvdrm_L1.so
 vendor/lib/libwvm.so
-vendor/lib/libWVStreamControlAPI_L3.so
+vendor/lib/libWVStreamControlAPI_L1.so
 vendor/lib/mediadrm/libwvdrmengine.so
 
 # GPS
