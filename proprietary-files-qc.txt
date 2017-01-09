@@ -54,7 +54,7 @@ vendor/lib/libmmqjpeg_codec.so
 vendor/lib/liboemcamera.so
 vendor/lib/libqomx_jpegenc.so
 
-# Camera Actuator
+# Camera actuator
 vendor/lib/libactuator_dw9714_13p1ba.so
 vendor/lib/libactuator_dw9714_13p1ba_camcorder.so
 vendor/lib/libactuator_dw9714_13p1ba_camera.so
@@ -68,7 +68,7 @@ vendor/lib/libactuator_rohm_bu64243gwz.so
 vendor/lib/libactuator_rohm_bu64243gwz_camcorder.so
 vendor/lib/libactuator_rohm_bu64243gwz_camera.so
 
-# Camera Chromatix
+# Camera chromatix
 vendor/lib/libchromatix_ov2680_common.so
 vendor/lib/libchromatix_ov2680_default_video.so
 vendor/lib/libchromatix_ov2680_snapshot.so
@@ -100,24 +100,23 @@ vendor/lib/libchromatix_ov8865_sunny_liveshot.so
 vendor/lib/libchromatix_ov8865_sunny_preview.so
 vendor/lib/libchromatix_ov8865_sunny_snapshot.so
 
-# Camera Firmware
+# Camera firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
 etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
 
-# Camera Sensors
+# Camera sensors
 vendor/lib/libmmcamera_ov2680_5987fhq.so
 vendor/lib/libmmcamera_ov2680_skuhf.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
 
-# Camera Eeprom
+# Camera eeprom
 vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
 
 # DRM
 bin/qseecomd
 lib/libdrmdecrypt.so
-vendor/lib/drm/libdrmwvmplugin.so
 vendor/lib/libprdrmdecrypt.so
 vendor/lib/libtzplayready.so
 vendor/lib/libdrmfs.so
@@ -125,10 +124,6 @@ vendor/lib/libdrmtime.so
 vendor/lib/libQSEEComAPI.so
 vendor/lib/librpmb.so
 vendor/lib/libssd.so
-vendor/lib/libwvdrm_L1.so
-vendor/lib/libwvm.so
-vendor/lib/libWVStreamControlAPI_L1.so
-vendor/lib/mediadrm/libwvdrmengine.so
 
 # GPS
 -lib/libloc_api_v02.so
@@ -205,7 +200,7 @@ vendor/lib/libdisp-aba.so
 vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-qdcm.so
 
-# Qualcomm Framework
+# Qualcomm framework
 bin/irsc_util
 etc/data/dsi_config.xml
 etc/data/netmgr_config.xml
@@ -253,11 +248,18 @@ vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
-# Time Services
+# Time services
 -app/TimeService/TimeService.apk
 bin/time_daemon
 -vendor/lib/libtime_genoff.so
 vendor/lib/libTimeService.so
+
+# Widevine
+vendor/lib/drm/libdrmwvmplugin.so
+vendor/lib/libwvdrm_L1.so
+vendor/lib/libwvm.so
+vendor/lib/libWVStreamControlAPI_L1.so
+vendor/lib/mediadrm/libwvdrmengine.so
 
 # WLAN
 lib/libwcnss_qmi.so
