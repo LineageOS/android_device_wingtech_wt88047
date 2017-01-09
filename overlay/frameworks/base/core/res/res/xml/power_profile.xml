@@ -23,7 +23,8 @@
         <value>800000</value>
         <value>998000</value>
         <value>1094400</value>
-        <value>1190400</value>
+        <value>1152000</value>
+        <value>1290600</value>
     </array>
     <array name="cpu.active">
         <value>151</value>
@@ -33,6 +34,7 @@
         <value>259</value>
         <value>307</value>
         <value>353</value>
+        <value>410</value>
     </array>
     <item name="cpu.idle">1.6</item>
     <item name="battery.capacity">2200</item>
