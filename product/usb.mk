@@ -1,5 +1,5 @@
 # USB ID
-ADDITIONAL_DEFAULT_PROPERTIES += \
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     ro.usb.vid=2717 \
     ro.usb.id.midi=90BA \
     ro.usb.id.midi_adb=90BB \
