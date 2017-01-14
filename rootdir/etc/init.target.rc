@@ -51,6 +51,10 @@ on boot
     write /sys/block/mmcblk0/queue/add_random 0
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
 
+    # Adaptive LMK
+    write /sys/module/lowmemorykiller/parameters/enable_adaptive_lmk 1
+    write /sys/module/lowmemorykiller/parameters/vmpressure_file_min 49152
+
 on init
     export LD_SHIM_LIBS /system/vendor/lib/lib-imsvt.so|libshims_ims.so
 
