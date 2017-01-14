@@ -1,8 +1,8 @@
 /*
    Copyright (c) 2016, The Linux Foundation. All rights reserved.
    Copyright (C) 2016, The CyanogenMod Project
-   Copyright (C) 2015, Ketut P. Kumajaya
-   Copyright (C) 2016, Nikolai Petrenko
+   Copyright (C) 2015-2016, Ketut P. Kumajaya
+   Copyright (C) 2016-2017, Nikolai Petrenko
    Copyright (C) 2017, The LineageOS Project
 
    Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@
 #include "property_service.h"
 #include "log.h"
 #include "util.h"
+#include <sys/sysinfo.h>
 
 #include "init_msm8916.h"
 
@@ -70,11 +71,34 @@ static void import_cmdline(const std::string& name, bool for_emulator)
     }
 }
 
+int is2GB()
+{
+    struct sysinfo sys;
+    sysinfo(&sys);
+    return sys.totalram > 1024ull * 1024 * 1024;
+}
+
 void init_target_properties()
 {
     std::string product = property_get("ro.product.name");
     if (strstr(product.c_str(), "wt88047") == NULL)
         return;
+
+    if (is2GB()) {
+        property_set("dalvik.vm.heapstartsize", "8m");
+        property_set("dalvik.vm.heapgrowthlimit", "192m");
+        property_set("dalvik.vm.heapsize", "512m");
+        property_set("dalvik.vm.heaptargetutilization", "0.75");
+        property_set("dalvik.vm.heapminfree", "512k");
+        property_set("dalvik.vm.heapmaxfree", "8m");
+    } else {
+        property_set("dalvik.vm.heapstartsize", "8m");
+        property_set("dalvik.vm.heapgrowthlimit", "96m");
+        property_set("dalvik.vm.heapsize", "256m");
+        property_set("dalvik.vm.heaptargetutilization", "0.75");
+        property_set("dalvik.vm.heapminfree", "2m");
+        property_set("dalvik.vm.heapmaxfree", "8m");
+    }
 
     import_entire_kernel_cmdline(0, import_cmdline);
 
