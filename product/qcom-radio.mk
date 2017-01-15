@@ -1,6 +1,3 @@
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/spn-conf.xml:system/etc/spn-conf.xml
-
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.target=dpm1 \
