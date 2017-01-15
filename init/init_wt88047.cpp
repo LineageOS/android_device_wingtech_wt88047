@@ -47,27 +47,29 @@
 
 static std::string board_id;
 
-static void import_entire_kernel_cmdline(bool in_qemu,
-                           const std::function<void(const std::string&, bool)>& fn)
+static bool contains(std::string str, std::string substr)
+{
+    return str.find(substr) != string::npos;
+}
+
+static void import_entire_kernel_cmdline(const std::function<void(const std::string&)>& fn)
 {
     std::string cmdline;
     android::base::ReadFileToString("/proc/cmdline", &cmdline);
 
     for (const auto& entry : android::base::Split(android::base::Trim(cmdline), " ")) {
-        fn(entry, in_qemu);
+        fn(entry);
     }
 }
 
-static void import_cmdline(const std::string& name, bool for_emulator)
+static void import_cmdline(const std::string& name)
 {
     if (name.empty())
         return;
 
-    std::string::size_type pos = name.find('=');
-    std::string value = name.substr(pos + 1);
-    if (strstr(name.c_str(), "board_id") != NULL) {
-        pos = value.find(':');
-        board_id = value.substr(0, pos);
+    if (contains(name, "board_id")) {
+        std::string value = android::base::Split(name, ":")[0];
+        board_id = android::base::Split(value, "=")[1];
     }
 }
 
@@ -80,8 +82,10 @@ static int is2GB()
 
 void init_target_properties()
 {
-    std::string product = property_get("ro.product.name");
-    if (strstr(product.c_str(), "wt88047") == NULL)
+    std::string product;
+
+    product = property_get("ro.product.name");
+    if (contains(product, "wt88047"))
         return;
 
     if (is2GB()) {
@@ -100,7 +104,7 @@ void init_target_properties()
         property_set("dalvik.vm.heapmaxfree", "8m");
     }
 
-    import_entire_kernel_cmdline(0, import_cmdline);
+    import_entire_kernel_cmdline(import_cmdline);
     if (board_id == "S88047E1") {
         property_set("ro.build.product", "HM2014817");
         property_set("ro.product.device", "HM2014817");
@@ -149,7 +153,7 @@ void init_target_properties()
         property_set("ro.product.model", "2014112");
         property_set("ro.product.name", "2014112");
         property_set("ro.telephony.default_network", "9,1");
-    } else { /* including S88047A2 and S88047A1 */
+    } else if ((board_id == "S88047A2") || (board_id == "S88047A1")) {
         property_set("ro.build.product", "HM2014811");
         property_set("ro.product.device", "HM2014811");
         property_set("ro.product.model", "2014811");
