@@ -33,6 +33,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/sysinfo.h>
 
 #include <android-base/file.h>
 #include <android-base/strings.h>
@@ -41,33 +42,34 @@
 #include "property_service.h"
 #include "log.h"
 #include "util.h"
-#include <sys/sysinfo.h>
 
 #include "init_msm8916.h"
 
 static std::string board_id;
 
-static void import_entire_kernel_cmdline(bool in_qemu,
-                           const std::function<void(const std::string&, bool)>& fn)
+static bool contains(std::string str, std::string substr)
+{
+    return str.find(substr) != std::string::npos;
+}
+
+static void import_entire_kernel_cmdline(const std::function<void(const std::string&)>& fn)
 {
     std::string cmdline;
     android::base::ReadFileToString("/proc/cmdline", &cmdline);
 
     for (const auto& entry : android::base::Split(android::base::Trim(cmdline), " ")) {
-        fn(entry, in_qemu);
+        fn(entry);
     }
 }
 
-static void import_cmdline(const std::string& name, bool for_emulator)
+static void import_cmdline(const std::string& name)
 {
     if (name.empty())
         return;
 
-    std::string::size_type pos = name.find('=');
-    std::string value = name.substr(pos + 1);
-    if (strstr(name.c_str(), "board_id") != NULL) {
-        pos = value.find(':');
-        board_id = value.substr(0, pos);
+    if (contains(name, "board_id")) {
+        std::string value = android::base::Split(name, ":")[0];
+        board_id = android::base::Split(value, "=")[1];
     }
 }
 
@@ -80,8 +82,10 @@ int is2GB()
 
 void init_target_properties()
 {
-    std::string product = property_get("ro.product.name");
-    if (strstr(product.c_str(), "wt88047") == NULL)
+    std::string product;
+
+    product = property_get("ro.product.name");
+    if (!contains(product, "wt88047"))
         return;
 
     if (is2GB()) {
@@ -100,8 +104,7 @@ void init_target_properties()
         property_set("dalvik.vm.heapmaxfree", "8m");
     }
 
-    import_entire_kernel_cmdline(0, import_cmdline);
-
+    import_entire_kernel_cmdline(import_cmdline);
     if (board_id == "S88047E1") {
         property_set("ro.build.product", "HM2014817");
         property_set("ro.product.device", "HM2014817");
