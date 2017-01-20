@@ -168,7 +168,7 @@
          allocations to block waiting on disk I/O or lowmemorykiller.  Overrides the default
          value chosen by ActivityManager based on screen size.  0 prevents keeping any extra
          memory over what the kernel keeps by default.  -1 keeps the default. -->
-    <integer name="config_extraFreeKbytesAbsolute">61440</integer>
+    <!--<integer name="config_extraFreeKbytesAbsolute">61440</integer>-->
 
     <!-- Flag specifying whether VoLTE is available on device -->
     <bool name="config_device_volte_available">true</bool>
