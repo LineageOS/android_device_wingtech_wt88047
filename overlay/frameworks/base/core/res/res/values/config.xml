@@ -191,29 +191,17 @@
          phone object irrespective of this config -->
     <bool name="config_switch_phone_on_voice_reg_state_change">false</bool>
 
-    <!-- Array of output values for keyboard backlight corresponding to the LUX values
-         in the config_autoBrightnessLevels array.  This array should have size one greater
-         than the size of the config_autoBrightnessLevels array.
-         The brightness values must be between 0 and 255 and be non-decreasing.
-         This must be overridden in platform specific overlays -->
-    <integer-array name="config_autoBrightnessKeyboardBacklightValues"></integer-array>
-
-    <integer name="config_buttonBrightnessSettingDefault">0</integer>
-
-    <!-- Default value for led color when battery is low on charge -->
-    <integer name="config_notificationsBatteryLowARGB">0x00FF0000</integer>
-
-    <!-- Default value for led color when battery is medium charged -->
-    <integer name="config_notificationsBatteryMediumARGB">0x000000FF</integer>
-
-    <!-- Default value for led color when battery is fully charged -->
-    <integer name="config_notificationsBatteryFullARGB">0x0000FF00</integer>
+    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
+    <bool name="config_intrusiveNotificationLed">true</bool>
 
     <!-- Is the battery LED intrusive? Used to decide if there should be a disable option -->
     <bool name="config_intrusiveBatteryLed">true</bool>
 
-    <!-- Is the notification LED intrusive? Used to decide if there should be a disable option -->
-    <bool name="config_intrusiveNotificationLed">true</bool>
+    <!-- Default color for notification LED is blue. -->
+    <color name="config_defaultNotificationColor">#ff00ffff</color>
+
+    <!-- Disable button brightness settings -->
+    <integer name="config_buttonBrightnessSettingDefault">0</integer>
 
     <!-- Screen brightness used to dim the screen while dozing in a very low power state.
           May be less than the minimum allowed brightness setting
