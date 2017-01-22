@@ -15,8 +15,6 @@ PRODUCT_COPY_FILES += \
 
 # Properties
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.camera.tn.disable=1 \
-    persist.camera.pip.support=0 \
     persist.camera.cpp.duplication=false \
     persist.camera.hal.debug.mask=0 \
     media.stagefright.legacyencoder=true \
