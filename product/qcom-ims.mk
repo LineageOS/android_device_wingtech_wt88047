@@ -2,6 +2,7 @@
 PRODUCT_PACKAGES += \
     libshims_ims
 
+# Properties
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.jbims=1 \
     persist.radio.ROTATION_ENABLE=1 \
