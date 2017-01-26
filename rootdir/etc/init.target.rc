@@ -63,6 +63,10 @@ on post-fs
     swapon_all /fstab.qcom
     write /proc/sys/vm/page-cluster 0
 
+    # Create directory from IMS services
+    mkdir /data/shared 0755
+    chown system system /data/shared
+
 service ims_rtp_daemon /system/bin/ims_rtp_daemon
    class main
    user system
