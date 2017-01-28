@@ -54,7 +54,7 @@ vendor/lib/libmmqjpeg_codec.so
 vendor/lib/liboemcamera.so
 vendor/lib/libqomx_jpegenc.so
 
-# Camera Actuator
+# Camera actuator
 vendor/lib/libactuator_dw9714_13p1ba.so
 vendor/lib/libactuator_dw9714_13p1ba_camcorder.so
 vendor/lib/libactuator_dw9714_13p1ba_camera.so
@@ -68,7 +68,7 @@ vendor/lib/libactuator_rohm_bu64243gwz.so
 vendor/lib/libactuator_rohm_bu64243gwz_camcorder.so
 vendor/lib/libactuator_rohm_bu64243gwz_camera.so
 
-# Camera Chromatix
+# Camera chromatix
 vendor/lib/libchromatix_ov2680_common.so
 vendor/lib/libchromatix_ov2680_default_video.so
 vendor/lib/libchromatix_ov2680_snapshot.so
@@ -100,19 +100,24 @@ vendor/lib/libchromatix_ov8865_sunny_liveshot.so
 vendor/lib/libchromatix_ov8865_sunny_preview.so
 vendor/lib/libchromatix_ov8865_sunny_snapshot.so
 
-# Camera Firmware
+# Camera eeprom
+vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
+
+# Camera firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
 etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
 
-# Camera Sensors
+# Camera sensors
 vendor/lib/libmmcamera_ov2680_5987fhq.so
 vendor/lib/libmmcamera_ov2680_skuhf.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
 
-# Camera Eeprom
-vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
+# Compass
+vendor/lib/libcalmodule_akm.so
+vendor/lib/libcalmodule_yamaha.so
+vendor/lib/libcalmodule_gyroscope.so
 
 # DRM
 bin/qseecomd
@@ -134,19 +139,14 @@ vendor/lib/libgeofence.so
 vendor/lib/libizat_core.so
 vendor/lib/liblbs_core.so
 
-# Compass
-vendor/lib/libcalmodule_akm.so
-vendor/lib/libcalmodule_yamaha.so
-vendor/lib/libcalmodule_gyroscope.so
-
-# Graphics Firmware
+# Graphics firmware
 etc/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw
 
 # IMS
--framework/imscmlibrary.jar
 -vendor/app/ims/ims.apk
 -vendor/app/imssettings/imssettings.apk
+-framework/imscmlibrary.jar
 bin/ims_rtp_daemon
 bin/imscmservice
 bin/imsdatadaemon
@@ -154,7 +154,6 @@ bin/imsqmidaemon
 etc/permissions/ims.xml
 etc/permissions/imscm.xml
 etc/permissions/qti_permissions.xml
-vendor/lib/librcc.so
 vendor/lib/lib-dplmedia.so
 vendor/lib/lib-ims-rcscmjni.so
 vendor/lib/lib-imsSDP.so
@@ -175,6 +174,7 @@ vendor/lib/lib-rtpdaemoninterface.so
 vendor/lib/lib-rtpsl.so
 vendor/lib/libimscamera_jni.so
 vendor/lib/libimsmedia_jni.so
+vendor/lib/librcc.so
 vendor/lib/libvoice-svc.so
 
 # Media
@@ -200,7 +200,7 @@ vendor/lib/libdisp-aba.so
 vendor/lib/libmm-abl-oem.so
 vendor/lib/libmm-qdcm.so
 
-# Qualcomm Framework
+# Qualcomm framework
 bin/irsc_util
 etc/data/dsi_config.xml
 etc/data/netmgr_config.xml
@@ -248,13 +248,13 @@ vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
-# Time Services
+# Time services
 -app/TimeService/TimeService.apk
 bin/time_daemon
 -vendor/lib/libtime_genoff.so
 vendor/lib/libTimeService.so
 
-# Widevine DRM
+# Widevine
 vendor/lib/drm/libdrmwvmplugin.so
 vendor/lib/libwvdrm_L1.so
 vendor/lib/libwvm.so
