@@ -31,12 +31,10 @@
    IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <fstream>
+#include <string>
 #include <sys/sysinfo.h>
-
-#include <android-base/file.h>
-#include <android-base/strings.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
@@ -44,34 +42,6 @@
 #include "util.h"
 
 #include "init_msm8916.h"
-
-static std::string board_id;
-
-static bool contains(std::string str, std::string substr)
-{
-    return str.find(substr) != std::string::npos;
-}
-
-static void import_entire_kernel_cmdline(const std::function<void(const std::string&)>& fn)
-{
-    std::string cmdline;
-    android::base::ReadFileToString("/proc/cmdline", &cmdline);
-
-    for (const auto& entry : android::base::Split(android::base::Trim(cmdline), " ")) {
-        fn(entry);
-    }
-}
-
-static void import_cmdline(const std::string& name)
-{
-    if (name.empty())
-        return;
-
-    if (contains(name, "board_id")) {
-        std::string value = android::base::Split(name, ":")[0];
-        board_id = android::base::Split(value, "=")[1];
-    }
-}
 
 int is2GB()
 {
@@ -82,42 +52,37 @@ int is2GB()
 
 void init_target_properties()
 {
-    std::string product;
+    std::ifstream fin;
+    std::string buf;
 
-    product = property_get("ro.product.name");
-    if (!contains(product, "wt88047"))
+    std::string product = property_get("ro.product.name");
+    if (product.find("wt88047") == std::string::npos)
         return;
 
-    if (is2GB()) {
-        property_set("dalvik.vm.heapstartsize", "8m");
-        property_set("dalvik.vm.heapgrowthlimit", "192m");
-        property_set("dalvik.vm.heapsize", "512m");
-        property_set("dalvik.vm.heaptargetutilization", "0.75");
-        property_set("dalvik.vm.heapminfree", "512k");
-        property_set("dalvik.vm.heapmaxfree", "8m");
-    } else {
-        property_set("dalvik.vm.heapstartsize", "8m");
-        property_set("dalvik.vm.heapgrowthlimit", "96m");
-        property_set("dalvik.vm.heapsize", "256m");
-        property_set("dalvik.vm.heaptargetutilization", "0.75");
-        property_set("dalvik.vm.heapminfree", "2m");
-        property_set("dalvik.vm.heapmaxfree", "8m");
-    }
+    fin.open("/proc/cmdline");
+    while (std::getline(fin, buf, ' '))
+        if (buf.find("board_id") != std::string::npos)
+            break;
+    fin.close();
 
-    import_entire_kernel_cmdline(import_cmdline);
-    if (board_id == "S88047E1") {
+    /* S88047E1 */
+    if (buf.find("S88047E1") != std::string::npos) {
         property_set("ro.build.product", "HM2014817");
         property_set("ro.product.device", "HM2014817");
         property_set("ro.product.model", "2014817");
         property_set("ro.product.name", "2014817");
         property_set("ro.telephony.default_network", "9,1");
-    } else if (board_id == "S88047D1") {
+    }
+    /* S88047D1 */
+    else if (buf.find("S88047D1") != std::string::npos) {
         property_set("ro.build.product", "HM2014819");
         property_set("ro.product.device", "HM2014819");
         property_set("ro.product.model", "2014819");
         property_set("ro.product.name", "2014819");
         property_set("ro.telephony.default_network", "9,1");
-    } else if (board_id == "S88047C1") {
+    }
+    /* S88047C1 */
+    else if (buf.find("S88047C1") != std::string::npos) {
         property_set("ro.build.product", "HM2014818");
         property_set("ro.product.device", "HM2014818");
         property_set("ro.product.model", "2014818");
@@ -125,7 +90,9 @@ void init_target_properties()
         property_set("ro.telephony.default_network", "9,1");
         property_set("persist.dbg.volte_avail_ovr", "1");
         property_set("persist.dbg.vt_avail_ovr", "1");
-    } else if (board_id == "S88047B2") {
+    }
+    /* S88047B2 */
+    else if (buf.find("S88047B2") != std::string::npos) {
         property_set("ro.build.product", "HM2014821");
         property_set("ro.product.device", "HM2014821");
         property_set("ro.product.model", "2014821");
@@ -133,7 +100,9 @@ void init_target_properties()
         property_set("ro.telephony.default_network", "22,1");
         property_set("telephony.lteOnCdmaDevice", "1");
         property_set("persist.radio.sglte.eons_domain", "ps");
-    } else if (board_id == "S88047B1") {
+    }
+    /* S88047B1 */
+    else if (buf.find("S88047B1") != std::string::npos) {
         property_set("ro.build.product", "HM2014812");
         property_set("ro.product.device", "HM2014812");
         property_set("ro.product.model", "2014812");
@@ -141,25 +110,38 @@ void init_target_properties()
         property_set("ro.telephony.default_network", "22,1");
         property_set("telephony.lteOnCdmaDevice", "1");
         property_set("persist.radio.sglte.eons_domain", "ps");
-    } else if ((board_id =="S86047A1") || (board_id == "S86047A1_CD")) {
+    }
+    /* S86047A1 and S86047A1_CD */
+    else if (buf.find("S86047A1") != std::string::npos) {
         property_set("ro.build.product", "HM2014813");
         property_set("ro.product.device", "HM2014813");
         property_set("ro.product.model", "2014813");
         property_set("ro.product.name", "2014813");
         property_set("ro.telephony.default_network", "9,1");
-    } else if ((board_id == "S86047A2") || (board_id == "S86047A2_CD")) {
+    }
+    /* S86047A2 and S86047A2_CD */
+    else if (buf.find("S86047A2") != std::string::npos) {
         property_set("ro.build.product", "HM2014112");
         property_set("ro.product.device", "HM2014112");
         property_set("ro.product.model", "2014112");
         property_set("ro.product.name", "2014112");
         property_set("ro.telephony.default_network", "9,1");
-    } else { /* including S88047A2 and S88047A1 */
+    }
+    /* S88047A2 and S88047A1 */
+    else {
         property_set("ro.build.product", "HM2014811");
         property_set("ro.product.device", "HM2014811");
         property_set("ro.product.model", "2014811");
         property_set("ro.product.name", "2014811");
         property_set("ro.telephony.default_network", "9,1");
     }
+
+    property_set("dalvik.vm.heapstartsize", "8m");
+    property_set("dalvik.vm.heapgrowthlimit", is2GB() ? "192m" : "96m");
+    property_set("dalvik.vm.heapsize", is2GB() ? "512m" : "256m");
+    property_set("dalvik.vm.heaptargetutilization", "0.75");
+    property_set("dalvik.vm.heapminfree", is2GB() ? "512k" : "2m");
+    property_set("dalvik.vm.heapmaxfree", "8m");
 
     /* Unified description and fingerprint for now */
     property_set("ro.build.description", "wt88047-user 5.1.1 LMY47V 6.1.28 release-keys");
