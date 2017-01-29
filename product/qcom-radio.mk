@@ -7,5 +7,4 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.radio.ecc_hard_count=1 \
     rild.libpath=/system/vendor/lib/libril-qc-qmi-1.so \
     ril.subscription.types=RUIM \
-    persist.radio.rat_on=combine \
-    ro.ril.multi_rat_capable=true
+    persist.radio.rat_on=combine
