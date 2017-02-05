@@ -59,7 +59,6 @@ on init
     export LD_SHIM_LIBS /system/vendor/lib/lib-imsvt.so|libshims_ims.so
 
 on post-fs
-    write /sys/block/zram0/comp_algorithm lz4
     swapon_all /fstab.qcom
     write /proc/sys/vm/page-cluster 0
 
