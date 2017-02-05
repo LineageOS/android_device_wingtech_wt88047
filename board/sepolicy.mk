@@ -1,3 +1,3 @@
 # SELinux
 BOARD_SEPOLICY_DIRS += \
-    $(DEVICE_PATH)/sepolicy
+    device/wingtech/wt88047/sepolicy

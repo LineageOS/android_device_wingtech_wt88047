@@ -14,7 +14,8 @@
 # limitations under the License.
 #
 
-$(call inherit-product-if-exists, vendor/wingtech/wt88047/wt88047-vendor.mk)
+# Inherit the rest from msm8916-common
+$(call inherit-product, device/cyanogen/msm8916-common/msm8916.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
@@ -22,5 +23,4 @@ DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 # Include package config fragments
 include $(LOCAL_PATH)/product/*.mk
 
-# Inherit the rest from msm8916-common
-$(call inherit-product, device/cyanogen/msm8916-common/msm8916.mk)
+$(call inherit-product-if-exists, vendor/wingtech/wt88047/wt88047-vendor.mk)
