@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a288981_ae024c09",
+        "filename": "board/filesystem.mk",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 15346
+      },
+      "writtenOn": "2017-02-07T14:10:18Z",
+      "side": 1,
+      "message": "Why did you even remove this :p",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 12,
+        "endChar": 80
+      },
+      "revId": "8f24ceef95c20c11289bf065b7bc7b129a3d7968",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
