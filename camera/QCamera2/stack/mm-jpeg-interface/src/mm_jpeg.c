@@ -1879,7 +1879,6 @@ static int32_t mm_jpeg_check_resolution_change(mm_jpeg_obj *my_obj,
   int32_t prev_width,
   int32_t prev_height)
 {
-  int32_t rc = 0;
   if (my_obj->work_buf_cnt > work_bufs_need) {
     CDBG_ERROR("%s: %d] Unexpected work buffer count", __func__, __LINE__);
     return -1;

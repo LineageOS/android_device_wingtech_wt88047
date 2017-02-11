@@ -30,31 +30,32 @@
 #include "QCamera2Factory.h"
 
 static hw_module_t camera_common = {
-    tag: HARDWARE_MODULE_TAG,
-    module_api_version: CAMERA_MODULE_API_VERSION_1_0,
-    hal_api_version: HARDWARE_HAL_API_VERSION,
-    id: CAMERA_HARDWARE_MODULE_ID,
-    name: "QCamera Module",
-    author: "Qualcomm Innovation Center Inc",
-    methods: &qcamera::QCamera2Factory::mModuleMethods,
-    dso: NULL,
-    reserved:  {0},
+    .tag = HARDWARE_MODULE_TAG,
+    .module_api_version = CAMERA_MODULE_API_VERSION_1_0,
+    .hal_api_version = HARDWARE_HAL_API_VERSION,
+    .id = CAMERA_HARDWARE_MODULE_ID,
+    .name = "QCamera Module",
+    .author = "Qualcomm Innovation Center Inc",
+    .methods = &qcamera::QCamera2Factory::mModuleMethods,
+    .dso = NULL,
+    .reserved =  {0},
 };
 
 camera_module_t HAL_MODULE_INFO_SYM = {
-    common: camera_common,
-    get_number_of_cameras: qcamera::QCamera2Factory::get_number_of_cameras,
-    get_camera_info: qcamera::QCamera2Factory::get_camera_info,
+    .common = camera_common,
+    .get_number_of_cameras = qcamera::QCamera2Factory::get_number_of_cameras,
+    .get_camera_info = qcamera::QCamera2Factory::get_camera_info,
 #ifndef USE_JB_MR1
-    set_callbacks: NULL,
+    .set_callbacks = NULL,
 #endif
 //#ifdef USE_VENDOR_CAMERA_EXT
-    get_vendor_tag_ops: NULL,
+    .get_vendor_tag_ops = NULL,
 #ifndef USE_KK_CODE
-    open_legacy: NULL,
-    set_torch_mode: NULL,
-    init: NULL,
+    .open_legacy = NULL,
 #endif
-    reserved:  {0}
+    .set_torch_mode = NULL,
+    .init = NULL,
+    .reserved = {0}
+
 //#endif
 };
