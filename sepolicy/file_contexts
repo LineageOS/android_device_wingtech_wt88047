@@ -1,2 +1,5 @@
-/data/cam_socket[12] u:object_r:camera_socket:s0
-/dev/block/bootdevice/by-name/config u:object_r:frp_block_device:s0
+# Camera
+/data/cam_socket[12]                                 u:object_r:camera_socket:s0
+
+# Config
+/dev/block/bootdevice/by-name/config                 u:object_r:frp_block_device:s0
