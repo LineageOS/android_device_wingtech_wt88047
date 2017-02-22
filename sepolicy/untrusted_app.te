@@ -1,2 +1,0 @@
-allow untrusted_app storage_stub_file:dir getattr;
-allow untrusted_app tombstone_data_file:dir getattr;
