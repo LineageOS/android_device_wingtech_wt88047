@@ -134,11 +134,6 @@ vendor/lib/libgeofence.so
 vendor/lib/libizat_core.so
 vendor/lib/liblbs_core.so
 
-# Compass
-vendor/lib/libcalmodule_akm.so
-vendor/lib/libcalmodule_yamaha.so
-vendor/lib/libcalmodule_gyroscope.so
-
 # Graphics Firmware
 etc/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw
