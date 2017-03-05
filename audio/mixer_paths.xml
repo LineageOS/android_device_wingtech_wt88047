@@ -590,6 +590,7 @@
         <ctl name="RDAC2 MUX" value="RX2" />
         <ctl name="HPHL" value="Switch" />
         <ctl name="HPHR" value="Switch" />
+        <ctl name="Lineout_1 amp" value="DISABLE" />
     </path>
 
     <path name="headset-mic">
