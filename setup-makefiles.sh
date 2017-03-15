@@ -59,7 +59,5 @@ endif
 
 EOF
 
-printf '\n%s\n' "\$(call inherit-product, vendor/qcom/binaries/msm8916-32/graphics/graphics-vendor.mk)" >> "$PRODUCTMK"
-
 # We are done!
 write_footers
