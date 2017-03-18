@@ -53,12 +53,14 @@ private:
     int cameraDeviceOpen(int camera_id, struct hw_device_t **hw_device);
     static int camera_device_open(const struct hw_module_t *module, const char *id,
                 struct hw_device_t **hw_device);
+    bool can_talk_to_sensormanager();
 
 public:
     static struct hw_module_methods_t mModuleMethods;
 
 private:
     int mNumOfCameras;
+    android::Mutex gCameraWrapperLock;
 };
 
 }; /*namespace qcamera*/
