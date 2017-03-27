@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -35,13 +35,14 @@ static uint32_t rdi_len = 0;
 static void mm_app_rdi_dump_frame(mm_camera_buf_def_t *frame,
                                   char *name,
                                   char *ext,
-                                  int frame_idx)
+                                  uint32_t frame_idx)
 {
     char file_name[64];
     int file_fd;
     int i;
     if (frame != NULL) {
-        snprintf(file_name, sizeof(file_name), "/data/%s_%03d.%s", name, frame_idx, ext);
+        snprintf(file_name, sizeof(file_name), "/data/misc/camera/%s_%03u.%s", name,
+                frame_idx, ext);
         file_fd = open(file_name, O_RDWR | O_CREAT, 0777);
         if (file_fd < 0) {
             CDBG_ERROR("%s: cannot open file %s \n", __func__, file_name);
@@ -65,7 +66,7 @@ static void mm_app_rdi_notify_cb(mm_camera_super_buf_t *bufs,
     mm_camera_buf_def_t *frame = bufs->bufs[0];
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
 
-    CDBG("%s: BEGIN - length=%d, frame idx = %d stream_id=%d\n",
+    CDBG("%s: BEGIN - length=%zu, frame idx = %d stream_id=%d\n",
          __func__, frame->frame_len, frame->frame_idx, frame->stream_id);
     snprintf(file_name, sizeof(file_name), "RDI_dump_%d", pme->cam->camera_handle);
     mm_app_rdi_dump_frame(frame, file_name, "raw", frame->frame_idx);
@@ -89,7 +90,7 @@ mm_camera_stream_t * mm_app_add_rdi_stream(mm_camera_test_obj_t *test_obj,
                                                uint8_t num_burst)
 {
     int rc = MM_CAMERA_OK;
-    int i;
+    size_t i;
     mm_camera_stream_t *stream = NULL;
     cam_capability_t *cam_cap = (cam_capability_t *)(test_obj->cap_buf.buf.buffer);
     cam_format_t fmt = CAM_FORMAT_MAX;
@@ -101,9 +102,11 @@ mm_camera_stream_t * mm_app_add_rdi_stream(mm_camera_test_obj_t *test_obj,
         return NULL;
     }
 
-    CDBG_ERROR("%s: raw_dim w:%d height:%d\n", __func__, cam_cap->raw_dim.width, cam_cap->raw_dim.height);
+    CDBG_ERROR("%s: raw_dim w:%d height:%d\n", __func__,
+            cam_cap->raw_dim.width, cam_cap->raw_dim.height);
     for (i = 0;i < cam_cap->supported_raw_fmt_cnt;i++) {
-        CDBG_ERROR("%s: supported_raw_fmts[%d]=%d\n", __func__, i, cam_cap->supported_raw_fmts[i]);
+        CDBG_ERROR("%s: supported_raw_fmts[%zu]=%d\n", __func__,
+                i, cam_cap->supported_raw_fmts[i]);
         if (CAM_FORMAT_BAYER_MIPI_RAW_8BPP_GBRG <= cam_cap->supported_raw_fmts[i] &&
             CAM_FORMAT_BAYER_MIPI_RAW_12BPP_BGGR >= cam_cap->supported_raw_fmts[i])
         {

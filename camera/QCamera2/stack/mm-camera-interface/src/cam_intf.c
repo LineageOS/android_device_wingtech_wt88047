@@ -33,9 +33,10 @@ void *POINTER_OF_PARAM(cam_intf_parm_type_t PARAM_ID,
                  void *table_ptr)
 {
   parm_buffer_new_t *TABLE_PTR = (parm_buffer_new_t *)table_ptr;
-  int32_t j = 0, i = TABLE_PTR->num_entry;
-  parm_entry_type_new_t *curr_param =
-              (parm_entry_type_new_t *)&TABLE_PTR->entry[0];
+  void *tmp_p;
+  size_t j = 0, i = TABLE_PTR->num_entry;
+  tmp_p = (void *) &TABLE_PTR->entry[0];
+  parm_entry_type_new_t *curr_param = (parm_entry_type_new_t *) tmp_p;
 
   for (j = 0; j < i; j++) {
     if (PARAM_ID == curr_param->entry_type) {
@@ -43,7 +44,8 @@ void *POINTER_OF_PARAM(cam_intf_parm_type_t PARAM_ID,
     }
     curr_param = GET_NEXT_PARAM(curr_param, parm_entry_type_new_t);
   }
-  curr_param = (parm_entry_type_new_t *)&TABLE_PTR->entry[0];
+  tmp_p = (void *) &TABLE_PTR->entry[0];
+  curr_param = (parm_entry_type_new_t *) tmp_p;
   return (void *)&curr_param->data[0]; //should not be coming here
                                        //this is just to prevent a crash
                                        //for the caller

@@ -36,7 +36,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 static void mm_app_metadata_notify_cb(mm_camera_super_buf_t *bufs,
                                      void *user_data)
 {
-  int i = 0;
+  uint32_t i = 0;
   mm_camera_channel_t *channel = NULL;
   mm_camera_stream_t *p_stream = NULL;
   mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
@@ -51,6 +51,11 @@ static void mm_app_metadata_notify_cb(mm_camera_super_buf_t *bufs,
           break;
       }
   }
+  if (NULL == channel) {
+      CDBG_ERROR("%s: Wrong channel id (%d)", __func__, bufs->ch_id);
+      return;
+  }
+
   /* find preview stream */
   for (i = 0; i < channel->num_streams; i++) {
       if (channel->streams[i].s_config.stream_info->stream_type == CAM_STREAM_TYPE_METADATA) {
@@ -91,6 +96,11 @@ static void mm_app_metadata_notify_cb(mm_camera_super_buf_t *bufs,
     }
   }
 
+  if (pme->user_metadata_cb) {
+      CDBG("[DBG] %s, user defined own metadata cb. calling it...", __func__);
+      pme->user_metadata_cb(frame);
+  }
+
   if (MM_CAMERA_OK != pme->cam->ops->qbuf(bufs->camera_handle,
                                           bufs->ch_id,
                                           frame)) {
@@ -103,14 +113,14 @@ static void mm_app_metadata_notify_cb(mm_camera_super_buf_t *bufs,
 static void mm_app_preview_notify_cb(mm_camera_super_buf_t *bufs,
                                      void *user_data)
 {
-    int i = 0;
+    uint32_t i = 0;
     mm_camera_channel_t *channel = NULL;
     mm_camera_stream_t *p_stream = NULL;
     mm_camera_buf_def_t *frame = bufs->bufs[0];
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
 
-    CDBG_ERROR("%s: BEGIN - length=%d, frame idx = %d\n",
-         __func__, frame->frame_len, frame->frame_idx);
+    CDBG_ERROR("%s: BEGIN - length=%zu, frame idx = %d\n",
+            __func__, frame->frame_len, frame->frame_idx);
 
     /* find channel */
     for (i = 0; i < MM_CHANNEL_TYPE_MAX; i++) {
@@ -119,6 +129,11 @@ static void mm_app_preview_notify_cb(mm_camera_super_buf_t *bufs,
             break;
         }
     }
+    if (NULL == channel) {
+        CDBG_ERROR("%s: Wrong channel id (%d)", __func__, bufs->ch_id);
+        return;
+    }
+
     /* find preview stream */
     for (i = 0; i < channel->num_streams; i++) {
         if (channel->streams[i].s_config.stream_info->stream_type == CAM_STREAM_TYPE_PREVIEW) {
@@ -126,6 +141,12 @@ static void mm_app_preview_notify_cb(mm_camera_super_buf_t *bufs,
             break;
         }
     }
+
+    if (NULL == p_stream) {
+        CDBG_ERROR("%s: cannot find preview stream", __func__);
+        return;
+    }
+
     /* find preview frame */
     for (i = 0; i < bufs->num_bufs; i++) {
         if (bufs->bufs[i]->stream_id == p_stream->s_id) {
@@ -168,7 +189,7 @@ static void mm_app_zsl_notify_cb(mm_camera_super_buf_t *bufs,
                                  void *user_data)
 {
     int rc = 0;
-    int i = 0;
+    uint32_t i = 0;
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
     mm_camera_channel_t *channel = NULL;
     mm_camera_stream_t *p_stream = NULL;
@@ -225,6 +246,7 @@ static void mm_app_zsl_notify_cb(mm_camera_super_buf_t *bufs,
     }
     if (NULL == md_stream) {
         CDBG_ERROR("%s: cannot find metadata stream", __func__);
+        return;
     }
 
     /* find preview frame */
@@ -233,6 +255,11 @@ static void mm_app_zsl_notify_cb(mm_camera_super_buf_t *bufs,
             p_frame = bufs->bufs[i];
             break;
         }
+    }
+
+    if (!p_frame) {
+        CDBG_ERROR("%s: cannot find preview frame", __func__);
+        return;
     }
 
     if(md_stream) {
@@ -259,16 +286,16 @@ static void mm_app_zsl_notify_cb(mm_camera_super_buf_t *bufs,
         }
     }
 
-    if (!m_frame || !p_frame) {
-        CDBG_ERROR("%s: cannot find preview/snapshot frame", __func__);
+    if (!m_frame) {
+        CDBG_ERROR("%s: cannot find snapshot frame", __func__);
         return;
     }
 
-    CDBG("%s: ZSL CB with fb_fd = %d, m_frame = 0x%x, p_frame = 0x%x \n",
+    CDBG("%s: ZSL CB with fb_fd = %d, m_frame = %p, p_frame = %p \n",
          __func__,
          pme->fb_fd,
-         (uint32_t )m_frame,
-         (uint32_t )p_frame);
+         m_frame,
+         p_frame);
 
     if ( 0 < pme->fb_fd ) {
         mm_app_overlay_display(pme, p_frame->fd);
@@ -476,8 +503,8 @@ mm_camera_stream_t * mm_app_add_raw_stream(mm_camera_test_obj_t *test_obj,
         stream->s_config.stream_info->dim.width = DEFAULT_SNAPSHOT_WIDTH;
         stream->s_config.stream_info->dim.height = DEFAULT_SNAPSHOT_HEIGHT;
     } else {
-        stream->s_config.stream_info->dim.width = test_obj->buffer_width;
-        stream->s_config.stream_info->dim.height = test_obj->buffer_height;
+        stream->s_config.stream_info->dim.width = (int32_t)test_obj->buffer_width;
+        stream->s_config.stream_info->dim.height = (int32_t)test_obj->buffer_height;
     }
     stream->s_config.padding_info = cam_cap->padding_info;
 
@@ -531,8 +558,8 @@ mm_camera_stream_t * mm_app_add_snapshot_stream(mm_camera_test_obj_t *test_obj,
         stream->s_config.stream_info->dim.width = DEFAULT_SNAPSHOT_WIDTH;
         stream->s_config.stream_info->dim.height = DEFAULT_SNAPSHOT_HEIGHT;
     } else {
-        stream->s_config.stream_info->dim.width = test_obj->buffer_width;
-        stream->s_config.stream_info->dim.height = test_obj->buffer_height;
+        stream->s_config.stream_info->dim.width = (int32_t)test_obj->buffer_width;
+        stream->s_config.stream_info->dim.height = (int32_t)test_obj->buffer_height;
     }
     stream->s_config.padding_info = cam_cap->padding_info;
 
@@ -871,7 +898,7 @@ int mm_app_initialize_fb(mm_camera_test_obj_t *test_obj)
     }
 
     munmap(fb_base, test_obj->slice_size);
-    test_obj->data_overlay.id = MSMFB_NEW_REQUEST;
+    test_obj->data_overlay.id = (uint32_t)MSMFB_NEW_REQUEST;
     rc = ioctl(test_obj->fb_fd, MSMFB_OVERLAY_SET, &test_obj->data_overlay);
     if (rc < 0) {
         CDBG_ERROR("%s : MSMFB_OVERLAY_SET failed! err=%d\n",

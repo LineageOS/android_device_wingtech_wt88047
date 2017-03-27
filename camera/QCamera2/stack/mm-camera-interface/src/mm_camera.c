@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -47,6 +47,8 @@
 
 #define GET_PARM_BIT32(parm, parm_arr) \
     ((parm_arr[parm/32]>>(parm%32))& 0x1)
+
+#define WAIT_EVENT_TIMEOUT 5 //5seconds
 
 /* internal function declare */
 int32_t mm_camera_evt_sub(mm_camera_obj_t * my_obj,
@@ -114,6 +116,7 @@ uint8_t mm_camera_util_chip_is_a_family(void)
 static void mm_camera_dispatch_app_event(mm_camera_cmdcb_t *cmd_cb,
                                          void* user_data)
 {
+    mm_camera_cmd_thread_name("mm_cam_event");
     int i;
     mm_camera_event_t *event = &cmd_cb->u.evt;
     mm_camera_obj_t * my_obj = (mm_camera_obj_t *)user_data;
@@ -248,18 +251,20 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
     int32_t rc = 0;
     int8_t n_try=MM_CAMERA_DEV_OPEN_TRIES;
     uint8_t sleep_msec=MM_CAMERA_DEV_OPEN_RETRY_SLEEP;
-    unsigned int cam_idx = 0;
+    int cam_idx = 0;
     char t_devname[MM_CAMERA_DEV_NAME_LEN];
+    const char *temp_dev_name = mm_camera_util_get_dev_name(my_obj->my_hdl);
 
     CDBG("%s:  begin\n", __func__);
 
-    strcpy(t_devname, mm_camera_util_get_dev_name(my_obj->my_hdl));
-    if (t_devname == NULL) {
-        rc = -1;
+    if (temp_dev_name == NULL) {
+        CDBG_ERROR("%s: dev name is NULL",__func__);
+        rc= -1;
         goto on_error;
     }
+    strlcpy(t_devname, temp_dev_name, sizeof(t_devname));
     snprintf(dev_name, sizeof(dev_name), "/dev/%s",t_devname );
-    sscanf(dev_name, "/dev/video%u", &cam_idx);
+    sscanf(dev_name, "/dev/video%d", &cam_idx);
     CDBG_ERROR("%s: dev name = %s, cam_idx = %d", __func__, dev_name, cam_idx);
 
     do{
@@ -272,7 +277,7 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
         }
         CDBG("%s:failed with I/O error retrying after %d milli-seconds",
              __func__, sleep_msec);
-        usleep(sleep_msec * 1000);
+        usleep(sleep_msec * 1000U);
     }while (n_try > 0);
 
     if (my_obj->ctrl_fd <= 0) {
@@ -294,7 +299,7 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
         }
         CDBG("%s:failed with I/O error retrying after %d milli-seconds",
              __func__, sleep_msec);
-        usleep(sleep_msec * 1000);
+        usleep(sleep_msec * 1000U);
     } while (n_try > 0);
 
     if (my_obj->ds_fd <= 0) {
@@ -310,6 +315,7 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
     pthread_cond_init(&my_obj->evt_cond, NULL);
 
     CDBG("%s : Launch evt Thread in Cam Open",__func__);
+    snprintf(my_obj->evt_thread.threadName, THREAD_NAME_SIZE, "CAM_Dispatch");
     mm_camera_cmd_thread_launch(&my_obj->evt_thread,
                                 mm_camera_dispatch_app_event,
                                 (void *)my_obj);
@@ -317,6 +323,7 @@ int32_t mm_camera_open(mm_camera_obj_t *my_obj)
     /* launch event poll thread
      * we will add evt fd into event poll thread upon user first register for evt */
     CDBG("%s : Launch evt Poll Thread in Cam Open", __func__);
+    snprintf(my_obj->evt_thread.threadName, THREAD_NAME_SIZE, "CAM_Poll");
     mm_camera_poll_thread_launch(&my_obj->evt_poll_thread,
                                  MM_CAMERA_POLL_TYPE_EVT);
     mm_camera_evt_sub(my_obj, TRUE);
@@ -495,6 +502,42 @@ int32_t mm_camera_qbuf(mm_camera_obj_t *my_obj,
 
     return rc;
 }
+
+/*===========================================================================
+ * FUNCTION   : mm_camera_get_queued_buf_count
+ *
+ * DESCRIPTION: return queued buffer count
+ *
+ * PARAMETERS :
+ *   @my_obj       : camera object
+ *   @ch_id        : channel handle
+ *   @stream_id : stream id
+ *
+ * RETURN     : queued buffer count
+ *==========================================================================*/
+int32_t mm_camera_get_queued_buf_count(mm_camera_obj_t *my_obj,
+        uint32_t ch_id, uint32_t stream_id)
+{
+    int rc = -1;
+    mm_channel_t * ch_obj = NULL;
+    uint32_t payload;
+    ch_obj = mm_camera_util_get_channel_by_handler(my_obj, ch_id);
+    payload = stream_id;
+
+    if (NULL != ch_obj) {
+        pthread_mutex_lock(&ch_obj->ch_lock);
+        pthread_mutex_unlock(&my_obj->cam_lock);
+        rc = mm_channel_fsm_fn(ch_obj,
+                MM_CHANNEL_EVT_GET_STREAM_QUEUED_BUF_COUNT,
+                (void *)&payload,
+                NULL);
+    } else {
+        pthread_mutex_unlock(&my_obj->cam_lock);
+    }
+
+    return rc;
+}
+
 
 /*===========================================================================
  * FUNCTION   : mm_camera_query_capability
@@ -891,7 +934,7 @@ uint32_t mm_camera_add_stream(mm_camera_obj_t *my_obj,
         mm_channel_fsm_fn(ch_obj,
                           MM_CHANNEL_EVT_ADD_STREAM,
                           NULL,
-                          (void*)&s_hdl);
+                          (void *)&s_hdl);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
     }
@@ -928,7 +971,7 @@ int32_t mm_camera_del_stream(mm_camera_obj_t *my_obj,
 
         rc = mm_channel_fsm_fn(ch_obj,
                                MM_CHANNEL_EVT_DEL_STREAM,
-                               (void*)stream_id,
+                               (void *)&stream_id,
                                NULL);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
@@ -1041,7 +1084,7 @@ int32_t mm_camera_config_stream(mm_camera_obj_t *my_obj,
         payload.config = config;
         rc = mm_channel_fsm_fn(ch_obj,
                                MM_CHANNEL_EVT_CONFIG_STREAM,
-                               (void*)&payload,
+                               (void *)&payload,
                                NULL);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
@@ -1148,7 +1191,7 @@ int32_t mm_camera_request_super_buf(mm_camera_obj_t *my_obj,
 
         rc = mm_channel_fsm_fn(ch_obj,
                                MM_CHANNEL_EVT_REQUEST_SUPER_BUF,
-                               (void*)num_buf_requested,
+                               (void *)&num_buf_requested,
                                NULL);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
@@ -1218,7 +1261,7 @@ int32_t mm_camera_flush_super_buf_queue(mm_camera_obj_t *my_obj, uint32_t ch_id,
 
         rc = mm_channel_fsm_fn(ch_obj,
                                MM_CHANNEL_EVT_FLUSH_SUPER_BUF_QUEUE,
-                               (void *)frame_idx,
+                               (void *)&frame_idx,
                                NULL);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
@@ -1255,7 +1298,7 @@ int32_t mm_camera_config_channel_notify(mm_camera_obj_t *my_obj,
 
         rc = mm_channel_fsm_fn(ch_obj,
                                MM_CHANNEL_EVT_CONFIG_NOTIFY_MODE,
-                               (void *)notify_mode,
+                               (void *)&notify_mode,
                                NULL);
     } else {
         pthread_mutex_unlock(&my_obj->cam_lock);
@@ -1441,7 +1484,7 @@ int32_t mm_camera_map_stream_buf(mm_camera_obj_t *my_obj,
                                  uint32_t buf_idx,
                                  int32_t plane_idx,
                                  int fd,
-                                 uint32_t size)
+                                 size_t size)
 {
     int32_t rc = -1;
     mm_evt_paylod_map_stream_buf_t payload;
@@ -1591,11 +1634,21 @@ int32_t mm_camera_evt_sub(mm_camera_obj_t * my_obj,
  *==========================================================================*/
 void mm_camera_util_wait_for_event(mm_camera_obj_t *my_obj,
                                    uint32_t evt_mask,
-                                   int32_t *status)
+                                   uint32_t *status)
 {
+    int rc = 0;
+    struct timespec ts;
+
     pthread_mutex_lock(&my_obj->evt_lock);
     while (!(my_obj->evt_rcvd.server_event_type & evt_mask)) {
-        pthread_cond_wait(&my_obj->evt_cond, &my_obj->evt_lock);
+        clock_gettime(CLOCK_REALTIME, &ts);
+        ts.tv_sec += WAIT_EVENT_TIMEOUT;
+        rc = pthread_cond_timedwait(&my_obj->evt_cond, &my_obj->evt_lock, &ts);
+        if (rc == ETIMEDOUT) {
+            ALOGE("%s pthread_cond_timedwait success\n", __func__);
+            my_obj->evt_rcvd.status = MSM_CAMERA_STATUS_FAIL;
+            break;
+        }
     }
     *status = my_obj->evt_rcvd.status;
     /* reset local storage for recieved event for next event */
@@ -1620,11 +1673,11 @@ void mm_camera_util_wait_for_event(mm_camera_obj_t *my_obj,
  *==========================================================================*/
 int32_t mm_camera_util_sendmsg(mm_camera_obj_t *my_obj,
                                void *msg,
-                               uint32_t buf_size,
+                               size_t buf_size,
                                int sendfd)
 {
     int32_t rc = -1;
-    int32_t status;
+    uint32_t status;
 
     /* need to lock msg_lock, since sendmsg until reposonse back is deemed as one operation*/
     pthread_mutex_lock(&my_obj->msg_lock);
@@ -1660,7 +1713,7 @@ int32_t mm_camera_util_sendmsg(mm_camera_obj_t *my_obj,
 int32_t mm_camera_map_buf(mm_camera_obj_t *my_obj,
                           uint8_t buf_type,
                           int fd,
-                          uint32_t size)
+                          size_t size)
 {
     int32_t rc = 0;
     cam_sock_packet_t packet;
@@ -1735,8 +1788,8 @@ int32_t mm_camera_util_s_ctrl(int32_t fd,  uint32_t id, int32_t *value)
     }
     rc = ioctl(fd, VIDIOC_S_CTRL, &control);
 
-    CDBG("%s: fd=%d, S_CTRL, id=0x%x, value = 0x%x, rc = %d\n",
-         __func__, fd, id, (uint32_t)value, rc);
+    CDBG("%s: fd=%d, S_CTRL, id=0x%x, value = %p, rc = %d\n",
+         __func__, fd, id, value, rc);
     if (value != NULL) {
         *value = control.value;
     }
@@ -1793,7 +1846,7 @@ int32_t mm_camera_util_g_ctrl( int32_t fd, uint32_t id, int32_t *value)
 int32_t mm_camera_channel_advanced_capture(mm_camera_obj_t *my_obj,
                                         mm_camera_advanced_capture_t advanced_capture_type,
                                         uint32_t ch_id,
-                                        int32_t start_flag)
+                                        uint32_t start_flag)
 {
     CDBG("%s: E",__func__);
     int32_t rc = -1;
@@ -1807,25 +1860,31 @@ int32_t mm_camera_channel_advanced_capture(mm_camera_obj_t *my_obj,
             case MM_CAMERA_AF_BRACKETING:
                 rc = mm_channel_fsm_fn(ch_obj,
                                        MM_CHANNEL_EVT_AF_BRACKETING,
-                                       (void *)start_flag,
+                                       (void *)&start_flag,
                                        NULL);
                 break;
             case MM_CAMERA_AE_BRACKETING:
                 rc = mm_channel_fsm_fn(ch_obj,
                                        MM_CHANNEL_EVT_AE_BRACKETING,
-                                       (void *)start_flag,
+                                       (void *)&start_flag,
                                        NULL);
                 break;
             case MM_CAMERA_FLASH_BRACKETING:
                 rc = mm_channel_fsm_fn(ch_obj,
                                        MM_CHANNEL_EVT_FLASH_BRACKETING,
-                                       (void *)start_flag,
+                                       (void *)&start_flag,
+                                       NULL);
+                break;
+            case MM_CAMERA_MTF_BRACKETING:
+                rc = mm_channel_fsm_fn(ch_obj,
+                                       MM_CHANNEL_EVT_MTF_BRACKETING,
+                                       (void *)&start_flag,
                                        NULL);
                 break;
             case MM_CAMERA_ZOOM_1X:
                 rc = mm_channel_fsm_fn(ch_obj,
                                        MM_CHANNEL_EVT_ZOOM_1X,
-                                       (void *)start_flag,
+                                       (void *)&start_flag,
                                        NULL);
                 break;
             default:
