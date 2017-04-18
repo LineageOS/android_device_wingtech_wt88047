@@ -287,6 +287,9 @@ etc/firmware/venus.b04
 etc/firmware/venus.mbn
 etc/firmware/venus.mdt
 
+# STLport
+vendor/lib/libstlport.so|e61ef21decc21472e06eacc841e7d61bf68ca9f3
+
 # Thermal
 vendor/bin/thermal-engine
 vendor/lib/libthermalclient.so
