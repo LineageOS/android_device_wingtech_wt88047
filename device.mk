@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 
-$(call inherit-product-if-exists, vendor/wingtech/wt88047/wt88047-vendor.mk)
+$(call inherit-product, vendor/wingtech/wt88047/wt88047-vendor.mk)
 
 # Overlay
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
