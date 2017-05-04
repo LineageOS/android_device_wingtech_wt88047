@@ -1,4 +1,4 @@
-/* Copyright (c) 2011-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2011-2014,2016 The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -78,6 +78,10 @@ public:
         mLocApi->updateEvtMask();
     }
 
+    inline bool isFeatureSupported(uint8_t featureVal) {
+        return mLocApi->isFeatureSupported(featureVal);
+    }
+
     // This will be overridden by the individual adapters
     // if necessary.
     inline virtual void setUlpProxy(UlpProxyBase* ulp) {
@@ -117,7 +121,7 @@ public:
                                  const void* data);
     inline virtual bool isInSession() { return false; }
     ContextBase* getContext() const { return mContext; }
-    virtual void reportGpsMeasurementData(GpsData &gpsMeasurementData);
+    virtual void reportGnssMeasurementData(GnssData &gnssMeasurementData);
 };
 
 } // namespace loc_core
