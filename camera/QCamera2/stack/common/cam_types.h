@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -31,10 +31,11 @@
 #define __QCAMERA_TYPES_H__
 
 #include <stdint.h>
-#include <string.h>
 #include <pthread.h>
 #include <inttypes.h>
 #include <media/msmb_camera.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define CAM_MAX_NUM_BUFS_PER_STREAM  (24)
 #define MAX_METADATA_PAYLOAD_SIZE    (1024)
@@ -50,34 +51,6 @@
 #define CEILING4(X)  (((X) + 0x0003) & 0xFFFC)
 #define CEILING2(X)  (((X) + 0x0001) & 0xFFFE)
 
-#define CAM_FN_CNT 255
-/** CAM_DUMP_TO_FILE:
- *  @filename: file name
- *  @name:filename
- *  @index: index of the file
- *  @extn: file extension
- *  @p_addr: address of the buffer
- *  @len: buffer length
- *
- *  dump the image to the file
- **/
-#define CAM_DUMP_TO_FILE(path, name, index, extn, p_addr, len) ({ \
-  int rc = 0; \
-  char filename[CAM_FN_CNT]; \
-  if (index >= 0) \
-    snprintf(filename, CAM_FN_CNT-1, "%s/%s%d.%s", path, name, index, extn); \
-  else \
-    snprintf(filename, CAM_FN_CNT-1, "%s/%s.%s", path, name, extn); \
-  FILE *fp = fopen(filename, "w+"); \
-  if (fp) { \
-    rc = fwrite(p_addr, 1, len, fp); \
-    ALOGE("%s:%d] written size %d", __func__, __LINE__, len); \
-    fclose(fp); \
-  } else { \
-    ALOGE("%s:%d] open %s failed", __func__, __LINE__, filename); \
-  } \
-})
-
 #define MAX_ZOOMS_CNT 79
 #define MAX_SIZES_CNT 24
 #define MAX_EXP_BRACKETING_LENGTH 32
@@ -86,7 +59,7 @@
 #define MAX_NUM_STREAMS          8
 #define CHROMATIX_SIZE 21292
 #define COMMONCHROMATIX_SIZE 42044
-#define AFTUNE_SIZE 4100  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
+#define AFTUNE_SIZE 5200  //sizeof(actuator_driver_params_t) + sizeof(af_algo_tune_parms_t)
 #define MAX_SCALE_SIZES_CNT 8
 #define MAX_SAMP_DECISION_CNT     64
 
@@ -248,6 +221,46 @@ typedef enum {
     CAM_FORMAT_META_RAW_8BIT,
     CAM_FORMAT_META_RAW_10BIT,
 
+    /* QCOM RAW formats where data is packed into 64bit word.
+     * 14BPP: 1 64-bit word contains 4 pixels p0 - p3, where most
+     *       significant 4 bits are set to 0. P0 is stored at LSB.
+     */
+    CAM_FORMAT_BAYER_QCOM_RAW_14BPP_GBRG,
+    CAM_FORMAT_BAYER_QCOM_RAW_14BPP_GRBG,
+    CAM_FORMAT_BAYER_QCOM_RAW_14BPP_RGGB,
+    CAM_FORMAT_BAYER_QCOM_RAW_14BPP_BGGR,
+    /* MIPI RAW formats based on MIPI CSI-2 specifiction.
+     * 14 BPPP: 1st byte: P0 [13:6]
+     *          2nd byte: P1 [13:6]
+     *          3rd byte: P2 [13:6]
+     *          4th byte: P3 [13:6]
+     *          5th byte: P0 [5:0]
+     *          7th byte: P1 [5:0]
+     *          8th byte: P2 [5:0]
+     *          9th byte: P3 [5:0]
+     */
+    CAM_FORMAT_BAYER_MIPI_RAW_14BPP_GBRG,
+    CAM_FORMAT_BAYER_MIPI_RAW_14BPP_GRBG,
+    CAM_FORMAT_BAYER_MIPI_RAW_14BPP_RGGB,
+    CAM_FORMAT_BAYER_MIPI_RAW_14BPP_BGGR,
+    CAM_FORMAT_BAYER_IDEAL_RAW_QCOM_14BPP_GBRG,
+    CAM_FORMAT_BAYER_IDEAL_RAW_QCOM_14BPP_GRBG,
+    CAM_FORMAT_BAYER_IDEAL_RAW_QCOM_14BPP_RGGB,
+    CAM_FORMAT_BAYER_IDEAL_RAW_QCOM_14BPP_BGGR,
+    CAM_FORMAT_BAYER_IDEAL_RAW_MIPI_14BPP_GBRG,
+    CAM_FORMAT_BAYER_IDEAL_RAW_MIPI_14BPP_GRBG,
+    CAM_FORMAT_BAYER_IDEAL_RAW_MIPI_14BPP_RGGB,
+    CAM_FORMAT_BAYER_IDEAL_RAW_MIPI_14BPP_BGGR,
+    /* 14BPP: 1st byte: P0 [8:0]
+     *        2nd byte: P0 [13:9]
+     *        3rd byte: P1 [8:0]
+     *        4th byte: P1 [13:9]
+     */
+    CAM_FORMAT_BAYER_IDEAL_RAW_PLAIN16_14BPP_GBRG,
+    CAM_FORMAT_BAYER_IDEAL_RAW_PLAIN16_14BPP_GRBG,
+    CAM_FORMAT_BAYER_IDEAL_RAW_PLAIN16_14BPP_RGGB,
+    CAM_FORMAT_BAYER_IDEAL_RAW_PLAIN16_14BPP_BGGR,
+
     CAM_FORMAT_MAX
 } cam_format_t;
 
@@ -305,9 +318,9 @@ typedef struct {
     int32_t plane_idx;    /* planner index. valid if type is STREAM_BUF.
                            * -1 means all planners shanre the same fd;
                            * otherwise, each planner has its own fd */
-    unsigned long cookie; /* could be job_id(uint32_t) to identify mapping job */
+    uint32_t cookie;      /* could be job_id(uint32_t) to identify mapping job */
     int fd;               /* origin fd */
-    uint32_t size;        /* size of the buffer */
+    size_t size;          /* size of the buffer */
 } cam_buf_map_type;
 
 typedef struct {
@@ -317,7 +330,7 @@ typedef struct {
     int32_t plane_idx;    /* planner index. valid if type is STREAM_BUF.
                            * -1 means all planners shanre the same fd;
                            * otherwise, each planner has its own fd */
-    unsigned long cookie; /* could be job_id(uint32_t) to identify unmapping job */
+    uint32_t cookie;      /* could be job_id(uint32_t) to identify unmapping job */
 } cam_buf_unmap_type;
 
 typedef enum {
@@ -363,7 +376,7 @@ typedef struct {
 } cam_padding_info_t;
 
 typedef struct {
-    int num_planes;
+    uint32_t num_planes;
     union {
         cam_sp_len_offset_t sp;
         cam_mp_len_offset_t mp[VIDEO_MAX_PLANES];
@@ -415,7 +428,7 @@ typedef enum {
     CAM_WB_MODE_CLOUDY_DAYLIGHT,
     CAM_WB_MODE_TWILIGHT,
     CAM_WB_MODE_SHADE,
-    CAM_WB_MODE_CCT,
+    CAM_WB_MODE_MANUAL,
     CAM_WB_MODE_OFF,
     CAM_WB_MODE_MAX
 } cam_wb_mode_type;
@@ -484,13 +497,40 @@ typedef enum {
 typedef enum {
     CAM_MANUAL_FOCUS_MODE_INDEX,
     CAM_MANUAL_FOCUS_MODE_DAC_CODE,
+    CAM_MANUAL_FOCUS_MODE_RATIO,
+    CAM_MANUAL_FOCUS_MODE_DIOPTER,
     CAM_MANUAL_FOCUS_MODE_MAX
 } cam_manual_focus_mode_type;
 
 typedef struct {
     cam_manual_focus_mode_type flag;
-    int32_t af_manual_lens_position;
+    union{
+        int32_t af_manual_lens_position_index;
+        int32_t af_manual_lens_position_dac;
+        int32_t af_manual_lens_position_ratio;
+        float af_manual_diopter;
+    };
 } cam_manual_focus_parm_t;
+
+typedef enum {
+    CAM_MANUAL_WB_MODE_CCT,
+    CAM_MANUAL_WB_MODE_GAIN,
+    CAM_MANUAL_WB_MODE_MAX
+} cam_manual_wb_mode_type;
+
+typedef struct {
+    float r_gain;
+    float g_gain;
+    float b_gain;
+} cam_awb_gain_t;
+
+typedef struct {
+    cam_manual_wb_mode_type type;
+    union{
+        int32_t cct;
+        cam_awb_gain_t gains;
+    };
+} cam_manual_wb_parm_t;
 
 typedef enum {
     CAM_SCENE_MODE_OFF,
@@ -619,7 +659,7 @@ typedef struct {
 } cam_exp_bracketing_t;
 
 typedef struct {
-  unsigned int num_frames;
+  uint32_t num_frames;
   cam_exp_bracketing_t exp_val;
 } cam_hdr_bracketing_info_t;
 
@@ -691,15 +731,15 @@ typedef enum {
 } cam_denoise_process_type_t;
 
 typedef struct {
-    int denoise_enable;
+    uint8_t denoise_enable;
     cam_denoise_process_type_t process_plates;
 } cam_denoise_param_t;
 
-#define CAM_FACE_PROCESS_MASK_DETECTION    (1<<0)
-#define CAM_FACE_PROCESS_MASK_RECOGNITION  (1<<1)
+#define CAM_FACE_PROCESS_MASK_DETECTION    (1U<<0)
+#define CAM_FACE_PROCESS_MASK_RECOGNITION  (1U<<1)
 typedef struct {
-    int fd_mode;               /* mask of face process */
-    int num_fd;
+    uint32_t fd_mode;          /* mask of face process */
+    uint32_t num_fd;
 } cam_fd_set_parm_t;
 
 typedef enum {
@@ -733,6 +773,7 @@ typedef struct {
     uint8_t num_faces_detected;                /* number of faces detected */
     cam_face_detection_info_t faces[MAX_ROI];  /* detailed information of faces detected */
     qcamera_face_detect_type_t fd_type;        /* face detect for preview or snapshot frame*/
+    cam_dimension_t fd_frame_dim;              /* frame dims on which fd is applied */
 } cam_face_detection_data_t;
 
 #define CAM_HISTOGRAM_STATS_SIZE 256
@@ -772,6 +813,11 @@ typedef struct {
   float focus_distance[CAM_FOCUS_DISTANCE_MAX_INDEX];
 } cam_focus_distances_info_t;
 
+typedef struct {
+  uint32_t scale;
+  float diopter;
+}cam_focus_pos_info_t ;
+
 /* Different autofocus cycle when calling do_autoFocus
  * CAM_AF_COMPLETE_EXISTING_SWEEP: Complete existing sweep
  * if one is ongoing, and lock.
@@ -794,13 +840,17 @@ typedef enum {
     CAM_AF_SCANNING,
     CAM_AF_FOCUSED,
     CAM_AF_NOT_FOCUSED,
-    CAM_AF_INACTIVE
+    CAM_AF_INACTIVE,
+    CAM_AF_PASSIVE_SCANNING,
+    CAM_AF_PASSIVE_FOCUSED,
+    CAM_AF_PASSIVE_UNFOCUSED,
 } cam_autofocus_state_t;
 
 typedef struct {
     cam_autofocus_state_t focus_state;           /* state of focus */
     cam_focus_distances_info_t focus_dist;       /* focus distance */
     int32_t focus_pos;
+    uint32_t focused_frame_idx;
 } cam_auto_focus_data_t;
 
 typedef struct {
@@ -842,23 +892,50 @@ typedef struct {
    uint32_t meta_frame_id;
 } cam_meta_valid_t;
 
+typedef enum {
+    CAM_SENSOR_RAW,
+    CAM_SENSOR_YUV
+} cam_sensor_t;
+
 typedef struct {
     cam_flash_mode_t flash_mode;
+    cam_sensor_t sens_type;
     float aperture_value;
+    float            focal_length;
+    float            f_number;
+    int              sensing_method;
+    float            crop_factor;
 } cam_sensor_params_t;
+
+typedef enum {
+    CAM_METERING_MODE_UNKNOWN = 0,
+    CAM_METERING_MODE_AVERAGE = 1,
+    CAM_METERING_MODE_CENTER_WEIGHTED_AVERAGE = 2,
+    CAM_METERING_MODE_SPOT = 3,
+    CAM_METERING_MODE_MULTI_SPOT = 4,
+    CAM_METERING_MODE_PATTERN = 5,
+    CAM_METERING_MODE_PARTIAL = 6,
+    CAM_METERING_MODE_OTHER = 255,
+} cam_metering_mode_t;
 
 typedef struct {
     float exp_time;
     float real_gain;
-    int iso_value;
+    int32_t iso_value;
     uint32_t flash_needed;
-    int settled;
+    uint32_t settled;
     uint32_t exp_index;
     uint32_t line_count;
+    uint32_t metering_mode;
+    uint32_t exposure_program;
+    uint32_t exposure_mode;
+    uint32_t scenetype;
+    float brightness;
 } cam_ae_params_t;
 
 typedef struct {
     int32_t cct_value;
+    cam_awb_gain_t rgb_gains;
     int32_t decision;
 } cam_awb_params_t;
 
@@ -890,16 +967,16 @@ typedef struct {
 
 typedef struct {
     uint32_t tuning_data_version;
-    uint32_t tuning_sensor_data_size;
-    uint32_t tuning_vfe_data_size;
-    uint32_t tuning_cpp_data_size;
-    uint32_t tuning_cac_data_size;
+    size_t tuning_sensor_data_size;
+    size_t tuning_vfe_data_size;
+    size_t tuning_cpp_data_size;
+    size_t tuning_cac_data_size;
     uint8_t  data[TUNING_DATA_MAX];
 }tuning_params_t;
 
 typedef struct {
     cam_dimension_t dim;
-    int32_t size;
+    size_t size;
     char path[50];
 } cam_int_evt_params_t;
 
@@ -989,11 +1066,10 @@ typedef  struct {
     uint8_t is_sensor_params_valid;
     cam_sensor_params_t sensor_params;
 
-    /* Meta valid params */
-    uint8_t is_meta_valid;
-    cam_meta_valid_t meta_valid_params;
+    uint8_t is_meta_invalid;
+    cam_meta_valid_t meta_invalid_params;
 
-    /* Meta valid params */
+    /* Preview skip valid params */
     uint8_t is_preview_frame_skip_valid;
     cam_frame_idx_range_t preview_frame_skip_idx_range;
 
@@ -1034,6 +1110,12 @@ typedef  struct {
 
     uint8_t is_mobicat_stats_params_valid;
     cam_stats_buffer_exif_debug_t mobicat_stats_buffer_data;
+
+    uint8_t is_focus_pos_info_valid;
+    cam_focus_pos_info_t cur_pos_info;
+
+    /* Indication for Frame ID reset through recovery mechanism when bus overflow  */
+    uint8_t is_frame_id_reset;
 } cam_metadata_info_t;
 
 typedef enum {
@@ -1087,6 +1169,7 @@ typedef enum {
     CAM_INTF_PARM_ZSL_MODE,  /* indicating if it's running in ZSL mode */
     CAM_INTF_PARM_HDR_NEED_1X, /* if HDR needs 1x output */ /* 40 */
     CAM_INTF_PARM_VIDEO_HDR,
+    CAM_INTF_PARM_SENSOR_HDR,
     CAM_INTF_PARM_ROTATION,
     CAM_INTF_PARM_SCALE,
     CAM_INTF_PARM_VT, /* indicating if it's a Video Call Apllication */
@@ -1102,8 +1185,9 @@ typedef enum {
     CAM_INTF_PARM_SET_PP_COMMAND,
     CAM_INTF_PARM_TINTLESS,
     CAM_INTF_PARM_CDS_MODE,
-    CAM_INTF_PARM_WB_CCT,
+    CAM_INTF_PARM_WB_MANUAL,
     CAM_INTF_PARM_LONGSHOT_ENABLE,
+    CAM_INTF_PARM_LOW_POWER_ENABLE,
 
     /* stream based parameters */
     CAM_INTF_PARM_DO_REPROCESS,
@@ -1250,11 +1334,13 @@ typedef enum {
     CAM_INTF_META_ASD_HDR_SCENE_DATA,
     CAM_INTF_META_PRIVATE_DATA,
     CAM_INTF_PARM_STATS_DEBUG_MASK,
-    CAM_INTF_PARM_ALGO_OPTIMIZATIONS_MASK,
     CAM_INTF_PARM_ISP_DEBUG_MASK,
+    CAM_INTF_PARM_ALGO_OPTIMIZATIONS_MASK,
+    CAM_INTF_PARM_SENSOR_DEBUG_MASK,
     /* Indicates streams ID of all the requested buffers */
     CAM_INTF_META_STREAM_ID,
     CAM_INTF_PARM_FOCUS_BRACKETING,
+    CAM_INTF_PARM_MULTI_TOUCH_FOCUS_BRACKETING,
     CAM_INTF_PARM_FLASH_BRACKETING,
     CAM_INTF_PARM_GET_IMG_PROP,
 
@@ -1262,7 +1348,7 @@ typedef enum {
 } cam_intf_parm_type_t;
 
 typedef struct {
-    int   forced;
+    uint32_t forced;
     union {
       uint32_t force_linecount_value;
       float    force_gain_value;
@@ -1290,12 +1376,12 @@ typedef enum {
 typedef struct {
   cam_eztune_cmd_type_t   cmd;
   union {
-    int                   running;
-    int                   aec_enable;
-    int                   awb_enable;
-    int                   af_enable;
+    int32_t running;
+    int32_t aec_enable;
+    int32_t awb_enable;
+    int32_t af_enable;
     cam_ez_force_params_t ez_force_param;
-    int                   awb_mode;
+    int32_t awb_mode;
   } u;
 } cam_eztune_cmd_data_t;
 
@@ -1358,7 +1444,7 @@ typedef struct {
 #define CAM_MAX_TONEMAP_CURVE_SIZE    128
 
 typedef struct {
-    int tonemap_points_cnt;
+    size_t tonemap_points_cnt;
 
     /* A 1D array of pairs of floats.
      * Mapping a 0-1 input range to a 0-1 output range.
@@ -1409,26 +1495,33 @@ typedef struct {
     int32_t step;
 } cam_control_range_t;
 
-#define CAM_QCOM_FEATURE_FACE_DETECTION (1<<0)
-#define CAM_QCOM_FEATURE_DENOISE2D      (1<<1)
-#define CAM_QCOM_FEATURE_CROP           (1<<2)
-#define CAM_QCOM_FEATURE_CPP            (1<<3)
-#define CAM_QCOM_FEATURE_FLIP           (1<<4)
-#define CAM_QCOM_FEATURE_HDR            (1<<5)
-#define CAM_QCOM_FEATURE_REGISTER_FACE  (1<<6)
-#define CAM_QCOM_FEATURE_SHARPNESS      (1<<7)
-#define CAM_QCOM_FEATURE_VIDEO_HDR      (1<<8)
-#define CAM_QCOM_FEATURE_CAC            (1<<9)
-#define CAM_QCOM_FEATURE_SCALE          (1<<10)
-#define CAM_QCOM_FEATURE_EFFECT         (1<<11)
-#define CAM_QCOM_FEATURE_UBIFOCUS       (1<<12)
-#define CAM_QCOM_FEATURE_CHROMA_FLASH   (1<<13)
-#define CAM_QCOM_FEATURE_OPTIZOOM       (1<<14)
+#define CAM_QCOM_FEATURE_FACE_DETECTION (1U<<0)
+#define CAM_QCOM_FEATURE_DENOISE2D      (1U<<1)
+#define CAM_QCOM_FEATURE_CROP           (1U<<2)
+#define CAM_QCOM_FEATURE_ROTATION       (1U<<3)
+#define CAM_QCOM_FEATURE_FLIP           (1U<<4)
+#define CAM_QCOM_FEATURE_HDR            (1U<<5)
+#define CAM_QCOM_FEATURE_REGISTER_FACE  (1U<<6)
+#define CAM_QCOM_FEATURE_SHARPNESS      (1U<<7)
+#define CAM_QCOM_FEATURE_VIDEO_HDR      (1U<<8)
+#define CAM_QCOM_FEATURE_CAC            (1U<<9)
+#define CAM_QCOM_FEATURE_SCALE          (1U<<10)
+#define CAM_QCOM_FEATURE_EFFECT         (1U<<11)
+#define CAM_QCOM_FEATURE_UBIFOCUS       (1U<<12)
+#define CAM_QCOM_FEATURE_CHROMA_FLASH   (1U<<13)
+#define CAM_QCOM_FEATURE_OPTIZOOM       (1U<<14)
+#define CAM_QCOM_FEATURE_LLVD           (1U<<15)
+#define CAM_QCOM_FEATURE_DIS20          (1U<<16)
+#define CAM_QCOM_FEATURE_TRUEPORTRAIT   (1U<<17)
+#define CAM_QCOM_FEATURE_FSSR           (1U<<18)
+#define CAM_QCOM_FEATURE_MULTI_TOUCH_FOCUS (1U<<19)
+#define CAM_QCOM_FEATURE_SENSOR_HDR     (1U<<20)
+#define CAM_QCOM_FEATURE_REFOCUS        (1U<<21)
 
 // Debug mask
-#define HAL_DEBUG_MASK_HAL                 (1<<0)
-#define HAL_DEBUG_MASK_MM_CAMERA_INTERFACE (1<<1)
-#define HAL_DEBUG_MASK_MM_JPEG_INTERFACE   (1<<2)
+#define HAL_DEBUG_MASK_HAL                 (1U<<0)
+#define HAL_DEBUG_MASK_MM_CAMERA_INTERFACE (1U<<1)
+#define HAL_DEBUG_MASK_MM_JPEG_INTERFACE   (1U<<2)
 
 // Counter clock wise
 typedef enum {
@@ -1439,8 +1532,10 @@ typedef enum {
 } cam_rotation_t;
 
 typedef enum {
-    FLIP_H = 1<<0,
-    FLIP_V = 1<<1,
+    FLIP_NONE = 0, /* 00b */
+    FLIP_H = 1,    /* 01b */
+    FLIP_V = 2,    /* 10b */
+    FLIP_V_H = 3,  /* 11b */
 } cam_flip_t;
 
 typedef struct {
@@ -1473,7 +1568,7 @@ typedef struct {
 typedef struct {
     uint8_t enable;
     uint8_t burst_count;
-    uint8_t focus_steps[MAX_AF_BRACKETING_VALUES];
+    int32_t focus_steps[MAX_AF_BRACKETING_VALUES];
     uint8_t output_count;
 } cam_af_bracketing_t;
 
@@ -1485,18 +1580,25 @@ typedef struct {
 typedef struct {
     uint8_t enable;
     uint8_t burst_count;
+} cam_fssr_t;
+
+typedef struct {
+    uint8_t enable;
+    uint8_t burst_count;
     uint8_t zoom_threshold;
 } cam_opti_zoom_t;
+
+typedef struct {
+    uint8_t enable;
+    uint32_t meta_max_size;
+    uint32_t meta_header_size;
+    uint32_t body_mask_width;
+} cam_true_portrait_t;
 
 typedef enum {
     CAM_FLASH_OFF,
     CAM_FLASH_ON
 } cam_flash_value_t;
-
-typedef enum {
-    CAM_SENSOR_RAW,
-    CAM_SENSOR_YUV
-} cam_sensor_t;
 
 typedef struct {
     cam_sensor_t sens_type;
@@ -1519,7 +1621,7 @@ typedef struct {
 
     uint8_t zoom_level;
     cam_flash_value_t flash_value;
-
+    cam_true_portrait_t tp_param;
 } cam_pp_feature_config_t;
 
 typedef struct {

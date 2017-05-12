@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2012-2013, The Linux Foundation. All rights reserved.
+Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -37,7 +37,7 @@ static void mm_app_video_notify_cb(mm_camera_super_buf_t *bufs,
     mm_camera_buf_def_t *frame = bufs->bufs[0];
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
 
-    CDBG("%s: BEGIN - length=%d, frame idx = %d\n",
+    CDBG("%s: BEGIN - length=%zu, frame idx = %d\n",
          __func__, frame->frame_len, frame->frame_idx);
     snprintf(file_name, sizeof(file_name), "V_C%d", pme->cam->camera_handle);
     mm_app_dump_frame(frame, file_name, "yuv", frame->frame_idx);

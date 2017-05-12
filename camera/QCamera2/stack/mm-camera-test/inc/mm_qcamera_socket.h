@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -51,15 +51,15 @@
 
 #undef __FD_SET
 #define __FD_SET(fd, fdsetp) \
-  (((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] |= (1<<((fd) & 31)))
+  (((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] |= (1LU<<((fd) & 31)))
 
 #undef __FD_CLR
 #define __FD_CLR(fd, fdsetp) \
-  (((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] &= ~(1<<((fd) & 31)))
+  (((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] &= ~(1LU<<((fd) & 31)))
 
 #undef  __FD_ISSET
 #define __FD_ISSET(fd, fdsetp) \
-  ((((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] & (1<<((fd) & 31))) != 0)
+  ((((fd_set *)(fdsetp))->fds_bits[(fd) >> 5] & (1LU<<((fd) & 31))) != 0)
 
 #undef  __FD_ZERO
 #define __FD_ZERO(fdsetp) \
@@ -119,6 +119,10 @@ typedef struct _eztune_preview_protocol_t {
   uint32_t         new_cmd_available;
 } prserver_protocol_t;
 
+typedef union {
+  struct sockaddr addr;
+  struct sockaddr_in addr_in;
+} mm_qcamera_sock_addr_t;
 
 int eztune_server_start(void *lib_handle);
 

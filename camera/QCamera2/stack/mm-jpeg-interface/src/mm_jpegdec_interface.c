@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -41,9 +41,6 @@
 static pthread_mutex_t g_dec_intf_lock = PTHREAD_MUTEX_INITIALIZER;
 
 static mm_jpeg_obj* g_jpegdec_obj = NULL;
-
-static pthread_mutex_t g_dec_handler_lock = PTHREAD_MUTEX_INITIALIZER;
-
 
 /** mm_jpeg_intf_start_job:
  *

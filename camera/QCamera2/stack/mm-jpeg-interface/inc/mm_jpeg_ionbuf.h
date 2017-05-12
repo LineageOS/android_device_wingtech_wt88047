@@ -1,4 +1,4 @@
-/* Copyright (c) 2013, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2013-2014, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -32,7 +32,6 @@
 
 
 #include <stdio.h>
-#include <string.h>
 #include <linux/msm_ion.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -45,7 +44,7 @@ typedef struct  {
   struct ion_fd_data ion_info_fd;
   struct ion_allocation_data alloc;
   int p_pmem_fd;
-  long size;
+  size_t size;
   int ion_fd;
   uint8_t *addr;
 } buffer_t;
