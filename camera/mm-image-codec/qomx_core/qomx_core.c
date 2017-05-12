@@ -1,4 +1,4 @@
-/*Copyright (c) 2012, The Linux Foundation. All rights reserved.
+/*Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -177,6 +177,7 @@ OMX_API OMX_ERRORTYPE OMX_APIENTRY OMX_GetHandle(
 {
   OMX_ERRORTYPE rc = OMX_ErrorNone;
   int comp_idx = 0, inst_idx = 0;
+  char libName[BUFF_SIZE] = {0};
   void *p_obj = NULL;
   OMX_COMPONENTTYPE *p_comp = NULL;
   omx_core_component_t *p_core_comp = NULL;

@@ -39,7 +39,7 @@ static void mm_app_reprocess_notify_cb(mm_camera_super_buf_t *bufs,
     mm_camera_stream_t *m_stream = NULL;
     mm_camera_buf_def_t *m_frame = NULL;
     mm_camera_super_buf_t *src_frame;
-    int i = 0;
+    uint32_t i = 0;
     int rc = 0;
 
     if (!bufs) {
@@ -47,7 +47,7 @@ static void mm_app_reprocess_notify_cb(mm_camera_super_buf_t *bufs,
         return;
     }
     frame = bufs->bufs[0];
-    CDBG_ERROR("%s: BEGIN - length=%d, frame idx = %d\n",
+    CDBG_ERROR("%s: BEGIN - length=%zu, frame idx = %d\n",
          __func__, frame->frame_len, frame->frame_idx);
     /* find channel */
     for (i = 0; i < MM_CHANNEL_TYPE_MAX; i++) {
@@ -206,7 +206,7 @@ mm_camera_channel_t * mm_app_add_reprocess_channel(mm_camera_test_obj_t *test_ob
     memset(&pp_config, 0, sizeof(cam_pp_feature_config_t));
 
     cam_capability_t *caps = ( cam_capability_t * ) ( test_obj->cap_buf.buf.buffer );
-    if (caps->min_required_pp_mask & CAM_QCOM_FEATURE_SHARPNESS) {
+    if (caps->qcom_supported_feature_mask & CAM_QCOM_FEATURE_SHARPNESS) {
         pp_config.feature_mask |= CAM_QCOM_FEATURE_SHARPNESS;
         pp_config.sharpness = test_obj->reproc_sharpness;
     }
@@ -291,7 +291,7 @@ int mm_app_stop_reprocess(mm_camera_test_obj_t *test_obj)
 
 int mm_app_do_reprocess(mm_camera_test_obj_t *test_obj,
                         mm_camera_buf_def_t *frame,
-                        uint8_t meta_idx,
+                        uint32_t meta_idx,
                         mm_camera_super_buf_t *super_buf,
                         mm_camera_stream_t *src_meta)
 {
@@ -359,7 +359,7 @@ int mm_app_do_reprocess(mm_camera_test_obj_t *test_obj,
 
 void mm_app_release_ppinput(void *data, void *user_data)
 {
-    int i = 0;
+    uint32_t i = 0;
     mm_camera_super_buf_t *recvd_frame  = ( mm_camera_super_buf_t * ) data;
     mm_camera_test_obj_t *pme = (mm_camera_test_obj_t *)user_data;
 

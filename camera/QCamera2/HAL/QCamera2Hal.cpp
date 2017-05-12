@@ -45,10 +45,16 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     common: camera_common,
     get_number_of_cameras: qcamera::QCamera2Factory::get_number_of_cameras,
     get_camera_info: qcamera::QCamera2Factory::get_camera_info,
+#ifndef USE_JB_MR1
     set_callbacks: NULL,
+#endif
+//#ifdef USE_VENDOR_CAMERA_EXT
     get_vendor_tag_ops: NULL,
+#ifndef USE_KK_CODE
     open_legacy: NULL,
     set_torch_mode: NULL,
     init: NULL,
+#endif
     reserved:  {0}
+//#endif
 };
