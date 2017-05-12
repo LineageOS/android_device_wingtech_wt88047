@@ -27,6 +27,7 @@
  *
  */
 
+#include <stdlib.h>
 #include <pthread.h>
 #include <errno.h>
 #include <sys/ioctl.h>
@@ -305,7 +306,7 @@ uint32_t jpeg_open(mm_jpeg_ops_t *ops, mm_dimension picture_size)
                       0x10 for mm-camera-interface
                       0x100 for mm-jpeg-interface  */
   property_get("persist.camera.hal.debug.mask", prop, "268435463"); // 0x10000007=268435463
-  temp = atoi(prop);
+  temp = (uint32_t)atoi(prop);
   log_level = ((temp >> 28) & 0xF);
   debug_mask = (temp & HAL_DEBUG_MASK_MM_JPEG_INTERFACE);
   if (debug_mask > 0)

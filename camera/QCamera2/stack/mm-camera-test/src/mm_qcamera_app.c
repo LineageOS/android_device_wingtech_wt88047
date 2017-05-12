@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2014, The Linux Foundation. All rights reserved.
+/* Copyright (c) 2012-2015, The Linux Foundation. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -109,7 +109,7 @@ int mm_app_load_hal(mm_camera_app_t *my_cam_app)
     return MM_CAMERA_OK;
 }
 
-int mm_app_allocate_ion_memory(mm_camera_app_buf_t *buf, int ion_type)
+int mm_app_allocate_ion_memory(mm_camera_app_buf_t *buf, unsigned int ion_type)
 {
     int rc = MM_CAMERA_OK;
     struct ion_handle_data handle_data;
@@ -127,7 +127,7 @@ int mm_app_allocate_ion_memory(mm_camera_app_buf_t *buf, int ion_type)
     memset(&alloc, 0, sizeof(alloc));
     alloc.len = buf->mem_info.size;
     /* to make it page size aligned */
-    alloc.len = (alloc.len + 4095) & (~4095);
+    alloc.len = (alloc.len + 4095U) & (~4095U);
     alloc.align = 4096;
     alloc.flags = ION_FLAG_CACHED;
     alloc.heap_id_mask = ion_type;
@@ -197,7 +197,7 @@ int mm_app_deallocate_ion_memory(mm_camera_app_buf_t *buf)
 
 /* cmd = ION_IOC_CLEAN_CACHES, ION_IOC_INV_CACHES, ION_IOC_CLEAN_INV_CACHES */
 int mm_app_cache_ops(mm_camera_app_meminfo_t *mem_info,
-                     unsigned int cmd)
+                     int cmd)
 {
     struct ion_flush_data cache_inv_data;
     struct ion_custom_data custom_data;
@@ -214,13 +214,13 @@ int mm_app_cache_ops(mm_camera_app_meminfo_t *mem_info,
     cache_inv_data.vaddr = mem_info->data;
     cache_inv_data.fd = mem_info->fd;
     cache_inv_data.handle = mem_info->handle;
-    cache_inv_data.length = mem_info->size;
-    custom_data.cmd = cmd;
+    cache_inv_data.length = (unsigned int)mem_info->size;
+    custom_data.cmd = (unsigned int)cmd;
     custom_data.arg = (unsigned long)&cache_inv_data;
 
-    CDBG("addr = %p, fd = %d, handle = %p length = %d, ION Fd = %d",
+    CDBG("addr = %p, fd = %d, handle = %lx length = %d, ION Fd = %d",
          cache_inv_data.vaddr, cache_inv_data.fd,
-         cache_inv_data.handle, cache_inv_data.length,
+         (unsigned long)cache_inv_data.handle, cache_inv_data.length,
          mem_info->main_ion_fd);
     if(mem_info->main_ion_fd > 0) {
         if(ioctl(mem_info->main_ion_fd, ION_IOC_CUSTOM, &custom_data) < 0) {
@@ -236,25 +236,26 @@ int mm_app_cache_ops(mm_camera_app_meminfo_t *mem_info,
 void mm_app_dump_frame(mm_camera_buf_def_t *frame,
                        char *name,
                        char *ext,
-                       int frame_idx)
+                       uint32_t frame_idx)
 {
     char file_name[64];
     int file_fd;
     int i;
     int offset = 0;
     if ( frame != NULL) {
-        snprintf(file_name, sizeof(file_name), "/data/test/%s_%04d.%s", name, frame_idx, ext);
+        snprintf(file_name, sizeof(file_name), "/data/misc/camera/test/%s_%04d.%s", name, frame_idx, ext);
         file_fd = open(file_name, O_RDWR | O_CREAT, 0777);
         if (file_fd < 0) {
             CDBG_ERROR("%s: cannot open file %s \n", __func__, file_name);
         } else {
             for (i = 0; i < frame->num_planes; i++) {
-                CDBG("%s: saving file from address: 0x%x, data offset: %d, length: %d \n", __func__,
-                          (uint32_t )frame->buffer, frame->planes[i].data_offset, frame->planes[i].length);
+                CDBG("%s: saving file from address: %p, data offset: %d, "
+                     "length: %d \n", __func__, frame->buffer,
+                    frame->planes[i].data_offset, frame->planes[i].length);
                 write(file_fd,
                       (uint8_t *)frame->buffer + offset,
                       frame->planes[i].length);
-                offset +=  frame->planes[i].length;
+                offset += (int)frame->planes[i].length;
             }
 
             close(file_fd);
@@ -263,13 +264,14 @@ void mm_app_dump_frame(mm_camera_buf_def_t *frame,
     }
 }
 
-void mm_app_dump_jpeg_frame(const void * data, uint32_t size, char* name, char* ext, int index)
+void mm_app_dump_jpeg_frame(const void * data, size_t size, char* name,
+        char* ext, uint32_t index)
 {
     char buf[64];
     int file_fd;
     if ( data != NULL) {
-        snprintf(buf, sizeof(buf), "/data/test/%s_%d.%s", name, index, ext);
-        CDBG("%s: %s size =%d, jobId=%d", __func__, buf, size, index);
+        snprintf(buf, sizeof(buf), "/data/misc/camera/test/%s_%u.%s", name, index, ext);
+        CDBG("%s: %s size =%zu, jobId=%u", __func__, buf, size, index);
         file_fd = open(buf, O_RDWR | O_CREAT, 0777);
         write(file_fd, data, size);
         close(file_fd);
@@ -282,8 +284,8 @@ int mm_app_alloc_bufs(mm_camera_app_buf_t* app_bufs,
                       uint8_t is_streambuf,
                       size_t multipleOf)
 {
-    int i, j;
-    int ion_type = 0x1 << CAMERA_ION_FALLBACK_HEAP_ID;
+    uint32_t i, j;
+    unsigned int ion_type = 0x1 << CAMERA_ION_FALLBACK_HEAP_ID;
 
     if (is_streambuf) {
         ion_type |= 0x1 << CAMERA_ION_HEAP_ID;
@@ -302,7 +304,7 @@ int mm_app_alloc_bufs(mm_camera_app_buf_t* app_bufs,
         mm_app_allocate_ion_memory(&app_bufs[i], ion_type);
 
         app_bufs[i].buf.buf_idx = i;
-        app_bufs[i].buf.num_planes = frame_offset_info->num_planes;
+        app_bufs[i].buf.num_planes = (int8_t)frame_offset_info->num_planes;
         app_bufs[i].buf.fd = app_bufs[i].mem_info.fd;
         app_bufs[i].buf.frame_len = app_bufs[i].mem_info.size;
         app_bufs[i].buf.buffer = app_bufs[i].mem_info.data;
@@ -311,12 +313,14 @@ int mm_app_alloc_bufs(mm_camera_app_buf_t* app_bufs,
         /* Plane 0 needs to be set seperately. Set other planes
              * in a loop. */
         app_bufs[i].buf.planes[0].length = frame_offset_info->mp[0].len;
-        app_bufs[i].buf.planes[0].m.userptr = app_bufs[i].buf.fd;
+        app_bufs[i].buf.planes[0].m.userptr =
+            (long unsigned int)app_bufs[i].buf.fd;
         app_bufs[i].buf.planes[0].data_offset = frame_offset_info->mp[0].offset;
         app_bufs[i].buf.planes[0].reserved[0] = 0;
-        for (j = 1; j < frame_offset_info->num_planes; j++) {
+        for (j = 1; j < (uint8_t)frame_offset_info->num_planes; j++) {
             app_bufs[i].buf.planes[j].length = frame_offset_info->mp[j].len;
-            app_bufs[i].buf.planes[j].m.userptr = app_bufs[i].buf.fd;
+            app_bufs[i].buf.planes[j].m.userptr =
+                (long unsigned int)app_bufs[i].buf.fd;
             app_bufs[i].buf.planes[j].data_offset = frame_offset_info->mp[j].offset;
             app_bufs[i].buf.planes[j].reserved[0] =
                 app_bufs[i].buf.planes[j-1].reserved[0] +
@@ -396,7 +400,7 @@ int mm_app_stream_initbuf(cam_frame_len_offset_t *frame_offset_info,
         rc = ops_tbl->map_ops(pBufs[i].buf_idx,
                               -1,
                               pBufs[i].fd,
-                              pBufs[i].frame_len,
+                              (uint32_t)pBufs[i].frame_len,
                               ops_tbl->userdata);
         if (rc != MM_CAMERA_OK) {
             CDBG_ERROR("%s: mapping buf[%d] err = %d", __func__, i, rc);
@@ -440,14 +444,14 @@ int32_t mm_app_stream_deinitbuf(mm_camera_map_unmap_ops_tbl_t *ops_tbl,
     return 0;
 }
 
-int32_t mm_app_stream_clean_invalidate_buf(int index, void *user_data)
+int32_t mm_app_stream_clean_invalidate_buf(uint32_t index, void *user_data)
 {
     mm_camera_stream_t *stream = (mm_camera_stream_t *)user_data;
     return mm_app_cache_ops(&stream->s_bufs[index].mem_info,
       ION_IOC_CLEAN_INV_CACHES);
 }
 
-int32_t mm_app_stream_invalidate_buf(int index, void *user_data)
+int32_t mm_app_stream_invalidate_buf(uint32_t index, void *user_data)
 {
     mm_camera_stream_t *stream = (mm_camera_stream_t *)user_data;
     return mm_app_cache_ops(&stream->s_bufs[index].mem_info, ION_IOC_INV_CACHES);
@@ -480,7 +484,7 @@ static void notify_evt_cb(uint32_t camera_handle,
 }
 
 int mm_app_open(mm_camera_app_t *cam_app,
-                uint8_t cam_id,
+                int cam_id,
                 mm_camera_test_obj_t *test_obj)
 {
     int32_t rc;
@@ -488,7 +492,7 @@ int mm_app_open(mm_camera_app_t *cam_app,
 
     CDBG("%s:BEGIN\n", __func__);
 
-    test_obj->cam = cam_app->hal_lib.mm_camera_open(cam_id);
+    test_obj->cam = cam_app->hal_lib.mm_camera_open((uint8_t)cam_id);
     if(test_obj->cam == NULL) {
         CDBG_ERROR("%s:dev open error\n", __func__);
         return -MM_CAMERA_E_GENERAL;
@@ -592,7 +596,7 @@ error_after_cam_open:
 
 int mm_app_close(mm_camera_test_obj_t *test_obj)
 {
-    uint32_t rc = MM_CAMERA_OK;
+    int32_t rc = MM_CAMERA_OK;
 
     if (test_obj == NULL || test_obj->cam ==NULL) {
         CDBG_ERROR("%s: cam not opened", __func__);
@@ -717,7 +721,7 @@ mm_camera_stream_t * mm_app_add_stream(mm_camera_test_obj_t *test_obj,
                                             0,
                                             -1,
                                             stream->s_info_buf.mem_info.fd,
-                                            stream->s_info_buf.mem_info.size);
+                                            (uint32_t)stream->s_info_buf.mem_info.size);
     if (rc != MM_CAMERA_OK) {
         CDBG_ERROR("%s:map setparm_buf error\n", __func__);
         mm_app_deallocate_ion_memory(&stream->s_info_buf);
@@ -827,7 +831,7 @@ int AddSetParmEntryToBatch(mm_camera_test_obj_t *test_obj,
     parm_buffer_new_t *param_buf = (parm_buffer_new_t *) test_obj->parm_buf.mem_info.data;
     uint32_t num_entry = param_buf->num_entry;
     uint32_t size_req = paramLength + sizeof(parm_entry_type_new_t);
-    uint32_t aligned_size_req = (size_req + 3) & (~3);
+    uint32_t aligned_size_req = (size_req + 3U) & (~3U);
     parm_entry_type_new_t *curr_param = (parm_entry_type_new_t *)&param_buf->entry[0];
 
     /* first search if the key is already present in the batch list
@@ -863,7 +867,7 @@ int AddSetParmEntryToBatch(mm_camera_test_obj_t *test_obj,
     }
 
     curr_param->entry_type = paramType;
-    curr_param->size = (int32_t)paramLength;
+    curr_param->size = (size_t)paramLength;
     curr_param->aligned_size = aligned_size_req;
     memcpy(&curr_param->data[0], paramValue, paramLength);
     ALOGD("%s: num_entry: %d, paramType: %d, paramLength: %d, aligned_size_req: %d",
@@ -1234,7 +1238,7 @@ int setEVCompensation(mm_camera_test_obj_t *test_obj, int ev)
             goto ERROR;
         }
 
-        uint32_t value = ev;
+        uint32_t value = (uint32_t)ev;
 
         rc = AddSetParmEntryToBatch(test_obj,
                                     CAM_INTF_PARM_EXPOSURE_COMPENSATION,
@@ -1692,7 +1696,7 @@ ERROR:
     return rc;
 }
 
-int setWNR(mm_camera_test_obj_t *test_obj, int enable)
+int setWNR(mm_camera_test_obj_t *test_obj, uint8_t enable)
 {
     int rc = MM_CAMERA_OK;
 
@@ -1904,7 +1908,7 @@ int mm_camera_lib_open(mm_camera_lib_handle *handle, int cam_id)
     handle->current_params.stream_width = DEFAULT_SNAPSHOT_WIDTH;
     handle->current_params.stream_height = DEFAULT_SNAPSHOT_HEIGHT;
     handle->current_params.af_mode = CAM_FOCUS_MODE_AUTO; // Default to auto focus mode
-    rc = mm_app_open(&handle->app_ctx, cam_id, &handle->test_obj);
+    rc = mm_app_open(&handle->app_ctx, (uint8_t)cam_id, &handle->test_obj);
     if (rc != MM_CAMERA_OK) {
         CDBG_ERROR("%s:mm_app_open() cam_idx=%d, err=%d\n",
                    __func__, cam_id, rc);
@@ -2038,7 +2042,7 @@ int mm_camera_lib_send_command(mm_camera_lib_handle *handle,
                                mm_camera_lib_commands cmd,
                                void *in_data, void *out_data)
 {
-    int width, height;
+    uint32_t width, height;
     int rc = MM_CAMERA_OK;
     cam_capability_t *camera_cap = NULL;
     mm_camera_lib_snapshot_params *dim = NULL;
@@ -2246,8 +2250,10 @@ int mm_camera_lib_send_command(mm_camera_lib_handle *handle,
 
             width = handle->test_obj.buffer_width;
             height = handle->test_obj.buffer_height;
-            handle->test_obj.buffer_width = camera_cap->raw_dim.width;
-            handle->test_obj.buffer_height = camera_cap->raw_dim.height;
+            handle->test_obj.buffer_width =
+                    (uint32_t)camera_cap->raw_dim.width;
+            handle->test_obj.buffer_height =
+                    (uint32_t)camera_cap->raw_dim.height;
             handle->test_obj.buffer_format = DEFAULT_RAW_FORMAT;
             CDBG_ERROR("%s: MM_CAMERA_LIB_RAW_CAPTURE %dx%d\n",
                        __func__,
@@ -2454,8 +2460,7 @@ int mm_camera_lib_send_command(mm_camera_lib_handle *handle,
        }
 
         case MM_CAMERA_LIB_WNR_ENABLE: {
-            int wnr_enable = *((uint8_t *)in_data);
-            rc = setWNR(&handle->test_obj, wnr_enable);
+            rc = setWNR(&handle->test_obj, *((uint8_t *)in_data));
             if ( rc != MM_CAMERA_OK) {
                 CDBG_ERROR("%s: Set wnr enable failed\n", __func__);
                 goto EXIT;
@@ -2517,7 +2522,7 @@ EXIT:
 }
 
 int mm_camera_lib_set_preview_usercb(
-   mm_camera_lib_handle *handle, prev_callback cb)
+   mm_camera_lib_handle *handle, cam_stream_user_cb cb)
 {
     if (handle->test_obj.user_preview_cb != NULL) {
         CDBG_ERROR("%s, already set preview callbacks\n", __func__);
@@ -2526,3 +2531,87 @@ int mm_camera_lib_set_preview_usercb(
     handle->test_obj.user_preview_cb = *cb;
     return 0;
 }
+
+int mm_app_set_preview_fps_range(mm_camera_test_obj_t *test_obj,
+                        cam_fps_range_t *fpsRange)
+{
+    int rc = MM_CAMERA_OK;
+    CDBG_HIGH("%s: preview fps range: min=%f, max=%f.", __func__,
+        fpsRange->min_fps, fpsRange->max_fps);
+    rc = setFPSRange(test_obj, *fpsRange);
+
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: add_parm_entry_tobatch failed !!", __func__);
+        return rc;
+    }
+
+    return rc;
+}
+
+int mm_app_set_params_impl(mm_camera_test_obj_t *test_obj,
+                      cam_intf_parm_type_t param_type,
+                      uint32_t param_len,
+                      void* param_val)
+{
+    int rc = MM_CAMERA_OK;
+
+    rc = initBatchUpdate(test_obj);
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: Batch camera parameter update failed\n", __func__);
+        goto ERROR;
+    }
+
+    rc = AddSetParmEntryToBatch(test_obj,
+                                param_type,
+                                param_len,
+                                param_val);
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: parameter-type %d not added to batch\n", __func__, param_type);
+        goto ERROR;
+    }
+
+    rc = commitSetBatch(test_obj);
+    if (rc != MM_CAMERA_OK) {
+        CDBG_ERROR("%s: Batch parameters commit failed\n", __func__);
+        goto ERROR;
+    }
+
+ERROR:
+    return rc;
+}
+
+int mm_app_set_face_detection(mm_camera_test_obj_t *test_obj,
+                        cam_fd_set_parm_t *fd_set_parm)
+{
+    if (test_obj == NULL || fd_set_parm == NULL) {
+        CDBG_ERROR("%s, invalid params!", __func__);
+        return MM_CAMERA_E_INVALID_INPUT;
+    }
+
+    CDBG_HIGH("%s: mode = %d, num_fd = %d", __func__,
+          fd_set_parm->fd_mode, fd_set_parm->num_fd);
+
+    return mm_app_set_params_impl(test_obj, CAM_INTF_PARM_FD,
+                              sizeof(cam_fd_set_parm_t),
+                              fd_set_parm);
+}
+
+int mm_app_set_metadata_usercb(mm_camera_test_obj_t *test_obj,
+                        cam_stream_user_cb usercb)
+{
+    if (test_obj == NULL || usercb == NULL) {
+        CDBG_ERROR("%s, invalid params!", __func__);
+        return MM_CAMERA_E_INVALID_INPUT;
+    }
+
+    CDBG_HIGH("%s, set user metadata callback, addr: %p\n", __func__, usercb);
+
+    if (test_obj->user_metadata_cb != NULL) {
+        CDBG_HIGH("%s, already set user metadata callback", __func__);
+    }
+    test_obj->user_metadata_cb = usercb;
+
+    return 0;
+}
+
+

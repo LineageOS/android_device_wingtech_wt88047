@@ -87,7 +87,7 @@ typedef struct {
     qcamera_release_data_t   release_data; // any data needs to be release after notify
 } qcamera_data_argm_t;
 
-#define MAX_EXIF_TABLE_ENTRIES 14
+#define MAX_EXIF_TABLE_ENTRIES 20
 class QCameraExif
 {
 public:
@@ -126,7 +126,7 @@ public:
     void setMultipleStages(bool stages) { mMultipleStages = stages; };
     inline bool getJpegMemOpt() {return mJpegMemOpt;}
     inline void setJpegMemOpt(bool val) {mJpegMemOpt = val;}
-
+    QCameraStream* getReprocStream() {return m_reprocStream;}
 private:
     int32_t sendDataNotify(int32_t msg_type,
                            camera_memory_t *data,
@@ -168,6 +168,7 @@ private:
     int32_t setYUVFrameInfo(mm_camera_super_buf_t *recvd_frame);
     static bool matchJobId(void *data, void *user_data, void *match_data);
     static int getJpegMemory(omx_jpeg_ouput_buf_t *out_buf);
+    static int releaseJpegMemory(omx_jpeg_ouput_buf_t *out_buf);
 
     int32_t reprocess(qcamera_pp_data_t *pp_job);
     int32_t stopCapture();
@@ -182,8 +183,10 @@ private:
 
     void *                     m_pJpegOutputMem[MM_JPEG_MAX_BUF];
     QCameraExif *              m_pJpegExifObj;
-    int8_t                     m_bThumbnailNeeded;
+    uint32_t                   m_bThumbnailNeeded;
     QCameraReprocessChannel *  m_pReprocChannel;
+    camera_memory_t *          m_DataMem; // save frame mem pointer
+    QCameraReprocessChannel *  m_pDualReprocChannel;
 
     int8_t                     m_bInited; // if postproc is inited
 
@@ -203,6 +206,7 @@ private:
     uint8_t mNewJpegSessionNeeded;
     bool mMultipleStages;               // multiple stages are present
     uint32_t   m_JpegOutputMemCount;
+    QCameraStream *m_reprocStream;
 
 public:
     cam_dimension_t m_dst_dim;
