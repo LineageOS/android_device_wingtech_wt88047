@@ -69,7 +69,7 @@ public:
         (void)loc_technology_mask;
         return false;
     }
-    inline virtual bool reportSv(QcomSvStatus &svStatus,
+    inline virtual bool reportSv(GnssSvStatus &svStatus,
                                  GpsLocationExtended &locationExtended,
                                  void* svExt) {
         (void)svStatus;
