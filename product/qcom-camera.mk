@@ -2,6 +2,7 @@
 PRODUCT_PACKAGES += \
     camera.msm8916 \
     libmm-qcamera \
+    libshim_camera \
     Snap
 
 # Build libstlport for vendor blobs
@@ -18,4 +19,5 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.cpp.duplication=false \
     persist.camera.hal.debug.mask=0 \
     media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true
+    media.stagefright.less-secure=true \
+    ro.camera.sensors=ov8865_q8v18a,ov2680_skuhf,ov2680_5987fhq
