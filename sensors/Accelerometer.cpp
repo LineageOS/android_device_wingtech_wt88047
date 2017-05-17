@@ -63,14 +63,6 @@ AccelSensor::AccelSensor()
 		strlcat(input_sysfs_path, input_name, sizeof(input_sysfs_path));
 		strlcat(input_sysfs_path, SYSFS_I2C_SLAVE_PATH, sizeof(input_sysfs_path));
 		input_sysfs_path_len = strlen(input_sysfs_path);
-#ifdef TARGET_8610
-		if (access(input_sysfs_path, F_OK)) {
-			input_sysfs_path_len -= strlen(SYSFS_I2C_SLAVE_PATH);
-			strcpy(&input_sysfs_path[input_sysfs_path_len],
-					SYSFS_INPUT_DEV_PATH);
-			input_sysfs_path_len += strlen(SYSFS_INPUT_DEV_PATH);
-		}
-#endif
 		enable(0, 1);
 	}
 }
@@ -268,7 +260,7 @@ again:
 	return numEventReceived;
 }
 
-int AccelSensor::calibrate(int32_t, struct cal_cmd_t *para,
+int AccelSensor::calibrate(int32_t handle, struct cal_cmd_t *para,
 				struct cal_result_t *cal_result)
 {
 	int fd;
@@ -303,7 +295,7 @@ int AccelSensor::calibrate(int32_t, struct cal_cmd_t *para,
 			close(fd);
 			return err;
 		}
-		for(i = 0; i < (int)(sizeof(temp) / LENGTH); i++, p = NULL) {
+		for(i = 0; i < sizeof(temp) / LENGTH; i++, p = NULL) {
 			token = strtok_r(p, ",", &strsaveptr);
 			if(token == NULL)
 				break;
@@ -315,7 +307,7 @@ int AccelSensor::calibrate(int32_t, struct cal_cmd_t *para,
 			strlcpy(temp[i], token, sizeof(temp[i]));
 		}
 		close(fd);
-		for(int i = 0; i < (int)(sizeof(temp) / LENGTH); i++) {
+		for(int i = 0; i < sizeof(temp) / LENGTH; i++) {
 			cal_result->offset[i] = strtol(temp[i], &endptr, 10);
 			if (cal_result->offset[i] == LONG_MAX || cal_result->offset[i] == LONG_MIN) {
 				ALOGE("cal_result->offset[%d] error value\n", i);
@@ -334,7 +326,7 @@ int AccelSensor::calibrate(int32_t, struct cal_cmd_t *para,
 	return 0;
 }
 
-int AccelSensor::initCalibrate(int32_t, struct cal_result_t *cal_result)
+int AccelSensor::initCalibrate(int32_t handle, struct cal_result_t *cal_result)
 {
 	int fd, i, err;
 	char buf[LENGTH];
@@ -348,7 +340,7 @@ int AccelSensor::initCalibrate(int32_t, struct cal_result_t *cal_result)
 	fd = open(input_sysfs_path, O_RDWR);
 	if (fd >= 0) {
 		int para1 = 0;
-		for(i = 0; i < (int)(sizeof(arry) / sizeof(int)); ++i) {
+		for(i = 0; i < sizeof(arry) / sizeof(int); ++i) {
 			para1 = SET_CMD_H(cal_result->offset[i], arry[i]);
 			snprintf(buf, sizeof(buf), "%d", para1);
 			err = write(fd, buf, strlen(buf)+1);

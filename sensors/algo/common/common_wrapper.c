@@ -28,9 +28,9 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 --------------------------------------------------------------------------*/
 
 #include <stdio.h>
-#include <errno.h>
 #include <string.h>
 #include <CalibrationModule.h>
+#include <sensors.h>
 
 #define LOG_TAG "sensor_cal.common"
 #include <utils/Log.h>
