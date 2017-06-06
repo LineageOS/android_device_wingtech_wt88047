@@ -1,4 +1,4 @@
-/* Copyright (c) 2012-2015, The Linux Foundataion. All rights reserved.
+/* Copyright (c) 2012-2016, The Linux Foundataion. All rights reserved.
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions are
@@ -532,6 +532,10 @@ void QCamera2HardwareInterface::release_recording_frame(
         return;
     }
     CDBG("%s: E", __func__);
+
+    //Close and delete duplicated native handle and FD's
+    QCameraVideoMemory::closeNativeHandle(opaque, hw->mStoreMetaDataInFrame > 0);
+
     hw->lockAPI();
     qcamera_api_result_t apiResult;
     int32_t ret = hw->processAPI(QCAMERA_SM_EVT_RELEASE_RECORIDNG_FRAME, (void *)opaque);
