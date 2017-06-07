@@ -21,6 +21,4 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.hal.debug.mask=0 \
     persist.ts.postmakeup=true \
     persist.ts.rtmakeup=true \
-    media.stagefright.legacyencoder=true \
-    media.stagefright.less-secure=true \
     ro.camera.sensors=ov8865_q8v18a,ov2680_skuhf,ov2680_5987fhq
