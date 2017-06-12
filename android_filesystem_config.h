@@ -33,5 +33,5 @@
  const struct fs_path_config android_device_files[] = {
       // { 00755, AID_UID,     AID_GID,     (1ULL << CAPABILITY), "PATH_TO_BINARY" },
       { 00755, AID_SYSTEM,         AID_SYSTEM,         (1ULL << CAP_NET_BIND_SERVICE), "system/bin/imsdatadaemon" },
-      { 00755, AID_SYSTEM,         AID_RADIO,          (1ULL << CAP_NET_BIND_SERVICE), "system/bin/ims_rtp_daemon" },
+      // { 00755, AID_SYSTEM,         AID_RADIO,          (1ULL << CAP_NET_BIND_SERVICE), "system/bin/ims_rtp_daemon" },
 };
