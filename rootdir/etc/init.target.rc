@@ -45,7 +45,7 @@ on boot
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
 
 on init
-    export LD_SHIM_LIBS "/system/bin/mm-qcamera-daemon|libshim_camera.so:/system/vendor/lib/lib-imsvt.so|libshims_ims.so:/system/vendor/lib/libmmqjpeg_codec.so|libboringssl-compat.so"
+    export LD_SHIM_LIBS "/system/bin/mm-qcamera-daemon|libshim_camera.so:/system/vendor/lib/lib-imsvt.so|libshims_ims.so"
 
 on post-fs
     swapon_all /fstab.qcom
