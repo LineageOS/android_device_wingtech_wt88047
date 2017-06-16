@@ -1,9 +1,9 @@
-# Compass
+# Sensors
 vendor/lib/libcalmodule_akm.so
 vendor/lib/libcalmodule_yamaha.so
 vendor/lib/libcalmodule_gyroscope.so
 
-# Venus (media) firmware
+# Signed Venus (media) firmware
 etc/firmware/venus.b00
 etc/firmware/venus.b01
 etc/firmware/venus.b02
