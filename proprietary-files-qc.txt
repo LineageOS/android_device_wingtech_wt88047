@@ -10,13 +10,9 @@ vendor/lib/libacdbrtac.so
 vendor/lib/libadiertac.so
 vendor/lib/libaudcal.so
 vendor/lib/libFlacSwDec.so
--vendor/lib/libqct_resampler.so
 vendor/lib/soundfx/libqcbassboost.so
 vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
-
-# Battery
-bin/vm_bms
 
 # Bluetooth
 bin/btnvtool
@@ -57,7 +53,7 @@ vendor/lib/libmmqjpeg_codec.so
 vendor/lib/liboemcamera.so
 vendor/lib/libqomx_jpegenc.so
 
-# Camera Actuator
+# Camera actuator
 vendor/lib/libactuator_dw9714.so
 vendor/lib/libactuator_dw9714_camcorder.so
 vendor/lib/libactuator_dw9714_camera.so
@@ -83,7 +79,7 @@ vendor/lib/libactuator_rohm_bu64243gwz_h2x.so
 vendor/lib/libactuator_rohm_bu64243gwz_h2x_camcorder.so
 vendor/lib/libactuator_rohm_bu64243gwz_h2x_camera.so
 
-# Camera Chromatix
+# Camera chromatix
 vendor/lib/libchromatix_ov2680_common.so
 vendor/lib/libchromatix_ov2680_default_video.so
 vendor/lib/libchromatix_ov2680_snapshot.so
@@ -115,21 +111,18 @@ vendor/lib/libchromatix_ov8865_sunny_liveshot.so
 vendor/lib/libchromatix_ov8865_sunny_preview.so
 vendor/lib/libchromatix_ov8865_sunny_snapshot.so
 
-# Camera Eeprom
-vendor/lib/libmmcamera_ov8865_a11_eeprom.so
+# Camera eeprom
 vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
 
-# Camera Firmware
+# Camera firmware
 etc/firmware/cpp_firmware_v1_1_1.fw
 etc/firmware/cpp_firmware_v1_1_6.fw
 etc/firmware/cpp_firmware_v1_2_0.fw
 etc/firmware/cpp_firmware_v1_4_0.fw
 
-# Camera Sensors
-vendor/lib/libmmcamera_ov2680.so
+# Camera sensors
 vendor/lib/libmmcamera_ov2680_5987fhq.so
 vendor/lib/libmmcamera_ov2680_skuhf.so
-vendor/lib/libmmcamera_ov8865_a11.so
 vendor/lib/libmmcamera_ov8865_q8v18a.so
 
 # DRM
@@ -140,7 +133,7 @@ vendor/lib/libQSEEComAPI.so
 vendor/lib/librpmb.so
 vendor/lib/libssd.so
 
-# GPS
+# GPS - from crackling
 -lib/libloc_api_v02.so|74df1667c42701ef550ba73db6c5ae63542913ac
 -lib/libloc_ds_api.so|2124d2df231d1e3ccb7f22c6227f6112f4013485
 vendor/lib/hw/flp.default.so|c281157957565dc35f7e1731b2c71a71a532a821
@@ -177,7 +170,7 @@ vendor/lib/libRSDriver_adreno.so|2c9d23e4555f76c1aa28eb5aea2fa919081a8654
 vendor/lib/libsc-a3xx.so|a03fc9f0c929cb4adf013f8a463cfbef68d48090
 vendor/lib/libscale.so|972cbd87794b4ce0a5c23db946acbafd4cd6d073
 
-# Graphics Firmware
+# Graphics firmware
 etc/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw
 
@@ -217,7 +210,6 @@ vendor/lib/libvoice-svc.so|fe8d2807b5b1a35310a9bcf80ceb4467503130b0
 
 # Media
 lib/libOmxVdecHevc.so
-vendor/lib/libDivxDrm.so
 vendor/lib/libHevcSwDecoder.so
 vendor/lib/libI420colorconvert.so
 vendor/lib/libmmosal.so
@@ -225,7 +217,6 @@ vendor/lib/libmm-color-convertor.so
 vendor/lib/libOmxAacDec.so
 vendor/lib/libOmxEvrcDec.so
 vendor/lib/libOmxQcelp13Dec.so
-vendor/lib/libSHIMDivxDrm.so
 
 # Perf
 vendor/bin/perfd
@@ -240,7 +231,7 @@ vendor/lib/libmm-als.so
 vendor/lib/libmm-disp-apis.so
 vendor/lib/libmm-qdcm.so
 
-# Qualcomm Framework
+# Qualcomm framework
 bin/irsc_util
 etc/data/dsi_config.xml
 etc/data/netmgr_config.xml
@@ -266,7 +257,6 @@ vendor/lib/libsmemlog.so
 bin/netmgrd
 bin/qmuxd
 bin/radish
-bin/rfs_access
 bin/rmt_storage
 etc/permissions/qcnvitems.xml
 etc/permissions/qcrilhook.xml
@@ -280,6 +270,7 @@ vendor/lib/libmdmdetect.so
 vendor/lib/libnetmgr.so
 vendor/lib/libperipheral_client.so
 vendor/lib/libril-qc-qmi-1.so
+vendor/lib/libril-qc-radioconfig.so
 vendor/lib/libril-qcril-hook-oem.so
 vendor/lib/libsystem_health_mon.so
 vendor/lib/libxml.so
@@ -293,7 +284,7 @@ vendor/lib/libthermalioctl.so
 -vendor/lib/libts_detected_face_hal.so
 -vendor/lib/libts_face_beautify_hal.so
 
-# Time Services
+# Time services
 -app/TimeService/TimeService.apk
 bin/time_daemon
 -vendor/lib/libtime_genoff.so
