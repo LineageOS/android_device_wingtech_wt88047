@@ -142,8 +142,4 @@ void init_target_properties()
     property_set("dalvik.vm.heaptargetutilization", "0.75");
     property_set("dalvik.vm.heapminfree", is2GB() ? "512k" : "2m");
     property_set("dalvik.vm.heapmaxfree", "8m");
-
-    /* Unified description and fingerprint for now */
-    property_set("ro.build.description", "wt88047-user 5.1.1 LMY47V V8.2.1.0.LHJMIDL release-keys");
-    property_set("ro.build.fingerprint", "Xiaomi/wt88047/wt88047:5.1.1/LMY47V/V8.2.1.0.LHJMIDL:user/release-keys");
 }
