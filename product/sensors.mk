@@ -13,10 +13,6 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/native/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml
 
-# use 3 threads max for dex2oat
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sys.fw.dex2oat_thread_count=3
-
 # relax sensor fusion mag field filter
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.fusion.magfield.max=250
