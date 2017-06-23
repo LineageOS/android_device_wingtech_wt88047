@@ -25,6 +25,9 @@
 # ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
+on init
+    write /proc/sys/vm/page-cluster 0
+
 on boot
     # Torch
     chown system camera /sys/class/leds/torch-light/brightness
@@ -32,10 +35,6 @@ on boot
 
     write /sys/block/mmcblk0/queue/add_random 0
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
-
-on post-fs
-    swapon_all /fstab.qcom
-    write /proc/sys/vm/page-cluster 0
 
 service imsqmidaemon /system/vendor/bin/imsqmidaemon
     class main
@@ -61,3 +60,7 @@ service imsdatadaemon /system/vendor/bin/imsdatadaemon
 
 on property:sys.ims.QMI_DAEMON_STATUS=1
     start imsdatadaemon
+
+on property:sys.boot_completed=1
+    # Enable ZRAM on boot_complete
+    swapon_all /vendor/etc/fstab.qcom
