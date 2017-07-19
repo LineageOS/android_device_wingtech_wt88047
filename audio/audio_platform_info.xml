@@ -26,8 +26,7 @@
 <!-- IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.                          -->
 <audio_platform_info>
     <acdb_ids>
-        <device name="SND_DEVICE_IN_VOICE_SPEAKER_MIC" acdb_id="42" />
-        <device name="SND_DEVICE_IN_VOICE_FLUENCE_DMIC_AANC" acdb_id="12" />
+        <device name="SND_DEVICE_OUT_SPEAKER" acdb_id="15" />
     </acdb_ids>
 
     <backend_names>
