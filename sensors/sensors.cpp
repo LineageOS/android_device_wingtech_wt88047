@@ -87,6 +87,7 @@ struct sensors_module_t HAL_MODULE_INFO_SYM = {
 				reserved: {0},
 		},
 		get_sensors_list: sensors__get_sensors_list,
+		set_operation_mode: NULL,
 };
 
 struct sensors_poll_context_t {

@@ -40,7 +40,7 @@ const static char *filepath[] = {
     "/data/sensors_calibration_param.xml"
 };
 
-char *sensor_param[] = {"offset_x", "offset_y", "offset_z", "threshold_h", "threshold_l", "bias"};
+const char *sensor_param[] = {"offset_x", "offset_y", "offset_z", "threshold_h", "threshold_l", "bias"};
 sensors_XML :: sensors_XML()
     : mdoc(NULL)
 {

@@ -276,12 +276,44 @@ int ProximitySensor::readEvents(sensors_event_t* data, int count)
     return numEventReceived;
 }
 
+int ProximitySensor::setDelay(int32_t, int64_t ns)
+{
+    int fd;
+    char propBuf[PROPERTY_VALUE_MAX];
+    char buf[80];
+    int len;
+
+    property_get("sensors.light.loopback", propBuf, "0");
+    if (strcmp(propBuf, "1") == 0) {
+        ALOGE("sensors.light.loopback is set");
+        return 0;
+    }
+    int delay_ms = ns / 1000000;
+    strlcpy(&input_sysfs_path[input_sysfs_path_len],
+                SYSFS_POLL_DELAY, SYSFS_MAXLEN);
+    fd = open(input_sysfs_path, O_RDWR);
+    if (fd < 0) {
+        ALOGE("open %s failed.(%s)\n", input_sysfs_path, strerror(errno));
+        return -1;
+    }
+    snprintf(buf, sizeof(buf), "%d", delay_ms);
+    len = write(fd, buf, ssize_t(strlen(buf)+1));
+    if (len < ssize_t(strlen(buf) + 1)) {
+        ALOGE("write %s failed\n", buf);
+        close(fd);
+        return -1;
+    }
+
+    close(fd);
+    return 0;
+}
+
 float ProximitySensor::indexToValue(size_t index) const
 {
     return index * PROXIMITY_THRESHOLD;
 }
 
-int ProximitySensor::calibrate(int32_t handle, struct cal_cmd_t *para,
+int ProximitySensor::calibrate(int32_t, struct cal_cmd_t *para,
                 struct cal_result_t *cal_result)
 {
         int fd;
@@ -320,7 +352,7 @@ int ProximitySensor::calibrate(int32_t handle, struct cal_cmd_t *para,
                         close(fd);
                         return err;
                 }
-                for(i = 0; sizeof(temp) / LENGTH; i++, p = NULL) {
+                for(i = 0; i < (int)(sizeof(temp) / LENGTH); i++, p = NULL) {
                         token = strtok_r(p, ",", &strsaveptr);
                         if(token == NULL)
                                 break;
@@ -333,7 +365,7 @@ int ProximitySensor::calibrate(int32_t handle, struct cal_cmd_t *para,
                 }
                 close(fd);
                 if (para->axis == 0) {
-                        mThreshold_h = strtol(temp[0], &endptr, 10);
+                        mThreshold_h = strtol(temp[0], &endptr, 0);
                         if (mThreshold_h == LONG_MAX || mThreshold_h == LONG_MIN) {
                                 ALOGE("mThreshold_h error value\n");
                                 return -1;
@@ -343,7 +375,7 @@ int ProximitySensor::calibrate(int32_t handle, struct cal_cmd_t *para,
                                 return -1;
                         }
                 } else if (para->axis == 1) {
-                        mThreshold_l = strtol(temp[1], &endptr, 10);
+                        mThreshold_l = strtol(temp[1], &endptr, 0);
                         if (mThreshold_l == LONG_MAX || mThreshold_l == LONG_MIN) {
                                 ALOGE("mThreshold_l error value\n");
                                 return -1;
@@ -353,7 +385,7 @@ int ProximitySensor::calibrate(int32_t handle, struct cal_cmd_t *para,
                                 return -1;
                         }
                 } else if (para->axis == 2) {
-                        mBias = strtol(temp[2], &endptr, 10);
+                        mBias = strtol(temp[2], &endptr, 0);
                         if (mBias == LONG_MAX || mBias == LONG_MIN) {
                                 ALOGE("mBias error value\n");
                                 return -1;
@@ -374,7 +406,7 @@ int ProximitySensor::calibrate(int32_t handle, struct cal_cmd_t *para,
         return 0;
 }
 
-int ProximitySensor::initCalibrate(int32_t handle, struct cal_result_t *cal_result)
+int ProximitySensor::initCalibrate(int32_t, struct cal_result_t *cal_result)
 {
         int fd , i, err;
         char buf[33];
@@ -388,7 +420,7 @@ int ProximitySensor::initCalibrate(int32_t handle, struct cal_result_t *cal_resu
         fd = open(input_sysfs_path, O_RDWR);
         if (fd >= 0) {
                 int temp, para1 = 0;
-                for(i = 0; i < sizeof(arry) / sizeof(int); ++i) {
+                for(i = 0; i < (int)(sizeof(arry) / sizeof(int)); ++i) {
                         para1 = SET_CMD_H(cal_result->offset[i], arry[i]);
                         snprintf(buf, sizeof(buf), "%d",
                                         para1);

@@ -15,7 +15,6 @@
  */
 
 #include <stdint.h>
-#include <string.h>
 #include <errno.h>
 #include <unistd.h>
 #include <poll.h>
