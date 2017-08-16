@@ -21,7 +21,6 @@
 #include <errno.h>
 #include <sys/cdefs.h>
 #include <sys/types.h>
-#include <cstring>
 
 #include <linux/input.h>
 
@@ -95,8 +94,7 @@ __BEGIN_DECLS
 		(1ULL << SENSOR_TYPE_MAGNETIC_FIELD) | \
 		(1ULL << SENSOR_TYPE_PROXIMITY) | \
 		(1ULL << SENSOR_TYPE_LIGHT) | \
-		(1ULL << SENSOR_TYPE_GYROSCOPE ) | \
-		(1ULL << SENSOR_TYPE_PRESSURE))
+		(1ULL << SENSOR_TYPE_GYROSCOPE))
 
 
 /*****************************************************************************/
