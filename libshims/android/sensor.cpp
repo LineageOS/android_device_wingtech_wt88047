@@ -24,9 +24,9 @@
 #include <utils/Looper.h>
 #include <utils/Timers.h>
 
-#include <gui/Sensor.h>
+#include <sensor/Sensor.h>
 #include <gui/SensorManager.h>
-#include <gui/SensorEventQueue.h>
+#include <sensor/SensorEventQueue.h>
 
 #include <poll.h>
 #include "SeempLog.h"
