@@ -23,6 +23,7 @@ include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
+    atomic.cpp \
     android/sensor.cpp \
     gui/SensorManager.cpp
 LOCAL_C_INCLUDES := gui
