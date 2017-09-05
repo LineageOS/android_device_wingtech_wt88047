@@ -1,5 +1,5 @@
 cc_library_static {
-    name: "multihal",
+    name: "multihal-wt88047",
     vendor: true,
     srcs: [
         "multihal.cpp",
