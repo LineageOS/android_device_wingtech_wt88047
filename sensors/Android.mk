@@ -27,8 +27,7 @@ LOCAL_ADDITIONAL_DEPENDENCIES := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr
 
 LOCAL_SHARED_LIBRARIES := liblog libcutils libdl libxml2 libutils
 
-LOCAL_MODULE := sensors.msm8916
-LOCAL_MODULE_RELATIVE_PATH := hw
+LOCAL_MODULE := sensors.$(TARGET_DEVICE)
 LOCAL_MODULE_TAGS := optional
 
 # Export calibration library needed dependency headers
