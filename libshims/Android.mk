@@ -15,6 +15,15 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
+LOCAL_SRC_FILES := MediaBuffer.cpp
+LOCAL_SHARED_LIBRARIES := libstagefright_foundation libui libgui
+LOCAL_CFLAGS := -Wno-unused-private-field
+LOCAL_MODULE := libshim_ims
+LOCAL_MODULE_TAGS := optional
+LOCAL_VENDOR_MODULE := true
+include $(BUILD_SHARED_LIBRARY)
+
+include $(CLEAR_VARS)
 LOCAL_SRC_FILES := \
     atomic.cpp \
     android/sensor.cpp \
