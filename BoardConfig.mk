@@ -94,7 +94,8 @@ BOARD_SEPOLICY_DIRS += \
 
 # Shims
 TARGET_LD_SHIM_LIBS += \
-    /system/vendor/lib/libmmcamera2_imglib_modules.so|libshim_camera.so
+    /system/vendor/lib/libmmcamera2_imglib_modules.so|libshim_camera.so \
+    /system/vendor/lib/lib-imsvt.so|libshim_ims.so
 
 # inherit from the proprietary version
 include vendor/wingtech/wt88047/BoardConfigVendor.mk
