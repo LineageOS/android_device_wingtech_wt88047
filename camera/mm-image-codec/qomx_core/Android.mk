@@ -14,6 +14,6 @@ LOCAL_SRC_FILES := qomx_core.c
 
 LOCAL_MODULE := libqomx_core
 LOCAL_32_BIT_ONLY := true
-LOCAL_SHARED_LIBRARIES := libcutils libdl
+LOCAL_SHARED_LIBRARIES := libcutils libdl liblog
 
 include $(BUILD_SHARED_LIBRARY)
