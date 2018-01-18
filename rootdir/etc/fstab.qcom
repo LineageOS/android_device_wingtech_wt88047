@@ -3,8 +3,8 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
 /dev/block/bootdevice/by-name/system         /system      ext4    ro,barrier=1                                                wait,recoveryonly
-/dev/block/bootdevice/by-name/userdata       /data        f2fs    noatime,nosuid,nodev,inline_xattr                           wait,check,formattable,encryptable=footer
-/dev/block/bootdevice/by-name/userdata       /data        ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait,check,formattable,encryptable=footer
+/dev/block/bootdevice/by-name/userdata       /data        f2fs    noatime,nosuid,nodev,inline_xattr                           latemount,wait,check,formattable,encryptable=footer
+/dev/block/bootdevice/by-name/userdata       /data        ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              latemount,wait,check,formattable,encryptable=footer
 /dev/block/bootdevice/by-name/cache          /cache       f2fs    noatime,nosuid,nodev,inline_xattr                           wait,check,formattable
 /dev/block/bootdevice/by-name/cache          /cache       ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait,check,formattable
 /dev/block/bootdevice/by-name/persist        /persist     ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait
