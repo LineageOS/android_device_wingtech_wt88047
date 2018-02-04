@@ -1,6 +1,0 @@
-# Camera
-/data/cam_socket[12]                                 u:object_r:camera_socket:s0
-
-# Partitions
-/dev/block/bootdevice/by-name/cache                  u:object_r:cache_block_device:s0
-/dev/block/bootdevice/by-name/config                 u:object_r:frp_block_device:s0

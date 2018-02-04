@@ -1,5 +1,1 @@
-# For compass calibration module
-allow system_server compass_prop:file { getattr open read };
-allow system_server compass_prop:property_service set;
-
-allow system_server wifi_data_file:sock_file unlink;
+set_prop(system_server, compass_prop)
