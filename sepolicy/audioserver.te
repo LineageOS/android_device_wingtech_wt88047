@@ -1,1 +1,0 @@
-allow audioserver audiod:binder call;
