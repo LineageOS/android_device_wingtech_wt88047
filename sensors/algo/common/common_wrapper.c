@@ -105,6 +105,9 @@ typedef struct _AKMPRMS{
 } AKMPRMS;
 
 static AKMPRMS g_prms;
+static float last_pocket = -1.0f;
+static float last_light = -1.0f;
+static float last_proximity = -1.0f;
 
 static int convert_magnetic(sensors_event_t *raw, sensors_event_t *result,
 		struct sensor_algo_args *args __attribute__((unused)))
@@ -288,7 +291,7 @@ static int convert_rotation_vector(sensors_event_t *raw, sensors_event_t *result
 	return 0;
 }
 
-static int config_magnetic(int cmd, struct sensor_algo_args *args __attribute__((unused)))
+static int config_magnetic(int cmd, struct sensor_algo_args *args)
 {
 	struct compass_algo_args *param = (struct compass_algo_args*)args;
 
@@ -323,6 +326,65 @@ static int convert_uncalibrated_magnetic(sensors_event_t *raw, sensors_event_t *
 	}
 
 	return -1;
+}
+
+static int convert_pocket(sensors_event_t *raw, sensors_event_t *result,
+		struct sensor_algo_args *args __attribute__((unused)))
+{
+	float inside;
+
+	*result = *raw;
+	if (raw->type == SENSOR_TYPE_PROXIMITY) {
+		last_proximity = raw->data[0];
+	} else if (raw->type == SENSOR_TYPE_LIGHT) {
+		last_light = raw->data[0];
+	} else {
+		ALOGE("type error:%d\n", raw->type);
+		return -1;
+	}
+
+	ALOGD("last_light:%f last_proximity:%f\n", last_light, last_proximity);
+
+	if (last_proximity < 0.0f) {
+		if (last_light < 0.0f) {
+			ALOGE("sensor data error\n");
+			return -1;
+		} else if (last_light > 1000.0f) {
+			inside = 0;
+		} else {
+			inside = 1;
+		}
+	} else if (last_proximity < 5.0f) {
+		inside = 1;
+	} else {
+		inside = 0;
+	}
+
+	if (last_pocket != inside) {
+		last_pocket = inside;
+		result->data[0] = inside;
+		return 0;
+	}
+
+	return -1;
+}
+
+static int config_pocket(int cmd, struct sensor_algo_args *args)
+{
+	struct compass_algo_args *param = (struct compass_algo_args*)args;
+
+	switch (cmd) {
+		case CMD_ENABLE:
+			ALOGD("Enable status changed to %d\n", param->common.enable);
+			if (param->common.enable) {
+				last_pocket = -1.0f;
+				last_light = -1.0f;
+				last_proximity = -1.0f;
+			}
+			break;
+	}
+
+	return 0;
 }
 
 static int cal_init(const struct sensor_cal_module_t *module __attribute__((unused)))
@@ -401,6 +463,18 @@ static const char* mag_uncalib_match_table[] = {
 	NULL
 };
 
+static struct sensor_algo_methods_t pocket_methods = {
+	.convert = convert_pocket,
+	.config = config_pocket,
+};
+
+static const char* pocket_match_table[] = {
+	"ltr553-pocket",
+	"ap3426-pocket",
+	"oem-pocket",
+	NULL
+};
+
 static struct sensor_cal_algo_t algo_list[] = {
 	{
 		.tag = SENSOR_CAL_ALGO_TAG,
@@ -436,6 +510,15 @@ static struct sensor_cal_algo_t algo_list[] = {
 		.compatible = mag_uncalib_match_table,
 		.module = &SENSOR_CAL_MODULE_INFO,
 		.methods = &mag_uncalib_methods,
+	},
+
+	{
+		.tag = SENSOR_CAL_ALGO_TAG,
+		.version = SENSOR_CAL_ALGO_VERSION,
+		.type = SENSOR_TYPE_POCKET,
+		.compatible = pocket_match_table,
+		.module = &SENSOR_CAL_MODULE_INFO,
+		.methods = &pocket_methods,
 	},
 
 };

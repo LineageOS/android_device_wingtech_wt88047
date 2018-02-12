@@ -33,6 +33,7 @@
 
 #define FETCH_FULL_EVENT_BEFORE_RETURN 	1
 #define IGNORE_EVENT_TIME 				350000000
+#define SAMPLE_DROP_PERIOD_NS		30000000
 
 #define	EVENT_TYPE_GYRO_X	ABS_RX
 #define	EVENT_TYPE_GYRO_Y	ABS_RY
@@ -47,15 +48,16 @@
 
 GyroSensor::GyroSensor()
 	: SensorBase(NULL, GYRO_INPUT_DEV_NAME),
-	  mEnabled(0),
-	  mInputReader(6),
+	  mInputReader(4),
 	  mHasPendingEvent(false),
+	  mIsFirstTimestamp(false),
 	  mEnabledTime(0)
 {
 	mPendingEvent.version = sizeof(sensors_event_t);
 	mPendingEvent.sensor = SENSORS_GYROSCOPE_HANDLE;
 	mPendingEvent.type = SENSOR_TYPE_GYROSCOPE;
 	memset(mPendingEvent.data, 0, sizeof(mPendingEvent.data));
+	mPendingEvent.gyro.status = SENSOR_STATUS_ACCURACY_HIGH;
 
 	if (data_fd) {
 		strlcpy(input_sysfs_path, "/sys/class/input/", sizeof(input_sysfs_path));
@@ -67,35 +69,40 @@ GyroSensor::GyroSensor()
 }
 
 GyroSensor::GyroSensor(struct SensorContext *context)
-	: SensorBase(NULL, NULL),
-	  mEnabled(0),
-	  mInputReader(6),
+	: SensorBase(NULL, NULL, context),
+	  mInputReader(4),
 	  mHasPendingEvent(false),
+	  mIsFirstTimestamp(false),
 	  mEnabledTime(0)
 {
 	mPendingEvent.version = sizeof(sensors_event_t);
 	mPendingEvent.sensor = context->sensor->handle;
 	mPendingEvent.type = SENSOR_TYPE_GYROSCOPE;
 	memset(mPendingEvent.data, 0, sizeof(mPendingEvent.data));
+	mPendingEvent.gyro.status = SENSOR_STATUS_ACCURACY_HIGH;
+
 	data_fd = context->data_fd;
 	strlcpy(input_sysfs_path, context->enable_path, sizeof(input_sysfs_path));
 	input_sysfs_path_len = strlen(input_sysfs_path);
 	mUseAbsTimeStamp = false;
+	mSensor = *(context->sensor);
+	read_dynamic_calibrate_params(&mSensor);
 
 	enable(0, 1);
 }
 
 GyroSensor::GyroSensor(char *name)
 	: SensorBase(NULL, GYRO_INPUT_DEV_NAME),
-	  mEnabled(0),
-	  mInputReader(6),
+	  mInputReader(4),
 	  mHasPendingEvent(false),
+	  mIsFirstTimestamp(false),
 	  mEnabledTime(0)
 {
 	mPendingEvent.version = sizeof(sensors_event_t);
 	mPendingEvent.sensor = SENSORS_GYROSCOPE_HANDLE;
 	mPendingEvent.type = SENSOR_TYPE_GYROSCOPE;
 	memset(mPendingEvent.data, 0, sizeof(mPendingEvent.data));
+	mPendingEvent.gyro.status = SENSOR_STATUS_ACCURACY_HIGH;
 
 	if (data_fd) {
 		strlcpy(input_sysfs_path, SYSFS_CLASS, sizeof(input_sysfs_path));
@@ -138,6 +145,7 @@ int GyroSensor::enable(int32_t, int en) {
 	property_get("sensors.gyro.loopback", propBuf, "0");
 	if (strcmp(propBuf, "1") == 0) {
 		mEnabled = flags;
+		mEnabledTime = 0;
 		ALOGE("sensors.gyro.loopback is set");
 		return 0;
 	}
@@ -153,13 +161,13 @@ int GyroSensor::enable(int32_t, int en) {
 			if (flags) {
 				buf[0] = '1';
 				mEnabledTime = getTimestamp() + IGNORE_EVENT_TIME;
+				sysclk_sync_offset = getClkOffset();
 			} else {
 				buf[0] = '0';
 			}
 			err = write(fd, buf, sizeof(buf));
 			close(fd);
 			mEnabled = flags;
-			setInitialState();
 			return 0;
 		}
 		return -1;
@@ -168,7 +176,7 @@ int GyroSensor::enable(int32_t, int en) {
 }
 
 bool GyroSensor::hasPendingEvents() const {
-	return mHasPendingEvent;
+	return mHasPendingEvent || mHasPendingMetadata;
 }
 
 int GyroSensor::setDelay(int32_t, int64_t delay_ns)
@@ -186,8 +194,9 @@ int GyroSensor::setDelay(int32_t, int64_t delay_ns)
 	fd = open(input_sysfs_path, O_RDWR);
 	if (fd >= 0) {
 		char buf[80];
-		sprintf(buf, "%d", delay_ms);
+		snprintf(buf, sizeof(buf), "%d", delay_ms);
 		write(fd, buf, strlen(buf)+1);
+		mIsFirstTimestamp = false;
 		close(fd);
 		return 0;
 	}
@@ -206,12 +215,21 @@ int GyroSensor::readEvents(sensors_event_t* data, int count)
 		return mEnabled ? 1 : 0;
 	}
 
+	if (mHasPendingMetadata) {
+		mHasPendingMetadata--;
+		meta_data.timestamp = getTimestamp();
+		*data = meta_data;
+		return mEnabled ? 1 : 0;
+	}
+
 	ssize_t n = mInputReader.fill(data_fd);
 	if (n < 0)
 		return n;
 
 	int numEventReceived = 0;
 	input_event const* event;
+	sensors_event_t raw, result;
+	int64_t first_timestamp;
 
 #if FETCH_FULL_EVENT_BEFORE_RETURN
 again:
@@ -242,17 +260,48 @@ again:
 					}
 				break;
 				case SYN_REPORT:
-					{
-						if (mEnabled && mUseAbsTimeStamp) {
-							if(mPendingEvent.timestamp >= mEnabledTime) {
-								*data++ = mPendingEvent;
-								numEventReceived++;
-							}
-							count--;
-							mUseAbsTimeStamp = false;
-						} else {
-							ALOGE_IF(!mUseAbsTimeStamp, "GyroSensor:timestamp not received");
+					if(mUseAbsTimeStamp != true) {
+						mPendingEvent.timestamp = timevalToNano(event->time);
+					}
+					if (!mEnabled) {
+						break;
+					}
+
+					mPendingEvent.timestamp -= sysclk_sync_offset;
+					raw = mPendingEvent;
+					if (algo != NULL) {
+						if (algo->methods->convert(&raw, &result, NULL)) {
+							ALOGE("Calibrated failed\n");
+							result = raw;
 						}
+					} else {
+						result = raw;
+					}
+					*data = result;
+					data->version = sizeof(sensors_event_t);
+					data->sensor = mPendingEvent.sensor;
+					data->type = SENSOR_TYPE_GYROSCOPE;
+					data->timestamp = mPendingEvent.timestamp;
+					if (!mIsFirstTimestamp) {
+						first_timestamp = data->timestamp;
+						mIsFirstTimestamp = true;
+					}
+					/* The raw data is stored inside sensors_event_t.data after
+					 * sensors_event_t.gyroscope. Notice that the raw data is
+					 * required to composite the virtual sensor uncalibrated
+					 * gyroscope field sensor.
+					 *
+					 * data[0~2]: calibrated gyroscope field data.
+					 * data[3]: gyroscope field data accuracy.
+					 * data[4~6]: uncalibrated gyroscope field data.
+					 */
+					data->data[4] = mPendingEvent.data[0];
+					data->data[5] = mPendingEvent.data[1];
+					data->data[6] = mPendingEvent.data[2];
+					if ((data->timestamp - first_timestamp) > SAMPLE_DROP_PERIOD_NS) {
+						data++;
+						numEventReceived++;
+						count--;
 					}
 				break;
 			}
@@ -276,3 +325,35 @@ again:
 	return numEventReceived;
 }
 
+int GyroSensor::read_dynamic_calibrate_params(struct sensor_t *sensor)
+{
+	sensors_XML& sensor_XML(sensors_XML :: getInstance());
+	struct cal_result_t cal_result;
+	int err = 0;
+
+	err = sensor_XML.read_sensors_params(sensor, &cal_result, 1);
+	if (err < 0) {
+		ALOGE("read dynamic calibrate %s sensor error\n", sensor->name);
+		cal_result.offset[0] = 0;
+		cal_result.offset[1] = 0;
+		cal_result.offset[2] = 0;
+	}
+
+	gyro_algo_args arg;
+
+	arg.bias[0] = cal_result.offset[0];
+	arg.bias[1] = cal_result.offset[1];
+	arg.bias[2] = cal_result.offset[2];
+	arg.common.sensor = *sensor;
+
+	if (algo != NULL) {
+		if (algo->methods->config(CMD_INIT, (sensor_algo_args*)&arg)) {
+			ALOGE("Init gyro calibration parameters failed\n");
+			return -1;
+		}
+	} else {
+		ALOGE("Init gyro algo error\n");
+	}
+
+	return 0;
+}

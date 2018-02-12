@@ -38,15 +38,31 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <CalibrationModule.h>
 #include "sensors.h"
 #include "CalibrationManager.h"
+#include "NativeSensorManager.h"
 
 ANDROID_SINGLETON_STATIC_INSTANCE(CalibrationManager);
+
+static int store_calibrate_params(struct sensor_t *sensor, struct sensors_event_t *bias)
+{
+	sensors_XML& sensor_XML(sensors_XML :: getInstance());
+	struct cal_result_t cal_result;
+	int err = 0;
+
+	cal_result.offset[0] = bias->data[0] ;
+	cal_result.offset[1] = bias->data[1] ;
+	cal_result.offset[2] = bias->data[2] ;
+	err = sensor_XML.write_sensors_params(sensor, &cal_result, CAL_DYNAMIC);
+	if (err < 0) {
+		ALOGE("write calibrate %s sensor error\n", sensor->name);
+		return err;
+	}
+
+	return 0;
+}
 
 int CalibrationManager::check_algo(const sensor_cal_algo_t *list)
 {
 	if (list->tag != SENSOR_CAL_ALGO_TAG)
-		return -1;
-	if ((list->type < SENSOR_TYPE_ACCELEROMETER) ||
-			(list->type > SENSOR_TYPE_GEOMAGNETIC_ROTATION_VECTOR))
 		return -1;
 	if (list->compatible == NULL)
 		return -1;
@@ -70,7 +86,9 @@ void CalibrationManager::loadCalLibs()
 	int i = 0;
 	int count;
 	int tmp;
+	struct sensor_algo_args args;
 
+	args.store_calibrate_params = store_calibrate_params;
 	algo_count = 0;
 	algo_list = NULL;
 
@@ -132,7 +150,7 @@ void CalibrationManager::loadCalLibs()
 
 		modules[i]->dso = dso;
 
-		if (modules[i]->methods->init(modules[i])) {
+		if (modules[i]->methods->init(modules[i], &args)) {
 			ALOGE("init %s failed\n", modules[i]->id);
 			modules[i] = NULL;
 			continue;
@@ -222,12 +240,12 @@ const sensor_cal_algo_t* CalibrationManager::getCalAlgo(const sensor_t *s/* = NU
 	}
 
 	if (i != algo_count) {
-		ALOGI("found exactly compatible algo for type %d", s->type);
+		ALOGI("found exactly compatible algo for %s", s->name);
 		return list[i];
 	}
 
 	if (tmp != NULL)
-		ALOGI("found compatible algo for type %d", s->type);
+		ALOGI("found compatible algo for %s", s->name);
 
 	return tmp;
 }

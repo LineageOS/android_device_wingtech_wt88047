@@ -45,7 +45,7 @@ __BEGIN_DECLS
 #define TEMPERATURE_NAME	"temperature"
 #define PROXIMITY_NAME		"proximity"
 #define GRAVITY_NAME		"gravity"
-#define LINEAR_ACCELERATION_NAME	"liner_acceleration"
+#define LINEAR_ACCELERATION_NAME	"linear_acceleration"
 #define ROTATION_VECTOR_NAME	"rotation_vector"
 #define RELATIVE_HUMIDITY_NAME	"relative_humidity"
 #define AMBIENT_TEMPERATURE_NAME	"ambient_temperature"
@@ -71,6 +71,7 @@ enum {
 	CMD_ENABLE = 0, /* Enable status changed */
 	CMD_DELAY, /* Polling rate changed */
 	CMD_BATCH, /* Batching parameter changed */
+	CMD_INIT,
 };
 
 struct sensor_cal_algo_t;
@@ -79,11 +80,18 @@ struct sensor_cal_module_t;
 struct sensor_algo_args {
 	int enable;
 	int delay_ms;
+	struct sensor_t sensor;
+	int (*store_calibrate_params)(struct sensor_t *sensor, struct sensors_event_t *bias);
 };
 
 struct compass_algo_args {
 	struct sensor_algo_args common;
 	uint32_t reserved[16];
+};
+
+struct gyro_algo_args {
+	struct sensor_algo_args common;
+	float bias[3];
 };
 
 struct sensor_algo_methods_t {
@@ -93,7 +101,7 @@ struct sensor_algo_methods_t {
 };
 
 struct sensor_cal_methods_t {
-	int (*init)(const struct sensor_cal_module_t* module);
+	int (*init)(const struct sensor_cal_module_t* module, struct sensor_algo_args *args);
 	void (*deinit)();
 	/* Return 0 on success */
 	int (*get_algo_list)(const struct sensor_cal_algo_t **algo);

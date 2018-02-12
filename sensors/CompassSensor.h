@@ -43,12 +43,9 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 struct input_event;
 
 class CompassSensor : public SensorBase {
-	int mEnabled;
 	InputEventCircularReader mInputReader;
 	sensors_event_t mPendingEvent;
 	bool mHasPendingEvent;
-	char input_sysfs_path[PATH_MAX];
-	int input_sysfs_path_len;
 	int64_t mEnabledTime;
 	float res;
 

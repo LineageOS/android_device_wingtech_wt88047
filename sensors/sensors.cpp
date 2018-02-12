@@ -42,23 +42,6 @@
 #include "sensors_extension.h"
 /*****************************************************************************/
 
-/**
- * structure representing a command to be dispatched to the poll thread
- */
-struct sensor_command {
-	enum cmd_type {
-		CMD_ENABLE,
-		CMD_SET_PERIOD,
-	};
-	cmd_type type;
-	size_t sz;
-	int sensor;
-	union {
-		bool enabled;
-		uint64_t period;
-	};
-};
-
 static int open_sensors(const struct hw_module_t* module, const char* id,
 						struct hw_device_t** device);
 
@@ -87,49 +70,43 @@ struct sensors_module_t HAL_MODULE_INFO_SYM = {
 				reserved: {0},
 		},
 		get_sensors_list: sensors__get_sensors_list,
-		set_operation_mode: NULL,
 };
 
 struct sensors_poll_context_t {
+	// extension for sensors_poll_device_1, must be first
 	struct sensors_poll_device_1_ext_t device;// must be first
-
-		sensors_poll_context_t();
-		~sensors_poll_context_t();
+	sensors_poll_context_t();
+	~sensors_poll_context_t();
 	int activate(int handle, int enabled);
 	int setDelay(int handle, int64_t ns);
 	int pollEvents(sensors_event_t* data, int count);
-	int handleCommandPipe();
 	int calibrate(int handle, cal_cmd_t *para);
+	int batch(int handle, int sample_ns, int latency_ns);
+	int flush(int handle);
 
 private:
+	static const size_t wake = MAX_SENSORS;
+	static const char WAKE_MESSAGE = 'W';
 	struct pollfd mPollFds[MAX_SENSORS+1];
-
-	/** index of the command read fd in mPollFds */
-	int mCmdFdReadIdx;
-	/** command write fd */
-	int mCmdFdWrite;
+	int mWritePipeFd;
 	SensorBase* mSensors[MAX_SENSORS];
+	mutable Mutex mLock;
 };
 
 /*****************************************************************************/
 
 sensors_poll_context_t::sensors_poll_context_t()
 {
-	int numSensors;
+	int number;
 	int i;
 	const struct sensor_t *slist;
 	const struct SensorContext *context;
 	NativeSensorManager& sm(NativeSensorManager::getInstance());
 
-	numSensors = sm.getSensorList(&slist);
-	if (numSensors > MAX_SENSORS) {
-		ALOGW("Native sensor manager returned too many sensors (%d), truncating list %d",
-			numSensors, MAX_SENSORS);
-		numSensors = MAX_SENSORS;
-	}
+	number = sm.getSensorList(&slist);
 
 	/* use the dynamic sensor list */
-	for (i = 0; i < numSensors; i++) {
+	for (i = 0; i < number; i++) {
 		context = sm.getInfoByHandle(slist[i].handle);
 
 		mPollFds[i].fd = (context == NULL) ? -1 : context->data_fd;
@@ -137,77 +114,50 @@ sensors_poll_context_t::sensors_poll_context_t()
 		mPollFds[i].revents = 0;
 	}
 
-	mCmdFdReadIdx = numSensors;
-	ALOGD("Command pipe fd idx: %d", mCmdFdReadIdx);
+	ALOGI("The avaliable sensor handle number is %d",i);
+	int wakeFds[2];
+	int result = pipe(wakeFds);
+	ALOGE_IF(result<0, "error creating wake pipe (%s)", strerror(errno));
+	fcntl(wakeFds[0], F_SETFL, O_NONBLOCK);
+	fcntl(wakeFds[1], F_SETFL, O_NONBLOCK);
+	mWritePipeFd = wakeFds[1];
 
-	int cmdFds[2];
-	int result = pipe(cmdFds);
-	ALOGE_IF(result<0, "error creating cmd pipe (%s)", strerror(errno));
-	fcntl(cmdFds[0], F_SETFL, O_NONBLOCK);
-	fcntl(cmdFds[1], F_SETFL, O_NONBLOCK);
-	mCmdFdWrite = cmdFds[1];
-
-	mPollFds[mCmdFdReadIdx].fd = cmdFds[0];
-	mPollFds[mCmdFdReadIdx].events = POLLIN;
-	mPollFds[mCmdFdReadIdx].revents = 0;
+	mPollFds[number].fd = wakeFds[0];
+	mPollFds[number].events = POLLIN;
+	mPollFds[number].revents = 0;
 }
 
 sensors_poll_context_t::~sensors_poll_context_t() {
 	NativeSensorManager& sm(NativeSensorManager::getInstance());
-	close(mPollFds[mCmdFdReadIdx].fd);
-	close(mCmdFdWrite);
+	int number = sm.getSensorCount();
+
+	close(mPollFds[number].fd);
+	close(mWritePipeFd);
 }
 
 int sensors_poll_context_t::activate(int handle, int enabled) {
+	int err = -1;
+	NativeSensorManager& sm(NativeSensorManager::getInstance());
+	Mutex::Autolock _l(mLock);
 
-	struct sensor_command cmd;
-	memset(&cmd, 0x00, sizeof(cmd));
-
-	cmd.type = sensor_command::CMD_ENABLE;
-	cmd.sz = sizeof(cmd);
-	cmd.sensor = handle;
-	cmd.enabled = enabled;
-
-	ssize_t rc = write(mCmdFdWrite, &cmd, sizeof(cmd));
-
-	if (rc < 0) {
-		ALOGE("error writing command to pipe (%s)", strerror(errno));
-		return -errno;
+	err = sm.activate(handle, enabled);
+	if (enabled && !err) {
+		const char wakeMessage(WAKE_MESSAGE);
+		int result = write(mWritePipeFd, &wakeMessage, 1);
+		ALOGE_IF(result<0, "error sending wake message (%s)", strerror(errno));
 	}
 
-	if (rc != sizeof(cmd)) {
-		ALOGE("error writing command, invalid len (%zd, expect=%zd)",
-			rc, sizeof(cmd));
-		return -EIO;
-	}
-
-	return 0;
+	return err;
 }
 
 int sensors_poll_context_t::setDelay(int handle, int64_t ns) {
+	int err = -1;
+	NativeSensorManager& sm(NativeSensorManager::getInstance());
+	Mutex::Autolock _l(mLock);
 
-	struct sensor_command cmd;
-	memset(&cmd, 0x00, sizeof(cmd));
+	err = sm.setDelay(handle, ns);
 
-	cmd.type = sensor_command::CMD_SET_PERIOD;
-	cmd.sz = sizeof(cmd);
-	cmd.sensor = handle;
-	cmd.period = ns;
-
-	ssize_t rc = write(mCmdFdWrite, &cmd, sizeof(cmd));
-
-	if (rc < 0) {
-		ALOGE("error writing command to pipe (%s)", strerror(errno));
-		return -errno;
-	}
-
-	if (rc != sizeof(cmd)) {
-		ALOGE("error writing command, invalid len (%zd, expect=%zd)",
-			rc, sizeof(cmd));
-		return -EIO;
-	}
-
-	return 0;
+	return err;
 }
 
 int sensors_poll_context_t::pollEvents(sensors_event_t* data, int count)
@@ -222,6 +172,7 @@ int sensors_poll_context_t::pollEvents(sensors_event_t* data, int count)
 		// see if we have some leftover from the last poll()
 		for (int i = 0 ; count && i < number ; i++) {
 			if ((mPollFds[i].revents & POLLIN) || (sm.hasPendingEvents(slist[i].handle))) {
+				Mutex::Autolock _l(mLock);
 				int nb = sm.readEvents(slist[i].handle, data, count);
 				if (nb < 0) {
 					ALOGE("readEvents failed.(%d)", errno);
@@ -248,12 +199,12 @@ int sensors_poll_context_t::pollEvents(sensors_event_t* data, int count)
 				ALOGE("poll() failed (%s)", strerror(errno));
 				return -errno;
 			}
-			if (mPollFds[mCmdFdReadIdx].revents & POLLIN) {
-				int rc = handleCommandPipe();
-				if (rc) {
-					return rc;
-				}
-				mPollFds[mCmdFdReadIdx].revents = 0;
+			if (mPollFds[number].revents & POLLIN) {
+				char msg;
+				int result = read(mPollFds[number].fd, &msg, 1);
+				ALOGE_IF(result<0, "error reading from wake pipe (%s)", strerror(errno));
+				ALOGE_IF(msg != WAKE_MESSAGE, "unknown message on wake queue (0x%02x)", int(msg));
+				mPollFds[number].revents = 0;
 			}
 		}
 		// if we have events and space, go read them
@@ -262,72 +213,42 @@ int sensors_poll_context_t::pollEvents(sensors_event_t* data, int count)
 	return nbEvents;
 }
 
-static inline double ns2hz(int64_t period_ns) {
-	if (period_ns == 0) {
-		return 0;
-	}
-	return 1.0 / (period_ns * 1e-9);
-}
-
-int sensors_poll_context_t::handleCommandPipe() {
-	struct sensor_command cmd;
-	ssize_t rc = read(mPollFds[mCmdFdReadIdx].fd, &cmd, sizeof(cmd));
-	if (rc < 0) {
-		ALOGE("error reading command from pipe (%s)",
-			strerror(errno));
-		return -errno;
-	}
-
-	if (rc != sizeof(cmd)) {
-		ALOGE("error reading command from pipe, invalid len read: %zd/expect %zd)",
-			rc, sizeof(cmd));
-		return -EIO;
-	}
-
-	// sanity check
-	if (cmd.sz != sizeof(cmd)) {
-		ALOGE("invalid command read from pipe, unxpected sz: %zu/expect %zu",
-			cmd.sz, sizeof(cmd));
-		return -EIO;
-	}
-
-	NativeSensorManager& sm(NativeSensorManager::getInstance());
-	SensorContext *ctx = sm.getInfoByHandle(cmd.sensor);
-	if (!ctx) {
-		ALOGW("Invalid sensor handle in command pipe: %d", cmd.sensor);
-		return -EIO;
-	}
-
-	const char * name = ctx->sensor->name;
-	switch (cmd.type) {
-		case sensor_command::CMD_ENABLE:
-			ALOGI("%s: activate: %d", name, cmd.enabled);
-			rc = sm.activate(cmd.sensor, cmd.enabled);
-			break;
-		case sensor_command::CMD_SET_PERIOD:
-			ALOGI("%s: setDelay: %.2f Hz", name, ns2hz(cmd.period));
-			rc = sm.setDelay(cmd.sensor, cmd.period);
-			break;
-		default:
-			ALOGE("%s: invalid command id received: %d", name, cmd.type);
-			return -EIO;
-	}
-
-	ALOGE_IF(rc, "%s: error (%d) processing command", name, rc);
-	return rc;
-}
-
 int sensors_poll_context_t::calibrate(int handle, struct cal_cmd_t *para)
 {
 
 	int err = -1;
 	NativeSensorManager& sm(NativeSensorManager::getInstance());
+	Mutex::Autolock _l(mLock);
 
 	err = sm.calibrate(handle, para);
 
 	return err;
 }
 
+int sensors_poll_context_t::batch(int handle, int sample_ns, int latency_ns)
+{
+	NativeSensorManager& sm(NativeSensorManager::getInstance());
+	Mutex::Autolock _l(mLock);
+
+	return sm.batch(handle, sample_ns, latency_ns);
+}
+
+int sensors_poll_context_t::flush(int handle)
+{
+	int ret;
+	const char wakeMessage(WAKE_MESSAGE);
+	int result;
+
+	NativeSensorManager& sm(NativeSensorManager::getInstance());
+	Mutex::Autolock _l(mLock);
+
+	ret = sm.flush(handle);
+
+	result = write(mWritePipeFd, &wakeMessage, 1);
+	ALOGE_IF(result<0, "error sending wake message (%s)", strerror(errno));
+
+	return ret;
+}
 /*****************************************************************************/
 
 static int poll__close(struct hw_device_t *dev)
@@ -363,6 +284,22 @@ static int poll_calibrate(struct sensors_poll_device_1_ext_t *dev,
 	sensors_poll_context_t *ctx = (sensors_poll_context_t *)dev;
 	return ctx->calibrate(handle, para);
 }
+
+#if defined(SENSORS_DEVICE_API_VERSION_1_3)
+static int poll__batch(struct sensors_poll_device_1 *dev,
+		int handle, int /*flags*/, int64_t sample_ns,
+		int64_t latency_ns) {
+	sensors_poll_context_t *ctx = (sensors_poll_context_t *)dev;
+	return ctx->batch(handle, sample_ns, latency_ns);
+}
+
+static int poll__flush(struct sensors_poll_device_1 *dev,
+		int handle) {
+	sensors_poll_context_t *ctx = (sensors_poll_context_t *)dev;
+	return ctx->flush(handle);
+}
+#endif
+
 /*****************************************************************************/
 
 /** Open a new instance of a sensor device using name */
@@ -371,17 +308,27 @@ static int open_sensors(const struct hw_module_t* module, const char*,
 {
 		int status = -EINVAL;
 		sensors_poll_context_t *dev = new sensors_poll_context_t();
+		NativeSensorManager& sm(NativeSensorManager::getInstance());
 
 		memset(&dev->device, 0, sizeof(sensors_poll_device_1_ext_t));
 
 		dev->device.common.tag = HARDWARE_DEVICE_TAG;
-		dev->device.common.version  = 0;
+#if defined(SENSORS_DEVICE_API_VERSION_1_3)
+		ALOGI("Sensors device API version 1.3 supported\n");
+		dev->device.common.version = SENSORS_DEVICE_API_VERSION_1_3;
+#else
+		dev->device.common.version = SENSORS_DEVICE_API_VERSION_0_1;
+#endif
 		dev->device.common.module   = const_cast<hw_module_t*>(module);
 		dev->device.common.close	= poll__close;
 		dev->device.activate		= poll__activate;
 		dev->device.setDelay		= poll__setDelay;
-		dev->device.poll			= poll__poll;
+		dev->device.poll		= poll__poll;
 		dev->device.calibrate		= poll_calibrate;
+#if defined(SENSORS_DEVICE_API_VERSION_1_3)
+		dev->device.batch		= poll__batch;
+		dev->device.flush		= poll__flush;
+#endif
 
 		*device = &dev->device.common;
 		status = 0;

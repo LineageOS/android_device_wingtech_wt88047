@@ -1,5 +1,5 @@
 /*--------------------------------------------------------------------------
-Copyright (c) 2014, The Linux Foundation. All rights reserved.
+Copyright (c) 2014, 2016, The Linux Foundation. All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are
@@ -44,9 +44,8 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 VirtualSensor::VirtualSensor(const struct SensorContext *ctx)
 	: SensorBase(NULL, NULL, ctx),
-	  mEnabled(0),
-	  mHasPendingEvent(false),
-	  mEnabledTime(0),
+	  reportLastEvent(false),
+	  mFirstEventReceived(false),
 	  context(ctx),
 	  mRead(mBuffer),
 	  mWrite(mBuffer),
@@ -54,7 +53,6 @@ VirtualSensor::VirtualSensor(const struct SensorContext *ctx)
 	  mFreeSpace(MAX_EVENTS)
 
 {
-	enable(0, 1);
 }
 
 VirtualSensor::~VirtualSensor() {
@@ -64,20 +62,49 @@ VirtualSensor::~VirtualSensor() {
 }
 
 int VirtualSensor::enable(int32_t, int en) {
-	mEnabled = en? 1 : 0;
+	int flag = en ? 1 : 0;
+	sensor_algo_args arg;
+
+	if (mEnabled != flag) {
+		mEnabled = flag;
+		mFirstEventReceived = false;
+		arg.enable = mEnabled;
+		if ((algo != NULL) && (algo->methods->config != NULL)) {
+			if (algo->methods->config(CMD_ENABLE, (sensor_algo_args*)&arg)) {
+				ALOGW("Calling enable config failed");
+			}
+		}
+	} else if (flag) {
+		reportLastEvent = mFirstEventReceived ? true : false;
+	}
+
 	return 0;
 }
 
 bool VirtualSensor::hasPendingEvents() const {
-	return mBufferEnd - mBuffer - mFreeSpace;
+	return (mBufferEnd - mBuffer - mFreeSpace) || reportLastEvent || mHasPendingMetadata;
 }
 
 int VirtualSensor::readEvents(sensors_event_t* data, int count)
 {
 	int number = 0;
 
-	if (count < 1)
+	if ((count < 1) || (!mEnabled))
 		return -EINVAL;
+
+	if (reportLastEvent) {
+		*data++ = mLastEvent;
+		count--;
+		reportLastEvent = false;
+		number++;
+	}
+
+	if (mHasPendingMetadata && count) {
+		*data++ = meta_data;
+		count--;
+		mHasPendingMetadata--;
+		number++;
+	}
 
 	while (count && (mBufferEnd - mBuffer - mFreeSpace)) {
 		*data++ = *mRead++;
@@ -86,7 +113,12 @@ int VirtualSensor::readEvents(sensors_event_t* data, int count)
 		number++;
 		mFreeSpace++;
 		count--;
+		if (!mFirstEventReceived)
+			mFirstEventReceived = true;
 	}
+
+	if (number > 0)
+		mLastEvent = data[number - 1];
 
 	return number;
 }
@@ -101,15 +133,17 @@ int VirtualSensor::injectEvents(sensors_event_t* data, int count)
 
 	for (i = 0; i < count; i++) {
 		event = data[i];
-
-		if (mFreeSpace) {
-			sensors_event_t out;
+		sensors_event_t out;
+		if (mFreeSpace && (event.type != SENSOR_TYPE_META_DATA)) {
 			if (algo->methods->convert(&event, &out, NULL))
 				continue;
 
 			out.version = sizeof(sensors_event_t);
 			out.sensor = context->sensor->handle;
 			out.type = context->sensor->type;
+#if defined(SENSORS_DEVICE_API_VERSION_1_3)
+			out.flags = context->sensor->flags;
+#endif
 			out.timestamp = event.timestamp;
 
 			*mWrite++ = out;
