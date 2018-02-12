@@ -1,5 +1,3 @@
-ifeq ($(TARGET_DEVICE),wt88047)
-
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
@@ -33,6 +31,13 @@ LOCAL_MODULE := sensors.msm8916
 LOCAL_MODULE_RELATIVE_PATH := hw
 LOCAL_MODULE_TAGS := optional
 
+# Export calibration library needed dependency headers
+LOCAL_COPY_HEADERS_TO := sensors/inc
+LOCAL_COPY_HEADERS := \
+    CalibrationModule.h \
+    sensors_extension.h \
+    sensors.h
+
 include $(BUILD_SHARED_LIBRARY)
 
 include $(CLEAR_VARS)
@@ -48,7 +53,7 @@ LOCAL_SRC_FILES := \
 LOCAL_SHARED_LIBRARIES := liblog libcutils
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR)/lib
+LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR_SHARED_LIBRARIES)
 
 include $(BUILD_SHARED_LIBRARY)
 
@@ -61,5 +66,3 @@ LOCAL_MODULE_PATH := $(TARGET_OUT_VENDOR_ETC)
 LOCAL_SRC_FILES := calmodule.cfg
 
 include $(BUILD_PREBUILT)
-
-endif

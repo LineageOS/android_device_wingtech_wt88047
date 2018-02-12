@@ -37,12 +37,18 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using namespace android;
 
+enum {
+    CAL_STATIC,
+    CAL_DYNAMIC,
+    CAL_COUNT,
+};
+
 class sensors_XML : public Singleton<sensors_XML> {
     friend class Singleton<sensors_XML>;
     xmlDocPtr mdoc;
 public:
-    int read_sensors_params(struct sensor_t *sensor, struct cal_result_t *cal_result);
-    int write_sensors_params(struct sensor_t *sensor, struct cal_result_t *cal_result);
+    int read_sensors_params(struct sensor_t *sensor, struct cal_result_t *cal_result, int state);
+    int write_sensors_params(struct sensor_t *sensor, struct cal_result_t *cal_result, int state);
     sensors_XML();
     int sensors_calibrate_reset();
     int sensors_rm_file();
