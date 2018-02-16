@@ -48,13 +48,13 @@ on post-fs
     swapon_all /fstab.qcom
     write /proc/sys/vm/page-cluster 0
 
-service imsqmidaemon /system/bin/imsqmidaemon
+service imsqmidaemon /system/vendor/bin/imsqmidaemon
     class main
     user system
     socket ims_qmid stream 0660 system radio
     group radio log oem_2950
 
-service imscmservice /system/bin/imscmservice
+service imscmservice /system/vendor/bin/imscmservice
     class main
     user system
     group radio oem_2950 log
@@ -63,7 +63,7 @@ service imscmservice /system/bin/imscmservice
 on property:sys.ims.DATA_DAEMON_STATUS=1
     start imscmservice
 
-service imsdatadaemon /system/bin/imsdatadaemon
+service imsdatadaemon /system/vendor/bin/imsdatadaemon
     class main
     user system
     socket ims_datad stream 0660 system radio

@@ -1,5 +1,5 @@
 # ADSP
-bin/adsprpcd
+vendor/bin/adsprpcd
 vendor/lib/libadsprpc.so
 vendor/lib/libfastcvopt.so
 
@@ -15,12 +15,12 @@ vendor/lib/soundfx/libqcreverb.so
 vendor/lib/soundfx/libqcvirt.so
 
 # Bluetooth
-bin/btnvtool
-bin/hci_qcomm_init
+vendor/bin/btnvtool
+vendor/bin/hci_qcomm_init
 vendor/lib/libbtnv.so
 
 # Camera
-bin/mm-qcamera-daemon
+vendor/bin/mm-qcamera-daemon
 vendor/lib/libjpegdhw.so
 vendor/lib/libjpegehw.so
 vendor/lib/libmmcamera2_c2d_module.so
@@ -115,10 +115,10 @@ vendor/lib/libchromatix_ov8865_sunny_snapshot.so
 vendor/lib/libmmcamera_sunny_q8v18a_eeprom.so
 
 # Camera firmware
-etc/firmware/cpp_firmware_v1_1_1.fw
-etc/firmware/cpp_firmware_v1_1_6.fw
-etc/firmware/cpp_firmware_v1_2_0.fw
-etc/firmware/cpp_firmware_v1_4_0.fw
+vendor/firmware/cpp_firmware_v1_1_1.fw
+vendor/firmware/cpp_firmware_v1_1_6.fw
+vendor/firmware/cpp_firmware_v1_2_0.fw
+vendor/firmware/cpp_firmware_v1_4_0.fw
 
 # Camera sensors
 vendor/lib/libmmcamera_ov2680_5987fhq.so
@@ -134,8 +134,8 @@ vendor/lib/librpmb.so
 vendor/lib/libssd.so
 
 # GPS - from crackling
--lib/libloc_api_v02.so|74df1667c42701ef550ba73db6c5ae63542913ac
--lib/libloc_ds_api.so|2124d2df231d1e3ccb7f22c6227f6112f4013485
+-vendor/lib/libloc_api_v02.so|74df1667c42701ef550ba73db6c5ae63542913ac
+-vendor/lib/libloc_ds_api.so|2124d2df231d1e3ccb7f22c6227f6112f4013485
 vendor/lib/hw/flp.default.so|c281157957565dc35f7e1731b2c71a71a532a821
 vendor/lib/libflp.so|776aae670ffc63b1fbe27420729ee7bd9a6fbb0e
 vendor/lib/libgeofence.so|bd34516de3c933d81267822716235c358ab6695d
@@ -171,8 +171,8 @@ vendor/lib/libsc-a3xx.so|a03fc9f0c929cb4adf013f8a463cfbef68d48090
 vendor/lib/libscale.so|972cbd87794b4ce0a5c23db946acbafd4cd6d073
 
 # Graphics firmware
-etc/firmware/a300_pfp.fw
-etc/firmware/a300_pm4.fw
+vendor/firmware/a300_pfp.fw
+vendor/firmware/a300_pm4.fw
 
 # Media
 lib/libOmxVdecHevc.so
@@ -189,7 +189,7 @@ vendor/bin/perfd
 vendor/lib/libqti-perfd-client.so
 
 # Postprocessing
-bin/mm-pp-daemon
+vendor/bin/mm-pp-daemon
 vendor/lib/libdisp-aba.so
 vendor/lib/libmm-abl.so
 vendor/lib/libmm-abl-oem.so
@@ -198,7 +198,7 @@ vendor/lib/libmm-disp-apis.so
 vendor/lib/libmm-qdcm.so
 
 # Qualcomm framework
-bin/irsc_util
+vendor/bin/irsc_util
 vendor/lib/libdiag.so
 vendor/lib/libdsi_netctrl.so
 vendor/lib/libdsutils.so
@@ -217,15 +217,15 @@ vendor/lib/libqmi.so
 vendor/lib/libsmemlog.so
 
 # Radio
--app/shutdownlistener/shutdownlistener.apk
-bin/netmgrd
-bin/qmuxd
-bin/radish
-bin/rmt_storage
-etc/permissions/qcnvitems.xml
-etc/permissions/qcrilhook.xml
--framework/qcnvitems.jar
--framework/qcrilhook.jar
+-vendor/app/shutdownlistener/shutdownlistener.apk
+vendor/bin/netmgrd
+vendor/bin/qmuxd
+vendor/bin/radish
+vendor/bin/rmt_storage
+vendor/etc/permissions/qcnvitems.xml
+vendor/etc/permissions/qcrilhook.xml
+-vendor/framework/qcnvitems.jar
+-vendor/framework/qcrilhook.jar
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk
 vendor/lib/libcneapiclient.so
 vendor/lib/libconfigdb.so
@@ -242,7 +242,7 @@ vendor/lib/libxml.so
 # Radio - IMS
 -vendor/app/ims/ims.apk|138de3a169d8c4703d9e5645abeb19e427b04909
 -vendor/app/imssettings/imssettings.apk|3020cdd3bc6d3c5bd147f2086fdd62fae108d81b
--framework/imscmlibrary.jar|0c24d6540c06efede52169c1445272f43748180f
+-vendor/framework/imscmlibrary.jar|0c24d6540c06efede52169c1445272f43748180f
 bin/ims_rtp_daemon|2900e38f2d6fbb981fae9ba41ec60eb47a29fd48
 bin/imscmservice|2b6bb0cc2c244885556fe5c6ee75733b59ea1910
 bin/imsdatadaemon|30cb68236f5c8f6fe0d78f0e772a33405c5cf58b
@@ -279,13 +279,13 @@ vendor/lib/libcalmodule_yamaha.so
 vendor/lib/libcalmodule_gyroscope.so
 
 # Signed Venus (media) firmware
-etc/firmware/venus.b00
-etc/firmware/venus.b01
-etc/firmware/venus.b02
-etc/firmware/venus.b03
-etc/firmware/venus.b04
-etc/firmware/venus.mbn
-etc/firmware/venus.mdt
+vendor/firmware/venus.b00
+vendor/firmware/venus.b01
+vendor/firmware/venus.b02
+vendor/firmware/venus.b03
+vendor/firmware/venus.b04
+vendor/firmware/venus.mbn
+vendor/firmware/venus.mdt
 
 # STLport
 vendor/lib/libstlport.so
@@ -296,8 +296,8 @@ vendor/lib/libthermalclient.so
 vendor/lib/libthermalioctl.so
 
 # Time services
--app/TimeService/TimeService.apk
-bin/time_daemon
+-vendor/app/TimeService/TimeService.apk
+vendor/bin/time_daemon
 -vendor/lib/libtime_genoff.so
 vendor/lib/libTimeService.so
 
@@ -307,4 +307,4 @@ vendor/lib/libWVStreamControlAPI_L3.so|61673304827483d44b735a3dd08f0783d10ce92d
 vendor/lib/mediadrm/libwvdrmengine.so|b88c5df27094314c39ff208fdd30c9e37042c70c
 
 # WLAN
-lib/libwcnss_qmi.so
+vendor/lib/libwcnss_qmi.so
