@@ -48,7 +48,6 @@ camera_module_t HAL_MODULE_INFO_SYM = {
 #ifndef USE_JB_MR1
     set_callbacks: NULL,
 #endif
-//#ifdef USE_VENDOR_CAMERA_EXT
     get_vendor_tag_ops: NULL,
 #ifndef USE_KK_CODE
     open_legacy: NULL,
@@ -56,5 +55,4 @@ camera_module_t HAL_MODULE_INFO_SYM = {
     init: NULL,
 #endif
     reserved:  {0}
-//#endif
 };
