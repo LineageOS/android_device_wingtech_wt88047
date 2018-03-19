@@ -31,10 +31,6 @@ else
     LOCAL_CFLAGS+= -DMM_JPEG_CONCURRENT_SESSIONS_COUNT=1
 endif
 
-ifeq ($(call is-board-platform-in-list, msm8610),true)
-    LOCAL_CFLAGS+= -DLOAD_ADSP_RPC_LIB
-endif
-
 LOCAL_SRC_FILES := \
     src/mm_jpeg_queue.c \
     src/mm_jpeg_exif.c \
