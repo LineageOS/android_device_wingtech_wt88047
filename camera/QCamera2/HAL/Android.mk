@@ -50,13 +50,8 @@ LOCAL_C_INCLUDES := \
         $(LOCAL_PATH)/../../mm-image-codec/qexif \
         $(LOCAL_PATH)/../../mm-image-codec/qomx_core \
         $(LOCAL_PATH)/../util \
-        $(LOCAL_PATH)/wrapper
-
-ifeq ($(call is-platform-sdk-version-at-least,20),true)
-LOCAL_C_INCLUDES += system/media/camera/include
-else
-LOCAL_CFLAGS += -DUSE_KK_CODE
-endif
+        $(LOCAL_PATH)/wrapper \
+        system/media/camera/include
 
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
 LOCAL_C_INCLUDES += $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include/media
