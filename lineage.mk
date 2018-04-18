@@ -31,6 +31,7 @@ PRODUCT_DEVICE := wt88047
 PRODUCT_GMS_CLIENTID_BASE := android-xiaomi
 
 # Build fingerprint
+BUILD_FINGERPRINT="Xiaomi/wt88047/wt88047:5.1.1/LMY47V/V8.1.3.0.LHJMIDL:user/release-keys"
+
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    BUILD_FINGERPRINT="Xiaomi/wt88047/wt88047:5.1.1/LMY47V/V8.1.3.0.LHJMIDL:user/release-keys" \
     PRIVATE_BUILD_DESC="wt88047-user 5.1.1 LMY47V V8.1.3.0.LHJMIDL release-keys"
