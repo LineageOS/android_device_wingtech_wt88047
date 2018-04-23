@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE_TAGS := optional
 
-LOCAL_CFLAGS := -Werror -g -O0
+LOCAL_CFLAGS := -Wall -Wextra -Werror -g -O0
 
 LOCAL_C_INCLUDES := \
     frameworks/native/include/media/openmax \
