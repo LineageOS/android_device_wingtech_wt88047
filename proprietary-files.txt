@@ -214,7 +214,7 @@ vendor/lib/libsmemlog.so
 # Radio
 -vendor/app/shutdownlistener/shutdownlistener.apk
 vendor/bin/netmgrd
-vendor/bin/qmuxd
+vendor/bin/qmuxd|3d05c6d9c5c2ac2a0fb62cbcecd279557d7b46de
 vendor/bin/radish
 vendor/bin/rmt_storage
 vendor/etc/permissions/qcnvitems.xml
