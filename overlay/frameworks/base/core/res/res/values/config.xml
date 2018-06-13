@@ -206,4 +206,29 @@
         <item>"/system/framework/arm/boot-core-libart.oat"</item>
         <item>"/system/framework/arm/boot-core-libart.vdex"</item>
    </string-array>
+
+    <!-- Values for GPS configuration -->
+    <string-array translatable="false" name="config_gpsParameters">
+	<item>XTRA_SERVER_1=https://xtrapath1.izatcloud.net/xtra3grc.bin</item>
+	<item>XTRA_SERVER_2=https://xtrapath2.izatcloud.net/xtra3grc.bin</item>
+	<item>XTRA_SERVER_3=https://xtrapath3.izatcloud.net/xtra3grc.bin</item>
+	<item>XTRA_VERSION_CHECK=1</item>
+	<item>ERR_ESTIMATE=0</item>
+	<item>NTP_SERVER=time.izatcloud.net</item>
+	<item>XTRA_CA_PATH=/system/etc/security/cacerts</item>
+	<item>CAPABILITIES=0x37</item>
+	<item>DEBUG_LEVEL=2</item>
+	<item>INTERMEDIATE_POS=0</item>
+	<item>SUPL_VER=0x10000</item>
+        <item>SUPL_ES=0</item>
+        <item>USE_EMERGENCY_PDN_FOR_EMERGENCY_SUPL=1</item>
+        <item>CAPABILITIES=0x37</item>
+        <item>LPP_PROFILE=2</item>
+        <item>NMEA_PROVIDER=0</item>
+        <item>SGLTE_TARGET=0</item>
+        <item>A_GLONASS_POS_PROTOCOL_SELECT=0</item>
+        <item>LPPE_CP_TECHNOLOGY=0</item>
+        <item>LPPE_UP_TECHNOLOGY=0</item>
+    </string-array>
+
 </resources>
