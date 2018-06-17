@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "06c4e1ab_204791c4",
+        "filename": "product/media.mk",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 4550
+      },
+      "writtenOn": "2018-06-17T12:25:32Z",
+      "side": 1,
+      "message": "This needs to be copied to vendor if you really want it to work",
+      "revId": "0db3486ab86d6fe4d99cd52443eda454b03ca7e9",
+      "serverId": "1ec6b3db-b2c1-4fa4-84a2-4c7efe89ba71",
+      "unresolved": false
+    }
+  ]
+}
