@@ -32,6 +32,7 @@ IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <cutils/log.h>
 #include "unistd.h"
 #include <fcntl.h>
+#include <string.h>
 #include <sys/stat.h>
 #include <private/android_filesystem_config.h>
 
