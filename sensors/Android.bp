@@ -1,3 +1,6 @@
+soong_namespace {
+}
+
 cc_library_static {
     name: "multihal-wt88047",
     vendor: true,
