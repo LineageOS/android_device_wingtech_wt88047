@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, The Linux Foundation. All rights reserved.
+ * Copyright (c) 2014, 2018 The Linux Foundation. All rights reserved.
  * Not a Contribution.
  * Copyright (C) 2008 The Android Open Source Project
  *
@@ -81,7 +81,7 @@ struct sensors_poll_context_t {
 	int setDelay(int handle, int64_t ns);
 	int pollEvents(sensors_event_t* data, int count);
 	int calibrate(int handle, cal_cmd_t *para);
-	int batch(int handle, int sample_ns, int latency_ns);
+	int batch(int handle, int64_t sample_ns, int latency_ns);
 	int flush(int handle);
 
 private:
@@ -225,7 +225,7 @@ int sensors_poll_context_t::calibrate(int handle, struct cal_cmd_t *para)
 	return err;
 }
 
-int sensors_poll_context_t::batch(int handle, int sample_ns, int latency_ns)
+int sensors_poll_context_t::batch(int handle, int64_t sample_ns, int latency_ns)
 {
 	NativeSensorManager& sm(NativeSensorManager::getInstance());
 	Mutex::Autolock _l(mLock);
