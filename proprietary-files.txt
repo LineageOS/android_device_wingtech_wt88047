@@ -222,6 +222,8 @@ etc/permissions/qcrilhook.xml:vendor/etc/permissions/qcrilhook.xml
 -framework/qcnvitems.jar:vendor/framework/qcnvitems.jar|ec64c7eedf68489a93b2831ec146105d672d353f
 -framework/qcrilhook.jar:vendor/framework/qcrilhook.jar|c867423053edbc7f307e53220faba66efdc25846
 -priv-app/qcrilmsgtunnel/qcrilmsgtunnel.apk|cea7f8624d386c9538102f4d5063005f0caedab4
+vendor/lib/com.quicinc.cne.api@1.0.so|60dd6f1fa0c70523f91342b07be6c82e733cdb90
+vendor/lib/com.quicinc.cne.constants@1.0.so|0d3b2fd95e8ea3525467d8ca38865ac2a9d3f4c7
 vendor/lib/libcneapiclient.so|9b88e710fcf5e2c688a5da9f40959c10fb8f2449
 vendor/lib/libconfigdb.so|0baff7fcba0f1a22b8ec1b08f6068579ed527452
 vendor/lib/liblqe.so|e4a40f8675c5b52f1bb71aa2fea62d7ffcd9b003
@@ -241,7 +243,7 @@ vendor/lib/libxml.so|8b9cae9b4d1525e7fea093d6a53f363c842f3076
 bin/imscmservice:vendor/bin/imscmservice|2b6bb0cc2c244885556fe5c6ee75733b59ea1910
 bin/imsdatadaemon:vendor/bin/imsdatadaemon|30cb68236f5c8f6fe0d78f0e772a33405c5cf58b
 bin/imsqmidaemon:vendor/bin/imsqmidaemon|00c1cd071898fc7883b98b53c507d07e8b262e63
-etc/permissions/ims.xml:vendor/etc/ims.xml|b77963459ea6664a0eddcbc5ca7f4220e4895c26
+etc/permissions/ims.xml:vendor/etc/permissions/ims.xml|b77963459ea6664a0eddcbc5ca7f4220e4895c26
 etc/permissions/imscm.xml:vendor/etc/permissions/imscm.xml|8b99ec26c783966bbea1fcb8e72c7c0206a4e802
 etc/permissions/qti_permissions.xml:vendor/etc/permissions/qti_permissions.xml|fd8a1db3c18b6d58334d747e47f4b155bb612039
 vendor/lib/lib-dplmedia.so|93af0d85c31b197efdbde915ff8f7bc404243f87
