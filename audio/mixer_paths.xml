@@ -81,7 +81,8 @@
     <ctl name="HPHL" value="ZERO" />
     <ctl name="HPHR" value="ZERO" />
     <ctl name="HPH SPK" value="ZERO" />
-    <ctl name="Lineout_1 amp" value="DISABLE" />
+    <ctl name="Ext Spk Switch" value="Off" />
+    <ctl name="Ext Headset Switch" value="Off" />
     <ctl name="SPK DAC Switch" value="0" />
     <ctl name="Speaker Boost" value="ENABLE" />
     <ctl name="MICBIAS CAPLESS Switch" value="0" />
@@ -562,7 +563,8 @@
         <ctl name="MI2S_RX Channels" value="One" />
         <ctl name="RX1 MIX1 INP1" value="RX1" />
         <ctl name="HPHL" value="Switch" />
-        <ctl name="Lineout_1 amp" value="ENABLE" />
+        <ctl name="Ext Headset Switch" value="Off" />
+        <ctl name="Ext Spk Switch" value="On" />
     </path>
 
     <path name="speaker-mic">
@@ -590,7 +592,8 @@
         <ctl name="RDAC2 MUX" value="RX2" />
         <ctl name="HPHL" value="Switch" />
         <ctl name="HPHR" value="Switch" />
-        <ctl name="Lineout_1 amp" value="DISABLE" />
+        <ctl name="Ext Spk Switch" value="Off" />
+        <ctl name="Ext Headset Switch" value="On" />
     </path>
 
     <path name="headset-mic">
@@ -649,7 +652,8 @@
         <ctl name="MI2S_RX Channels" value="One" />
         <ctl name="RX1 MIX1 INP1" value="RX1" />
         <ctl name="HPHL" value="Switch" />
-        <ctl name="Lineout_1 amp" value="DUALMODE" />
+        <ctl name="Ext Spk Switch" value="On" />
+        <ctl name="Ext Headset Switch" value="On" />
     </path>
 
     <path name="usb-headphones">
