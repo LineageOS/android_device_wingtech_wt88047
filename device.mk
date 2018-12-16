@@ -69,6 +69,10 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/gps/izat.conf:system/etc/izat.conf \
     $(LOCAL_PATH)/gps/sap.conf:system/etc/sap.conf
 
+# IMS
+PRODUCT_PACKAGES += \
+    libshims_ims
+
 # Init scripts
 PRODUCT_PACKAGES += \
     fstab.qcom \
