@@ -40,13 +40,13 @@ on boot
 
 service imsqmidaemon /system/vendor/bin/imsqmidaemon
     class main
-    user system
+    user radio
     socket ims_qmid stream 0660 system radio
     group radio log oem_2950
 
 service imscmservice /system/vendor/bin/imscmservice
     class main
-    user system
+    user radio
     group radio oem_2950 log
     disabled
 
@@ -55,7 +55,7 @@ on property:sys.ims.DATA_DAEMON_STATUS=1
 
 service imsdatadaemon /system/vendor/bin/imsdatadaemon
     class main
-    user system
+    user radio
     socket ims_datad stream 0660 system radio
     group system wifi radio inet log oem_2950
     disabled
