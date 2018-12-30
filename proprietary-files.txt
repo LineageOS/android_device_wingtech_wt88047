@@ -194,6 +194,8 @@ vendor/lib/libmm-qdcm.so|00413d3c2e3b6a0b43f1a315af33592bec1d952c
 
 # Qualcomm framework - from jalebi
 bin/irsc_util:vendor/bin/irsc_util|3e9ca860ef26dba7024812c378b6c5cd15b879aa
+etc/data/dsi_config.xml:vendor/etc/data/dsi_config.xml|0a8e28e484e0ca121651bf8c9d5617687ff2b796
+etc/data/netmgr_config.xml:vendor/etc/data/netmgr_config.xml|b013b5cb704cbd6fa8eedfb279e1ef3d4cc12a6c
 vendor/lib/libdiag.so|9bc420c1605f83f7b2c0cfd10e4d2a32ff1fb172
 vendor/lib/libdsi_netctrl.so|eb7deafd9cda2fc082b2623e4b1649e8dee44abc
 vendor/lib/libdsutils.so|4e6f2aff61471165cf76e67ae1c034b7d732d42b
@@ -249,6 +251,7 @@ etc/permissions/qti_permissions.xml:vendor/etc/permissions/qti_permissions.xml|f
 vendor/lib/lib-dplmedia.so|93af0d85c31b197efdbde915ff8f7bc404243f87
 vendor/lib/lib-ims-rcscmjni.so|5be14cd7a69709f673297ab175cb011a6f2fd1a3
 vendor/lib/lib-imsSDP.so|a0a140eee8ca53ec1d28e9357c5061803fde2b27
+vendor/lib/lib-imscamera.so|12df0e3cc481fede30def954d3975d96899b32d9
 vendor/lib/lib-imsdpl.so|e6e023f82bfc55ba9787c09aabf629da15654ef2
 vendor/lib/lib-imsqimf.so|d497b01f0219ce261da84654dba05b0b8eef6aee
 vendor/lib/lib-imsrcs.so|7968cbf064c9bdf69ab1f2f61834efad39f19f08
