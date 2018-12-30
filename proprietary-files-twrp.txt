@@ -1,0 +1,9 @@
+# DRM
+vendor/bin/qseecomd:recovery/root/sbin/qseecomd
+vendor/lib/hw/keystore.msm8916.so:recovery/root/vendor/lib/hw/keystore.msm8916.so
+vendor/lib/libQSEEComAPI.so:recovery/root/vendor/lib/libQSEEComAPI.so
+vendor/lib/libdiag.so:recovery/root/vendor/lib/libdiag.so
+vendor/lib/libdrmfs.so:recovery/root/vendor/lib/libdrmfs.so
+vendor/lib/libdrmtime.so:recovery/root/vendor/lib/libdrmtime.so
+vendor/lib/librpmb.so:recovery/root/vendor/lib/librpmb.so
+vendor/lib/libssd.so:recovery/root/vendor/lib/libssd.so
