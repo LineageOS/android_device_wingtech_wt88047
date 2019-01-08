@@ -1,6 +1,8 @@
 # DRM
 vendor/bin/qseecomd:recovery/root/sbin/qseecomd
+vendor/bin/hw/android.hardware.keymaster@3.0-service:recovery/root/sbin/hw/android.hardware.keymaster@3.0-service
 vendor/lib/hw/keystore.msm8916.so:recovery/root/vendor/lib/hw/keystore.msm8916.so
+vendor/lib/hw/android.hardware.keymaster@3.0-impl.so:recovery/root/vendor/lib/hw/android.hardware.keymaster@3.0-impl.so
 vendor/lib/libQSEEComAPI.so:recovery/root/vendor/lib/libQSEEComAPI.so
 vendor/lib/libdiag.so:recovery/root/vendor/lib/libdiag.so
 vendor/lib/libdrmfs.so:recovery/root/vendor/lib/libdrmfs.so
