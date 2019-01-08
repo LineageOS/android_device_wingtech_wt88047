@@ -1,3 +1,6 @@
+import /init.recovery.vold_decrypt.hwservicemanager.rc
+import /init.recovery.vold_decrypt.keymaster-3-0.rc
+
 on init
     chmod 0660 /dev/qseecom
     chown system drmrpc /dev/qseecom
@@ -15,4 +18,12 @@ service sbinqseecomd /sbin/qseecomd
     seclabel u:r:recovery:s0
 
 on property:ro.crypto.state=encrypted
+    start sbinhwservicemanager
     start sbinqseecomd
+
+on property:hwservicemanager.ready=true
+    start sbinkeymaster-3-0
+
+on property:init.svc.sys_vold=stopped
+    stop sbinkeymaster-3-0
+    stop sbinhwservicemanager
