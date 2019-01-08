@@ -7,3 +7,7 @@ vendor/lib/libdrmfs.so:recovery/root/vendor/lib/libdrmfs.so
 vendor/lib/libdrmtime.so:recovery/root/vendor/lib/libdrmtime.so
 vendor/lib/librpmb.so:recovery/root/vendor/lib/librpmb.so
 vendor/lib/libssd.so:recovery/root/vendor/lib/libssd.so
+
+# Keymaster
+vendor/bin/hw/android.hardware.keymaster@3.0-service:recovery/root/sbin/hw/android.hardware.keymaster@3.0-service
+vendor/lib/hw/android.hardware.keymaster@3.0-impl.so:recovery/root/vendor/lib/hw/android.hardware.keymaster@3.0-impl.so
