@@ -11,10 +11,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.hal.debug.mask=0 \
     ro.camera.sensors=ov8865_q8v18a,ov2680_skuhf,ov2680_5987fhq
 
-# Display
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.sf.lcd_density=320
-
 # Factory Reset Protection
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.frp.pst=/dev/block/platform/soc.0/7824900.sdhci/by-name/config
