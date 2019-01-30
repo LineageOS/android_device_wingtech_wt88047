@@ -2,17 +2,18 @@
 # The filesystem that contains the filesystem checker binary (typically /system) cannot
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
-/dev/block/bootdevice/by-name/system         /system      ext4    ro,barrier=1                                                wait,recoveryonly
-/dev/block/bootdevice/by-name/userdata       /data        f2fs    noatime,nosuid,nodev,inline_xattr                           wait,check,formattable,encryptable=footer
-/dev/block/bootdevice/by-name/userdata       /data        ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait,check,formattable,encryptable=footer
-/dev/block/bootdevice/by-name/cache          /cache       f2fs    noatime,nosuid,nodev,inline_xattr                           wait,check,formattable
-/dev/block/bootdevice/by-name/cache          /cache       ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait,check,formattable
-/dev/block/bootdevice/by-name/persist        /persist     ext4    noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait
-/dev/block/bootdevice/by-name/boot           /boot        emmc    defaults                                                    defaults
-/dev/block/bootdevice/by-name/recovery       /recovery    emmc    defaults                                                    defaults
-/dev/block/bootdevice/by-name/misc           /misc        emmc    defaults                                                    defaults
-/dev/block/bootdevice/by-name/modem          /firmware    vfat    ro,shortname=lower,uid=1000,gid=1026,dmask=227,fmask=337,context=u:object_r:firmware_file:s0    wait
+/dev/block/bootdevice/by-name/system         /system     ext4     ro,barrier=1                                                wait,recoveryonly
+/dev/block/bootdevice/by-name/oem            /vendor     squashfs ro,barrier=1                                                wait,recoveryonly
+/dev/block/bootdevice/by-name/userdata       /data       f2fs     noatime,nosuid,nodev,inline_xattr                           wait,check,formattable,encryptable=footer
+/dev/block/bootdevice/by-name/userdata       /data       ext4     noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait,check,formattable,encryptable=footer
+/dev/block/bootdevice/by-name/cache          /cache      f2fs     noatime,nosuid,nodev,inline_xattr                           wait,check,formattable
+/dev/block/bootdevice/by-name/cache          /cache      ext4     noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait,check,formattable
+/dev/block/bootdevice/by-name/persist        /persist    ext4     noatime,nosuid,nodev,barrier=1,noauto_da_alloc              wait
+/dev/block/bootdevice/by-name/boot           /boot       emmc     defaults                                                    defaults
+/dev/block/bootdevice/by-name/recovery       /recovery   emmc     defaults                                                    defaults
+/dev/block/bootdevice/by-name/misc           /misc       emmc     defaults                                                    defaults
+/dev/block/bootdevice/by-name/modem          /firmware   vfat     ro,shortname=lower,uid=1000,gid=1026,dmask=227,fmask=337,context=u:object_r:firmware_file:s0    wait
 
-/devices/soc.0/7864900.sdhci/mmc_host*       auto         auto    defaults                                                    voldmanaged=sdcard1:auto,encryptable=userdata
-/devices/platform/msm_hsusb*                 auto         auto    defaults                                                    voldmanaged=usbdisk:auto
-/dev/block/zram0                             none         swap    defaults zramsize=268435456,max_comp_streams=4
+/devices/soc.0/7864900.sdhci/mmc_host*       auto        auto     defaults                                                    voldmanaged=sdcard1:auto,encryptable=userdata
+/devices/platform/msm_hsusb*                 auto        auto     defaults                                                    voldmanaged=usbdisk:auto
+/dev/block/zram0                             none        swap     defaults zramsize=268435456,max_comp_streams=4
