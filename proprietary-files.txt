@@ -273,9 +273,12 @@ vendor/lib/librcc.so|a409377843c8c0af7f92beac09048927e36e7ca0
 vendor/lib/libvoice-svc.so|fe8d2807b5b1a35310a9bcf80ceb4467503130b0
 
 # Sensors
+lib/hw/sensors.msm8916.so:vendor/lib/sensors.wt88047.so
 vendor/lib/libcalmodule_akm.so
-vendor/lib/libcalmodule_yamaha.so
+vendor/lib/libcalmodule_common.so
 vendor/lib/libcalmodule_gyroscope.so
+vendor/lib/libcalmodule_yamaha.so
+vendor/lib/libcalmodule_senodia.so
 
 # Signed Venus (media) firmware
 etc/firmware/venus.b00:vendor/firmware/venus.b00
