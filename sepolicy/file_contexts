@@ -1,0 +1,5 @@
+# HAL
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch@1\.0-service\.wt88047      u:object_r:hal_lineage_touch_default_exec:s0
+
+# Touchpanel
+/sys/bus/i2c/drivers/ft5x06_ts/5-0038/keypad_mode                                u:object_r:proc_touchpanel:s0

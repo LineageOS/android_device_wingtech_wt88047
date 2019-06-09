@@ -1,0 +1,11 @@
+on init
+    chown system system /sys/bus/i2c/drivers/ft5x06_ts/5-0038/keypad_mode
+    chmod 0660 /sys/bus/i2c/drivers/ft5x06_ts/5-0038/keypad_mode
+
+on property:sys.boot_completed=1
+    restorecon_recursive /sys/bus/i2c/drivers/ft5x06_ts/5-0038/
+
+service vendor.touch-hal-1-0-wt88047 /vendor/bin/hw/vendor.lineage.touch@1.0-service.wt88047
+    class hal
+    user system
+    group system

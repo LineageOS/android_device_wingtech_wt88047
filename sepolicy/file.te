@@ -1,0 +1,2 @@
+# Touchpanel
+type proc_touchpanel, fs_type, sysfs_type, proc_type;
