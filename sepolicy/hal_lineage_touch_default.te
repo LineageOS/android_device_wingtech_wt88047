@@ -1,0 +1,2 @@
+allow hal_lineage_touch_default sysfs_keypad:dir search;
+allow hal_lineage_touch_default sysfs_keypad:file rw_file_perms;

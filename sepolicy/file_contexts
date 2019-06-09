@@ -1,2 +1,6 @@
 # block devices
-/dev/block/platform/soc\.0/7824900\.sdhci/by-name/oem                 u:object_r:system_block_device:s0
+/dev/block/platform/soc\.0/7824900\.sdhci/by-name/oem                            u:object_r:system_block_device:s0
+
+# Touchscreen
+/(vendor|system/vendor)/bin/hw/vendor\.lineage\.touch@1\.0-service\.wt88047      u:object_r:hal_lineage_touch_default_exec:s0
+/sys/devices/soc\.0/78b9000\.i2c/i2c-5/5-0038/keypad_mode                        u:object_r:sysfs_keypad:s0
