@@ -466,31 +466,6 @@
         <ctl name="Incall_Music_2 Audio Mixer MultiMedia9" value="1" />
     </path>
 
-    <path name="volte-call">
-        <ctl name="PRI_MI2S_RX_Voice Mixer VoLTE" value="1" />
-        <ctl name="VoLTE_Tx Mixer TERT_MI2S_TX_VoLTE" value="1" />
-   </path>
-
-   <path name="volte-call hdmi">
-       <ctl name="HDMI_RX_Voice Mixer VoLTE" value="1" />
-       <ctl name="VoLTE_Tx Mixer SLIM_0_TX_VoLTE" value="1" />
-   </path>
-
-   <path name="volte-call bt-sco">
-        <ctl name="INTERNAL_BT_SCO_RX_Voice Mixer VoLTE" value="1" />
-        <ctl name="VoLTE_Tx Mixer INTERNAL_BT_SCO_TX_VoLTE" value="1" />
-    </path>
-
-   <path name="volte-call bt-sco-wb">
-        <ctl name="Internal BTSCO SampleRate" value="16000" />
-        <path name="volte-call bt-sco" />
-    </path>
-
-   <path name="volte-call usb-headphones">
-        <ctl name="AFE_PCM_RX_Voice Mixer VoLTE" value="1" />
-        <ctl name="VoLTE_Tx Mixer AFE_PCM_TX_VoLTE" value="1" />
-   </path>
-
     <path name="compress-voip-call">
         <ctl name="PRI_MI2S_RX_Voice Mixer Voip" value="1" />
         <ctl name="Voip_Tx Mixer TERT_MI2S_TX_Voip" value="1" />
