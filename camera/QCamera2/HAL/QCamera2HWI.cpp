@@ -1911,7 +1911,7 @@ QCameraHeapMemory *QCamera2HardwareInterface::allocateStreamInfoBuf(
         if (mParameters.isSeeMoreEnabled()) {
             streamInfo->pp_config.feature_mask |= CAM_QCOM_FEATURE_LLVD;
         }
-
+        [[fallthrough]];
     case CAM_STREAM_TYPE_PREVIEW:
         if (mParameters.getRecordingHintValue()) {
             const char* dis_param = mParameters.get(QCameraParameters::KEY_QC_DIS);
