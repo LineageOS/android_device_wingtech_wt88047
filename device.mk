@@ -133,13 +133,14 @@ $(call inherit-product, device/wingtech/wt88047/system_prop.mk)
 
 # Telephony
 PRODUCT_PACKAGES += \
-    ims-ext-common \
+    ims-ext-common_system \
     ims_ext_common.xml \
     qti-telephony-hidl-wrapper \
     qti_telephony_hidl_wrapper.xml \
     telephony-ext
 
 PRODUCT_BOOT_JARS += \
+    ims-ext-common_system \
     telephony-ext
 
 # Thermal
