@@ -38,21 +38,33 @@
 #include <sys/sysinfo.h>
 
 #include <android-base/properties.h>
+#include <android-base/strings.h>
 
 #include "vendor_init.h"
 #include "property_service.h"
 
 using android::init::property_set;
 
-void property_override(char const prop[], char const value[])
-{
-    prop_info *pi;
+// copied from build/tools/releasetools/ota_from_target_files.py
+// but with "." at the end and empty entry
+std::vector<std::string> ro_product_props_default_source_order = {
+    ".",
+    "product.",
+    "product_services.",
+    "odm.",
+    "vendor.",
+    "system.",
+};
 
-    pi = (prop_info*) __system_property_find(prop);
-    if (pi)
+void property_override(char const prop[], char const value[], bool add = true)
+{
+    auto pi = (prop_info *) __system_property_find(prop);
+
+    if (pi != nullptr) {
         __system_property_update(pi, value, strlen(value));
-    else
+    } else if (add) {
         __system_property_add(prop, strlen(prop), value, strlen(value));
+    }
 }
 
 int is2GB()
@@ -62,7 +74,7 @@ int is2GB()
     return sys.totalram > 1024ull * 1024 * 1024;
 }
 
-void init_target_properties()
+void vendor_load_properties()
 {
     std::ifstream fin;
     std::string buf;
@@ -74,28 +86,40 @@ void init_target_properties()
             break;
     fin.close();
 
+    const auto set_ro_product_prop = [](const std::string &source,
+            const std::string &prop, const std::string &value) {
+        auto prop_name = "ro.product." + source + prop;
+        property_override(prop_name.c_str(), value.c_str(), false);
+    };
+
     /* S88047E1 */
     if (buf.find("S88047E1") != std::string::npos) {
         property_override("ro.build.product", "HM2014817");
-        property_override("ro.product.device", "HM2014817");
-        property_override("ro.product.model", "2014817");
-        property_override("ro.product.name", "2014817");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014817");
+            set_ro_product_prop(source, "model", "2014817");
+            set_ro_product_prop(source, "name", "2014817");
+        }
         property_override("ro.telephony.default_network", "9,1");
     }
     /* S88047D1 */
     else if (buf.find("S88047D1") != std::string::npos) {
         property_override("ro.build.product", "HM2014819");
-        property_override("ro.product.device", "HM2014819");
-        property_override("ro.product.model", "2014819");
-        property_override("ro.product.name", "2014819");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014819");
+            set_ro_product_prop(source, "model", "2014819");
+            set_ro_product_prop(source, "name", "2014819");
+        }
         property_set("ro.telephony.default_network", "9,1");
     }
     /* S88047C1 */
     else if (buf.find("S88047C1") != std::string::npos) {
         property_override("ro.build.product", "HM2014818");
-        property_override("ro.product.device", "HM2014818");
-        property_override("ro.product.model", "2014818");
-        property_override("ro.product.name", "2014818");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014818");
+            set_ro_product_prop(source, "model", "2014818");
+            set_ro_product_prop(source, "name", "2014818");
+        }
         property_set("ro.telephony.default_network", "9,1");
         property_set("persist.dbg.volte_avail_ovr", "1");
         property_set("persist.dbg.vt_avail_ovr", "1");
@@ -103,9 +127,11 @@ void init_target_properties()
     /* S88047B2 */
     else if (buf.find("S88047B2") != std::string::npos) {
         property_override("ro.build.product", "HM2014821");
-        property_override("ro.product.device", "HM2014821");
-        property_override("ro.product.model", "2014821");
-        property_override("ro.product.name", "2014821");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014821");
+            set_ro_product_prop(source, "model", "2014821");
+            set_ro_product_prop(source, "name", "2014821");
+        }
         property_set("ro.telephony.default_network", "22,1");
         property_set("telephony.lteOnCdmaDevice", "1");
         property_set("persist.radio.sglte.eons_domain", "ps");
@@ -113,9 +139,11 @@ void init_target_properties()
     /* S88047B1 */
     else if (buf.find("S88047B1") != std::string::npos) {
         property_override("ro.build.product", "HM2014812");
-        property_override("ro.product.device", "HM2014812");
-        property_override("ro.product.model", "2014812");
-        property_override("ro.product.name", "2014812");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014812");
+            set_ro_product_prop(source, "model", "2014812");
+            set_ro_product_prop(source, "name", "2014812");
+        }
         property_set("ro.telephony.default_network", "22,1");
         property_set("telephony.lteOnCdmaDevice", "1");
         property_set("persist.radio.sglte.eons_domain", "ps");
@@ -123,25 +151,31 @@ void init_target_properties()
     /* S86047A1 and S86047A1_CD */
     else if (buf.find("S86047A1") != std::string::npos) {
         property_override("ro.build.product", "HM2014813");
-        property_override("ro.product.device", "HM2014813");
-        property_override("ro.product.model", "2014813");
-        property_override("ro.product.name", "2014813");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014813");
+            set_ro_product_prop(source, "model", "2014813");
+            set_ro_product_prop(source, "name", "2014813");
+        }
         property_set("ro.telephony.default_network", "9,1");
     }
     /* S86047A2 and S86047A2_CD */
     else if (buf.find("S86047A2") != std::string::npos) {
         property_override("ro.build.product", "HM2014112");
-        property_override("ro.product.device", "HM2014112");
-        property_override("ro.product.model", "2014112");
-        property_override("ro.product.name", "2014112");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014112");
+            set_ro_product_prop(source, "model", "2014112");
+            set_ro_product_prop(source, "name", "2014112");
+        }
         property_set("ro.telephony.default_network", "9,1");
     }
     /* S88047A2 and S88047A1 */
     else {
         property_override("ro.build.product", "HM2014811");
-        property_override("ro.product.device", "HM2014811");
-        property_override("ro.product.model", "2014811");
-        property_override("ro.product.name", "2014811");
+        for (const auto &source : ro_product_props_default_source_order) {
+            set_ro_product_prop(source, "device", "HM2014811");
+            set_ro_product_prop(source, "model", "2014811");
+            set_ro_product_prop(source, "name", "2014811");
+        }
         property_set("ro.telephony.default_network", "9,1");
     }
 
@@ -151,11 +185,7 @@ void init_target_properties()
     property_set("dalvik.vm.heaptargetutilization", "0.75");
     property_set("dalvik.vm.heapminfree", "512k");
     property_set("dalvik.vm.heapmaxfree", "8m");
-}
 
-void vendor_load_properties()
-{
     // Init a dummy BT MAC address, will be overwritten later
     property_set("ro.boot.btmacaddr", "00:00:00:00:00:00");
-    init_target_properties();
 }
