@@ -62,6 +62,10 @@ PRODUCT_PACKAGES += \
     android.hardware.camera.provider@2.4-impl \
     camera.device@1.0-impl
 
+# Charger
+PRODUCT_PACKAGES += \
+    charger_res_image
+
 # For android_filesystem_config.h
 PRODUCT_PACKAGES += \
     fs_config_files
