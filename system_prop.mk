@@ -23,6 +23,13 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.fusion.magfield.max=250
 
+# IMS
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.ims.disableADBLogs=1 \
+    persist.ims.disableDebugLogs=1 \
+    persist.ims.disableIMSLogs=1 \
+    persist.ims.disableQXDMLogs=1
+
 # Radio
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.data.target=dpm1 \
