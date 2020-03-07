@@ -41,6 +41,10 @@ on boot
     write /sys/block/mmcblk0/queue/add_random 0
     write /sys/block/mmcblk0/bdi/read_ahead_kb 128
 
+on fs
+    # GnssConfiguration doesn't actually look at gps.conf, just the debug file
+    mount none /system/etc/gps.conf /system/etc/gps_debug.conf bind
+
 service imsqmidaemon /system/vendor/bin/imsqmidaemon
     class main
     user radio
