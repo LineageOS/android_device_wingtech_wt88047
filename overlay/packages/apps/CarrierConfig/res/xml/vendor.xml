@@ -3,5 +3,12 @@
     <carrier_config>
         <boolean name="world_phone_bool" value="true" />
         <boolean name="show_apn_setting_cdma_bool" value="true" />
+
+        <string name="gps.a_glonass_pos_protocol_select">15</string>
+        <string name="gps.gps_lock">0</string>
+        <string name="gps.supl_ver">0x10000</string>
+        <string name="gps.xtra_server_1">http://xtrapath1.izatcloud.net/xtra2.bin</string>
+        <string name="gps.xtra_server_2">http://xtrapath2.izatcloud.net/xtra2.bin</string>
+        <string name="gps.xtra_server_3">http://xtrapath3.izatcloud.net/xtra2.bin</string>
     </carrier_config>
 </carrier_config_list>
