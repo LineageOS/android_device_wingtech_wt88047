@@ -249,6 +249,12 @@ void LocApiBase::reportPosition(UlpLocation &location,
              locationExtended.gnss_sv_used_ids.glo_sv_used_ids_mask,
              locationExtended.gnss_sv_used_ids.bds_sv_used_ids_mask,
              locationExtended.gnss_sv_used_ids.gal_sv_used_ids_mask);
+
+    if (location.gpsLocation.timestamp > 0 && location.gpsLocation.timestamp < 1580000000000) {
+       location.gpsLocation.timestamp += 619315200000; /* 1024 * 7 * 24 * 60 * 60 * 1000 */
+       LOC_LOGV("week rollover fixed, timestamp: %lld.", location.gpsLocation.timestamp);
+    }
+
     // loop through adapters, and deliver to all adapters.
     TO_ALL_LOCADAPTERS(
         mLocAdapters[i]->reportPosition(location,
