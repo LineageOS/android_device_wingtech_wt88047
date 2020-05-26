@@ -298,10 +298,7 @@ vendor/lib/libthermalclient.so|de4a1dc98dec535da16059f44229043952638c29
 vendor/lib/libthermalioctl.so|c32eca3eb450e9bb0a70f15878253b2dad48e5c7
 
 # Time services - from jalebi
--app/TimeService/TimeService.apk:vendor/app/TimeService/TimeService.apk|72f98fb5a3e3090f62a784de3a4263bc2a22ed79
-bin/time_daemon:vendor/bin/time_daemon|1a22791893450fcd6ec84c800e02837e0c2067fe
 -vendor/lib/libtime_genoff.so|2f98702ccced493fd8d94b3eff099f4b53563612
-vendor/lib/libTimeService.so|6e02ea970f245a374d3dd4a13a814b33eb5e7878
 
 # Widevine - from angler - OPR6.170623.017 factory image
 vendor/lib/mediadrm/libwvdrmengine.so|66ba66d047044f92eb0eada1faf6a5799ded90ab
