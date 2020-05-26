@@ -238,9 +238,8 @@ vendor/lib/libril-qcril-hook-oem.so|72d922cbe67c1387b501e32547630dbb19fc6e5b
 vendor/lib/libsystem_health_mon.so|808950a838e8f01f0c6efe1ef25acc4ca3376a45
 vendor/lib/libxml.so|8b9cae9b4d1525e7fea093d6a53f363c842f3076
 
-# Radio - IMS
--vendor/app/ims/ims.apk|138de3a169d8c4703d9e5645abeb19e427b04909
--vendor/app/imssettings/imssettings.apk|3020cdd3bc6d3c5bd147f2086fdd62fae108d81b
+# Radio - IMS - from bullhead
+-vendor/app/ims/ims.apk|a3ec12c80d56d3887b62468d8b200c1fba889e48
 -framework/imscmlibrary.jar:vendor/framework/imscmlibrary.jar|0c24d6540c06efede52169c1445272f43748180f
 bin/imscmservice:vendor/bin/imscmservice|2b6bb0cc2c244885556fe5c6ee75733b59ea1910
 bin/imsdatadaemon:vendor/bin/imsdatadaemon|30cb68236f5c8f6fe0d78f0e772a33405c5cf58b
@@ -267,8 +266,8 @@ vendor/lib/lib-rtpcommon.so|f9a5632dafc29a44b7358d03a1cc572eee5a25d5
 vendor/lib/lib-rtpcore.so|8f4798e5e80c929287719ffb30ac6ecbf6a07d67
 vendor/lib/lib-rtpdaemoninterface.so|32bae4937f548463bb101c00090fc6d928579410
 vendor/lib/lib-rtpsl.so|115c5dbec50e5d288552c3f35155e47404323395
-vendor/lib/libimscamera_jni.so|f236db9b4edc3fd5b7c3a2c071c7a48e3ab5c7f2
-vendor/lib/libimsmedia_jni.so|fdd6027844b0b7ca0f7b1f903e131d0ad796bc4d
+vendor/lib/libimscamera_jni.so|9d4aa0ca4082548a1bc06eba9ee8295bb6bd9d6b
+vendor/lib/libimsmedia_jni.so|0464f3f1f72d16153618d6a7555c229fd14830c4
 vendor/lib/librcc.so|a409377843c8c0af7f92beac09048927e36e7ca0
 vendor/lib/libvoice-svc.so|fe8d2807b5b1a35310a9bcf80ceb4467503130b0
 
