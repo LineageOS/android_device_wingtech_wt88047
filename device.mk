@@ -133,7 +133,6 @@ $(call inherit-product, device/wingtech/wt88047/system_prop.mk)
 
 # Telephony
 PRODUCT_PACKAGES += \
-    ims-ext-common \
     telephony-ext
 
 PRODUCT_BOOT_JARS += \
