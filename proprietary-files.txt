@@ -245,6 +245,7 @@ vendor/lib/libxml.so|8b9cae9b4d1525e7fea093d6a53f363c842f3076
 bin/imscmservice:vendor/bin/imscmservice|2b6bb0cc2c244885556fe5c6ee75733b59ea1910
 bin/imsdatadaemon:vendor/bin/imsdatadaemon|30cb68236f5c8f6fe0d78f0e772a33405c5cf58b
 bin/imsqmidaemon:vendor/bin/imsqmidaemon|00c1cd071898fc7883b98b53c507d07e8b262e63
+bin/ims_rtp_daemon:vendor/bin/ims_rtp_daemon|a4aab66f467f42b236fe3746cbe6597d905b6aaf
 etc/permissions/ims.xml:vendor/etc/permissions/ims.xml|b77963459ea6664a0eddcbc5ca7f4220e4895c26
 etc/permissions/imscm.xml:vendor/etc/permissions/imscm.xml|8b99ec26c783966bbea1fcb8e72c7c0206a4e802
 etc/permissions/qti_permissions.xml:vendor/etc/permissions/qti_permissions.xml|fd8a1db3c18b6d58334d747e47f4b155bb612039

@@ -51,15 +51,6 @@ service imsqmidaemon /system/vendor/bin/imsqmidaemon
     socket ims_qmid stream 0660 system radio
     group radio log oem_2950
 
-service imscmservice /system/vendor/bin/imscmservice
-    class main
-    user radio
-    group radio oem_2950 log
-    disabled
-
-on property:sys.ims.DATA_DAEMON_STATUS=1
-    start imscmservice
-
 service imsdatadaemon /system/vendor/bin/imsdatadaemon
     class main
     user radio
@@ -69,6 +60,25 @@ service imsdatadaemon /system/vendor/bin/imsdatadaemon
 
 on property:sys.ims.QMI_DAEMON_STATUS=1
     start imsdatadaemon
+
+service imscmservice /system/vendor/bin/imscmservice
+    class main
+    user radio
+    group radio oem_2950 log
+    disabled
+
+on property:sys.ims.DATA_DAEMON_STATUS=1
+    start imscmservice
+
+service ims_rtp_daemon /system/vendor/bin/ims_rtp_daemon
+    class main
+    user radio
+    socket ims_rtpd stream 0660 system radio
+    group radio diag inet log
+    disabled
+
+on property:ims.DATA_DAEMON_STATUS=1
+    start ims_rtp_daemon
 
 on property:sys.boot_completed=1
     # Enable ZRAM on boot_complete
