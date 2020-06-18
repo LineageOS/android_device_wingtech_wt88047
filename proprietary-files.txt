@@ -143,17 +143,17 @@ vendor/lib/libizat_core.so|8a948e4f2aa38463050c6399f04ecb38564689d6
 vendor/lib/liblbs_core.so|10caf0d54768114cd471c33a1e2dc6385d3c7707
 
 # Graphics - from crackling
-vendor/lib/egl/eglsubAndroid.so|b164a3a31ec30498babb25f731e0a8225be8d0aa
+vendor/lib/egl/eglsubAndroid.so|a80ffa441af58222dc43ba2a15fb2d4f2a9fae59
 vendor/lib/egl/eglSubDriverAndroid.so|6f5ae2f50bae4917173bc1f23eedbb932e068994
 vendor/lib/egl/libEGL_adreno.so|c30e4b0741e48c424aea23bf74dbf0e8b3a99369
 vendor/lib/egl/libESXEGL_adreno.so|7fb1078f65d5ccec000e90466e347308d7faa98b
 vendor/lib/egl/libESXGLESv1_CM_adreno.so|817a1ecda830c46c170b2733b2fbc26f97b04180
-vendor/lib/egl/libESXGLESv2_adreno.so|61ba345a1eff7ef153269dd88399e32950173d0f
+vendor/lib/egl/libESXGLESv2_adreno.so|377452ed2d1b0655d7eca4a03fb763d7043aba30
 vendor/lib/egl/libGLESv1_CM_adreno.so|629e554170807f47a6790d559952ede06df0c9a6
 vendor/lib/egl/libGLESv2_adreno.so|70c7d8a44042fd0a9280c8ed2e9e738c3f14b0c3
 vendor/lib/egl/libq3dtools_adreno.so|4c3a394cd397e05b0794aa1bb16531da4c03855d
 vendor/lib/egl/libQTapGLES.so|900229ff94bbc44722d0df2a685b8ad2fbf1c51e
-vendor/lib/egl/libRBEGL_adreno.so|8c33769c191c889179f76663b8be63d300d26606
+vendor/lib/egl/libRBEGL_adreno.so|ce9a65968612e852d01f0bd6e1743dce015db7d1
 vendor/lib/egl/libRBGLESv1_CM_adreno.so|8c8491f0f4decb8658af866e32fc083322095f20
 vendor/lib/egl/libRBGLESv2_adreno.so|4bd77c04fc435de9d198da0233513dda6e557dab
 vendor/lib/libadreno_utils.so|522db7791ef53fc0747fc66274e3d9d01ac7b406
@@ -164,15 +164,17 @@ vendor/lib/libgsl.so|252cd2ec1006268a45df66bdce947e647d1efe5b
 vendor/lib/libllvm-glnext.so|2e5785200004df231403074c0f6d7d87bf395745
 vendor/lib/libllvm-qcom.so|77f2a0adf9c36291a02055be3fcd1cf5fa82a113
 vendor/lib/libOpenCL.so|9c3f63df298c155a526d075c9d2643d01b59f98a
-vendor/lib/librs_adreno.so|7f0fe9802d2bd832b98848d7436ae1aafbe52221
-vendor/lib/librs_adreno_sha1.so|3289659eb1307377b20fb33ca4b8d42e15532612
-vendor/lib/libRSDriver_adreno.so|2c9d23e4555f76c1aa28eb5aea2fa919081a8654
 vendor/lib/libsc-a3xx.so|a03fc9f0c929cb4adf013f8a463cfbef68d48090
 vendor/lib/libscale.so|972cbd87794b4ce0a5c23db946acbafd4cd6d073
 
 # Graphics firmware
 etc/firmware/a300_pfp.fw:vendor/firmware/a300_pfp.fw
 etc/firmware/a300_pm4.fw:vendor/firmware/a300_pm4.fw
+
+# Graphics RenderScript - bullhead OPR4.170623.006
+vendor/lib/libRSDriver_adreno.so|ee3386248adfa7d1a8c1107e051bcbbd3e8df0c1
+vendor/lib/librs_adreno.so|bb1d5cb84f14ed18fcbfb4815692cb196e44f180
+vendor/lib/librs_adreno_sha1.so|be8a817743950dac6e22b50cbd9657c2d35c35f2
 
 # Media - from jalebi
 vendor/lib/libOmxAacDec.so|7125dc53aaee56170b269278865b4ef3c4c8c61b
@@ -238,16 +240,19 @@ vendor/lib/libril-qcril-hook-oem.so|72d922cbe67c1387b501e32547630dbb19fc6e5b
 vendor/lib/libsystem_health_mon.so|808950a838e8f01f0c6efe1ef25acc4ca3376a45
 vendor/lib/libxml.so|8b9cae9b4d1525e7fea093d6a53f363c842f3076
 
-# Radio - IMS
--vendor/app/ims/ims.apk|138de3a169d8c4703d9e5645abeb19e427b04909
--vendor/app/imssettings/imssettings.apk|3020cdd3bc6d3c5bd147f2086fdd62fae108d81b
--framework/imscmlibrary.jar:vendor/framework/imscmlibrary.jar|0c24d6540c06efede52169c1445272f43748180f
+# Radio IMS - from bullhead
+-vendor/app/ims/ims.apk|2aa1158679ee5048987a3839f331ec5529d4ea43
+vendor/lib/libimscamera_jni.so|9d4aa0ca4082548a1bc06eba9ee8295bb6bd9d6b
+vendor/lib/libimsmedia_jni.so|0464f3f1f72d16153618d6a7555c229fd14830c4
+
+# Radio IMS - from motorola
 bin/imscmservice:vendor/bin/imscmservice|2b6bb0cc2c244885556fe5c6ee75733b59ea1910
 bin/imsdatadaemon:vendor/bin/imsdatadaemon|30cb68236f5c8f6fe0d78f0e772a33405c5cf58b
 bin/imsqmidaemon:vendor/bin/imsqmidaemon|00c1cd071898fc7883b98b53c507d07e8b262e63
 etc/permissions/ims.xml:vendor/etc/permissions/ims.xml|b77963459ea6664a0eddcbc5ca7f4220e4895c26
 etc/permissions/imscm.xml:vendor/etc/permissions/imscm.xml|8b99ec26c783966bbea1fcb8e72c7c0206a4e802
 etc/permissions/qti_permissions.xml:vendor/etc/permissions/qti_permissions.xml|fd8a1db3c18b6d58334d747e47f4b155bb612039
+-framework/imscmlibrary.jar:vendor/framework/imscmlibrary.jar|0c24d6540c06efede52169c1445272f43748180f
 vendor/lib/lib-dplmedia.so|93af0d85c31b197efdbde915ff8f7bc404243f87
 vendor/lib/lib-ims-rcscmjni.so|5be14cd7a69709f673297ab175cb011a6f2fd1a3
 vendor/lib/lib-imsSDP.so|a0a140eee8ca53ec1d28e9357c5061803fde2b27
@@ -259,7 +264,6 @@ vendor/lib/lib-imsrcscm.so|c2505f7f814d63fa5dff1f6e3f4f4492d5561258
 vendor/lib/lib-imsrcscmclient.so|d5d319cacd1c9fb5b8e76962ca97997de514359f
 vendor/lib/lib-imsrcscmservice.so|75eef124e07260a244a579bce2cf62c14f794406
 vendor/lib/lib-imss.so|38fa3f4614850829491101e59841b83fe3c783cb
-vendor/lib/lib-imsvt.so|6d9bc7654d48ab9f4315f43bcf62fc9f67f94ffd
 vendor/lib/lib-imsxml.so|9dc567b2fc47682525937e0b37c119649cf9c1a5
 vendor/lib/lib-rcsimssjni.so|289fc875e1e2b6a0bcb6bb7c057d0e293a6ca347
 vendor/lib/lib-rcsjni.so|dc46a320f28dc67699d6b97ae9bfcf96028dd4e9
@@ -267,8 +271,7 @@ vendor/lib/lib-rtpcommon.so|f9a5632dafc29a44b7358d03a1cc572eee5a25d5
 vendor/lib/lib-rtpcore.so|8f4798e5e80c929287719ffb30ac6ecbf6a07d67
 vendor/lib/lib-rtpdaemoninterface.so|32bae4937f548463bb101c00090fc6d928579410
 vendor/lib/lib-rtpsl.so|115c5dbec50e5d288552c3f35155e47404323395
-vendor/lib/libimscamera_jni.so|f236db9b4edc3fd5b7c3a2c071c7a48e3ab5c7f2
-vendor/lib/libimsmedia_jni.so|fdd6027844b0b7ca0f7b1f903e131d0ad796bc4d
+vendor/lib/lib-imsvt.so|6d9bc7654d48ab9f4315f43bcf62fc9f67f94ffd
 vendor/lib/librcc.so|a409377843c8c0af7f92beac09048927e36e7ca0
 vendor/lib/libvoice-svc.so|fe8d2807b5b1a35310a9bcf80ceb4467503130b0
 
